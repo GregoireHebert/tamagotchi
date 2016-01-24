@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="build">
+
+    <target name="build"
+            depends="prepare,vendors-install,lint,phpunit,pdepend,phpmd-ci,phpcpd,phpcs-ci,phpcb"/>
+
+    <target name="build-update"
+            depends="prepare,vendors-update,lint,phpunit,pdepend,phpmd-ci,phpcpd,phpcs-ci,phpcb"/>
+
+    <target name="build-parallel" depends="prepare,lint,phpunit,tools-parallel,phpcb"/>
+
+    <target name="clean" description="Cleanup build artifacts">
+        <delete dir="${basedir}/build/api"/>
+        <delete dir="${basedir}/build/cache"/>
+        <delete dir="${basedir}/build/code-browser"/>
+        <delete dir="${basedir}/build/coverage"/>
+        <delete dir="${basedir}/build/logs"/>
+        <delete dir="${basedir}/build/pdepend"/>
+    </target>
+
+    <target name="lint" description="Perform syntax check of sourcecode files">
+        <apply executable="php" failonerror="true">
+            <arg value="-l"/>
+
+            <fileset dir="${basedir}/src">
+                <include name="**/*.php"/>
+                <exclude name="**/build/**"/>
+                <exclude name="**/vendor/**"/>
+                <modified/>
+            </fileset>
+        </apply>
+    </target>
+
+    <target name="pdepend" description="Calculate software metrics">
+        <condition property="pdepend.executable" value="${basedir}/bin/pdepend.bat"
+                   else="${basedir}/bin/pdepend">
+            <os family="windows"/>
+        </condition>
+
+        <exec executable="${pdepend.executable}">
+            <arg value="--ignore=build,Tests,vendor"/>
+            <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml"/>
+            <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg"/>
+            <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg"/>
+
+            <arg path="${basedir}/src"/>
+        </exec>
+    </target>
+
+    <target name="phpcb" description="Aggregate tool output">
+        <condition property="phpcb.executable" value="${basedir}/bin/phpcb.bat"
+                   else="${basedir}/bin/phpcb">
+            <os family="windows"/>
+        </condition>
+
+        <dirset dir="${basedir}/src" id="ignored.dirs">
+            <include name="**/build"/>
+            <include name="**/vendor"/>
+        </dirset>
+        <pathconvert property="ignored.dir" refid="ignored.dirs" pathsep=","/>
+
+        <exec executable="${phpcb.executable}">
+            <arg value="--ignore"/>
+            <arg value="${ignored.dir}"/>
+            <arg value="--log"/>
+            <arg path="${basedir}/build/logs"/>
+            <arg value="--output"/>
+            <arg path="${basedir}/build/code-browser"/>
+            <arg value="--source"/>
+            <arg path="${basedir}/src"/>
+        </exec>
+    </target>
+
+    <target name="phpcpd" description="Find duplicate code">
+        <condition property="phpcpd.executable" value="${basedir}/bin/phpcpd.bat"
+                   else="${basedir}/bin/phpcpd">
+            <os family="windows"/>
+        </condition>
+
+        <exec executable="${phpcpd.executable}">
+            <arg value="--log-pmd"/>
+            <arg path="${basedir}/build/logs/pmd-cpd.xml"/>
+            <arg value="--exclude"/>
+            <arg value="build"/>
+            <arg value="--exclude"/>
+            <arg value="Tests"/>
+            <arg value="--exclude"/>
+            <arg value="vendor"/>
+
+            <arg path="${basedir}/src"/>
+        </exec>
+    </target>
+
+    <target name="phpcs"
+            description="Find coding standard violations and print human readable output.">
+        <condition property="phpcs.executable" value="${basedir}/bin/phpcs.bat"
+                   else="${basedir}/bin/phpcs">
+            <os family="windows"/>
+        </condition>
+
+        <exec executable="${phpcs.executable}">
+            <arg path="${basedir}/src"/>
+            <arg value="--standard=PSR2" />
+            <arg value="--ignore=build,Resources,vendor"/>
+        </exec>
+    </target>
+
+    <target name="phpcs-ci"
+            description="Find coding standard violations creating a log file for the continuous integration server">
+        <condition property="phpcs.executable" value="${basedir}/bin/phpcs.bat"
+                   else="${basedir}/bin/phpcs">
+            <os family="windows"/>
+        </condition>
+
+        <exec executable="${phpcs.executable}">
+            <arg path="${basedir}/src"/>
+
+            <arg value="--report=checkstyle"/>
+            <arg value="--report-file=${basedir}/build/logs/checkstyle.xml"/>
+
+            <arg value="--standard=PSR2" />
+            <arg value="--ignore=build,Resources,vendor"/>
+        </exec>
+    </target>
+
+    <target name="phpmd"
+            description="Perform project mess detection and print human readable output.">
+        <condition property="phpmd.executable" value="${basedir}/bin/phpmd.bat"
+                   else="${basedir}/bin/phpmd">
+            <os family="windows"/>
+        </condition>
+
+        <exec executable="${phpmd.executable}">
+            <arg path="${basedir}/src"/>
+
+            <arg value="text"/>
+            <arg path="${basedir}/build/phpmd.xml"/>
+            <arg value="--exclude"/>
+            <arg value="build,Tests,vendor"/>
+        </exec>
+    </target>
+
+    <target name="phpmd-ci"
+            description="Perform project mess detection creating a log file for the continuous integration server">
+        <condition property="phpmd.executable" value="${basedir}/bin/phpmd.bat"
+                   else="${basedir}/bin/phpmd">
+            <os family="windows"/>
+        </condition>
+
+        <exec executable="${phpmd.executable}">
+            <arg path="${basedir}/src"/>
+
+            <arg value="xml"/>
+            <arg path="${basedir}/build/phpmd.xml"/>
+            <arg value="--reportfile"/>
+            <arg path="${basedir}/build/logs/pmd.xml"/>
+            <arg value="--exclude"/>
+            <arg value="build,Tests,vendor"/>
+        </exec>
+    </target>
+
+    <target name="phpunit" description="Run unit tests">
+        <condition property="phpunit.executable" value="${basedir}/bin/phpunit.bat"
+                   else="${basedir}/bin/phpunit">
+            <os family="windows"/>
+        </condition>
+
+        <exec executable="${phpunit.executable}" failonerror="true">
+            <arg value="-c"/>
+            <arg path="${basedir}/phpunit.xml"/>
+        </exec>
+    </target>
+
+    <target name="prepare" depends="clean" description="Prepare for build">
+        <mkdir dir="${basedir}/vendor/bin"/>
+        <mkdir dir="${basedir}/build/api"/>
+        <mkdir dir="${basedir}/build/cache"/>
+        <mkdir dir="${basedir}/build/code-browser"/>
+        <mkdir dir="${basedir}/build/coverage"/>
+        <mkdir dir="${basedir}/build/logs"/>
+        <mkdir dir="${basedir}/build/pdepend"/>
+    </target>
+
+    <target name="tools-parallel" description="Run tools in parallel">
+        <parallel threadCount="2">
+            <sequential>
+                <antcall target="pdepend"/>
+                <antcall target="phpmd-ci"/>
+            </sequential>
+            <antcall target="phpcpd"/>
+            <antcall target="phpcs-ci"/>
+        </parallel>
+    </target>
+
+    <target name="vendors-install" description="Install vendors">
+        <get src="http://getcomposer.org/composer.phar" dest="${basedir}/bin/composer.phar"/>
+        <chmod file="${basedir}/bin/composer.phar" perm="775"/>
+
+        <exec executable="php" failonerror="true">
+            <arg path="${basedir}/bin/composer.phar"/>
+            <arg value="install"/>
+            <arg value="--no-progress"/>
+            <arg value="--prefer-source"/>
+        </exec>
+    </target>
+
+    <target name="vendors-update" description="Update vendors">
+        <get src="http://getcomposer.org/composer.phar" dest="${basedir}/bin/composer.phar"/>
+        <chmod file="${basedir}/bin/composer.phar" perm="775"/>
+
+        <exec executable="php" failonerror="true">
+            <arg path="${basedir}/bin/composer.phar"/>
+            <arg value="update"/>
+            <arg value="--no-progress"/>
+            <arg value="--prefer-source"/>
+        </exec>
+    </target>
+
+</project>

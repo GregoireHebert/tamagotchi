@@ -1,0 +1,75 @@
+{
+  "name": "Gheb / Tamagotchi",
+  "license": "proprietary",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "": "src/"
+    },
+    "files": [
+      "app/AppKernel.php"
+    ]
+  },
+
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+
+  "require": {
+    "php": ">=5.5.9",
+    "doctrine/orm": "^2.5",
+    "doctrine/doctrine-bundle": "^1.6",
+    "doctrine/doctrine-cache-bundle": "^1.2",
+    "doctrine/doctrine-fixtures-bundle": "^2.3",
+    "incenteev/composer-parameter-handler": "^2.0",
+    "sensio/distribution-bundle": "^5.0",
+    "sensio/framework-extra-bundle": "^3.0.2",
+    "symfony/symfony": "3.0.*",
+    "symfony/swiftmailer-bundle": "^2.3",
+    "symfony/monolog-bundle": "^2.8",
+    "mybuilder/phpunit-accelerator": "^1.1",
+    "stof/doctrine-extensions-bundle": "^1.2"
+  },
+
+  "require-dev": {
+    "covex-nn/phpcb": "1.0.4.1",
+    "pdepend/pdepend": "^2.2",
+    "phpmd/phpmd": "^2.3",
+    "phpunit/phpunit": "^5.1",
+    "sebastian/phpcpd": "^2.0",
+    "sensio/generator-bundle": "^3.0",
+    "squizlabs/php_codesniffer": "^2.4",
+    "symfony/phpunit-bridge": "2.7.x@beta"
+  },
+
+  "scripts": {
+    "post-install-cmd": [
+      "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap"
+    ],
+    "post-update-cmd": [
+      "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap"
+    ]
+  },
+
+  "config": {
+    "bin-dir": "bin"
+  },
+
+  "extra": {
+    "symfony-app-dir": "app",
+    "symfony-bin-dir": "bin",
+    "symfony-var-dir": "var",
+    "symfony-web-dir": "web",
+    "symfony-tests-dir": "tests",
+    "symfony-assets-install": "relative",
+    "incenteev-parameters": {
+      "file": "app/config/parameters.yml"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

@@ -1,0 +1,29 @@
+# Composer
+/vendor/
+
+# ant
+/build/api/
+/build/cache/
+/build/code-browser/
+/build/coverage/
+/build/logs/
+/build/pdepend/
+/cache.properties
+
+# PhpStorm
+.idea/
+
+# Symfony
+/app/config/parameters.yml
+/web/bundles/
+/var/*
+!/var/cache
+/var/cache/*
+!var/cache/.gitkeep
+!/var/logs
+/var/logs/*
+!var/logs/.gitkeep
+!/var/sessions
+/var/sessions/*
+!var/sessions/.gitkeep
+!var/SymfonyRequirements.php
