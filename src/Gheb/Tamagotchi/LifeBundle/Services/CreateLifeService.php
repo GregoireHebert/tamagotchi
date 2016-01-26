@@ -2,7 +2,8 @@
 
 namespace Gheb\Tamagotchi\LifeBundle\Services;
 
-use Gheb\Tamagotchi\CoreBundle\Character\Character;
+use Gheb\Tamagotchi\CoreBundle\Entity\Fish;
+use Gheb\Tamagotchi\CoreBundle\Personality\PersonalityLoader;
 
 /**
  * @author Grégoire Hébert <gregoirehebert@gheb.fr>
@@ -12,7 +13,7 @@ class CreateLifeService
     public function __construct($personality = 'average')
     {
         $personality = PersonalityLoader::load($personality);
-        $character = new Character();
+        $character = new Fish();
 
         $character->setPersonality($personality);
 
@@ -25,7 +26,7 @@ class CreateLifeService
             if ($now->format('H')%2 == 0) {
                 $character->decreaseSleepFul();
                 $character->decreaseHappiness();
-                if ($character->getMood() == Character::MOOD_NATURAL) {
+                if ($character->getMood() == Fish::MOOD_NATURAL) {
                     $character->decreaseCleanliness();
                 }
             } elseif ($now->format('H')%1 == 0) {
@@ -68,7 +69,7 @@ class CreateLifeService
                 return ('Je suis mort');
             }
 
-            if ($character->getMood() == Character::MOOD_STILL && $now->format('H')%6 == 0) {
+            if ($character->getMood() == Fish::MOOD_STILL && $now->format('H')%6 == 0) {
                 $character->newMood();
             }
 

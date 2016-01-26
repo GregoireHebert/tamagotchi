@@ -15,10 +15,11 @@ class AppKernel extends Kernel
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new AppBundle\AppBundle(),
         ];
 
         $bundles[] = new \Gheb\Tamagotchi\CoreBundle\CoreBundle();
+        $bundles[] = new \Gheb\Tamagotchi\DisplayBundle\DisplayBundle();
+        $bundles[] = new \Gheb\Tamagotchi\LifeBundle\LifeBundle();
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();

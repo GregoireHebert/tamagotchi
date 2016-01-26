@@ -1,9 +1,10 @@
 <?php
-namespace Gheb\Tamagotchi\CoreBundle\Inputs;
+namespace Gheb\Tamagotchi\CoreBundle\Entity;
 
-use Gheb\Tamagotchi\CoreBundle\Character\Character;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ORM\Entity
  * @author Grégoire Hébert <gregoirehebert@gheb.fr>
  */
 class LogSupplies
@@ -15,28 +16,36 @@ class LogSupplies
     const ACTION_GIVE_MEDICINE      = 5;
 
     /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @var integer
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="decimal", scale=2)
      * @var integer
      */
     private $action;
+
     /**
-     * @var Character
-     */
-    private $character;
-    /**
+     * @ORM\Column(type="date")
      * @var \DateTime
      */
     private $takenAt;
+
     /**
+     * @ORM\Column(type="string", length=256)
      * @var string
      */
     private $takenBy;
 
-    public function __construct(Character $character, $action, $takenBy)
+    public function __construct($action, $takenBy)
     {
         $this->takenAt = new \DateTime();
         $this->takenBy = $takenBy;
         $this->action = $action;
-        $this->character = $character;
     }
 
     /**
@@ -53,22 +62,6 @@ class LogSupplies
     public function setAction($action)
     {
         $this->action = $action;
-    }
-
-    /**
-     * @return Character
-     */
-    public function getCharacter()
-    {
-        return $this->character;
-    }
-
-    /**
-     * @param Character $character
-     */
-    public function setCharacter($character)
-    {
-        $this->character = $character;
     }
 
     /**
@@ -101,5 +94,21 @@ class LogSupplies
     public function setTakenBy($takenBy)
     {
         $this->takenBy = $takenBy;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 }

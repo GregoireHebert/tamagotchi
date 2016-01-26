@@ -2,7 +2,8 @@
 namespace Gheb\Tamagotchi\CoreBundle\Inputs;
 
 use Doctrine\ORM\EntityManager;
-use Gheb\Tamagotchi\CoreBundle\Character\Character;
+use Gheb\Tamagotchi\CoreBundle\Entity\Fish;
+use Gheb\Tamagotchi\CoreBundle\Entity\LogSupplies;
 
 /**
  * Class SupplyService
@@ -11,7 +12,7 @@ use Gheb\Tamagotchi\CoreBundle\Character\Character;
 class SupplyService
 {
     /**
-     * @var Character
+     * @var Fish
      */
     private $character;
 
@@ -22,7 +23,7 @@ class SupplyService
 
     public function __construct(EntityManager $manager)
     {
-        $characterRepo = $manager->getRepository('Gheb\Tamagotchi\CoreBundle\Character\Character');
+        $characterRepo = $manager->getRepository('Gheb\Tamagotchi\CoreBundle\Entity\Fish');
         $this->character = array_pop($characterRepo->findAll());
     }
 
@@ -31,7 +32,7 @@ class SupplyService
         $log = new LogSupplies($this->character, LogSupplies::ACTION_GIVE_MEDICINE, 'Owner');
         $this->character->addLog($log);
 
-        $this->character->setMood(Character::MOOD_STILL);
+        $this->character->setMood(Fish::MOOD_STILL);
         $this->manager->flush();
     }
 
@@ -64,7 +65,7 @@ class SupplyService
         $log = new LogSupplies($this->character, LogSupplies::ACTION_PLAY, 'Owner');
         $this->character->addLog($log);
 
-        $this->character->setMood(Character::MOOD_STILL);
+        $this->character->setMood(Fish::MOOD_STILL);
         $this->manager->flush();
     }
 
@@ -97,7 +98,7 @@ class SupplyService
         $log = new LogSupplies($this->character, LogSupplies::ACTION_TURN_OFF_LIGHT, 'Owner');
         $this->character->addLog($log);
 
-        $this->character->setMood(Character::MOOD_STILL);
+        $this->character->setMood(Fish::MOOD_STILL);
         $this->manager->flush();
     }
 
@@ -130,7 +131,7 @@ class SupplyService
         $log = new LogSupplies($this->character, LogSupplies::ACTION_CLEAN, 'Owner');
         $this->character->addLog($log);
 
-        $this->character->setMood(Character::MOOD_STILL);
+        $this->character->setMood(Fish::MOOD_STILL);
         $this->manager->flush();
     }
 
@@ -163,7 +164,7 @@ class SupplyService
         $log = new LogSupplies($this->character, LogSupplies::ACTION_FEED, 'Owner');
         $this->character->addLog($log);
 
-        $this->character->setMood(Character::MOOD_STILL);
+        $this->character->setMood(Fish::MOOD_STILL);
         $this->manager->flush();
     }
 }

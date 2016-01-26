@@ -1,71 +1,120 @@
 <?php
-namespace Gheb\Tamagotchi\CoreBundle\Character;
+namespace Gheb\Tamagotchi\CoreBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Gheb\Tamagotchi\CoreBundle\Inputs\LogSupplies;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ORM\Entity
+ * @ORM\Table(name="fish")
  * @author Grégoire Hébert <gregoirehebert@gheb.fr>
  */
-class Character
+class Fish
 {
     const MOOD_SLEEPY   = 1;
     const MOOD_PLAYER   = 2;
     const MOOD_SICK     = 3;
     const MOOD_STILL    = 4;
     const MOOD_NATURAL  = 5;
+
     /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="decimal", scale=2)
      * @var float
      */
     private $cleanliness;
+
     /**
-     * @var float
+     * @ORM\Column(type="date")
+     * @var \DateTime
      */
     private $dateOfBirth;
+
     /**
+     * @ORM\Column(type="decimal", scale=2)
      * @var float
      */
     private $happiness;
+
     /**
+     * @ORM\Column(type="decimal", scale=2)
      * @var float
      */
     private $health;
+
     /**
+     * @ORM\Column(type="decimal", scale=2)
      * @var float
      */
     private $hunger;
+
     /**
+     * @ORM\Column(type="integer")
      * @var integer
      */
     private $mood;
+
     /**
+     * @ORM\Column(type="string", length=256)
      * @var string
      */
     private $name;
+
     /**
-     * @var Array
+     *  @ORM\Column(type="array")
+     * @var array
      */
     private $personality;
 
     /**
+     * @ORM\ManyToMany(targetEntity="LogSupplies")
+     * @ORM\JoinTable(name="fish_logs",
+     *      joinColumns={@ORM\JoinColumn(name="fish_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="log_id", referencedColumnName="id", unique=true)}
+     *      )
      * @var ArrayCollection LogSupplies
      */
     private $logs;
 
     /**
+     * @ORM\Column(type="decimal", scale=2)
      * @var float
      */
     private $sleepFul;
 
     public function __construct()
     {
+        $this->name = 'fishy';
         $this->hunger = 20;
+        $this->health = 100;
         $this->happiness = 10;
         $this->sleepFul = 10;
         $this->cleanliness = 10;
         $this->mood = self::MOOD_STILL;
         $this->logs = new ArrayCollection();
         $this->dateOfBirth = new \DateTime();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     public function decreaseCleanliness($cleanliness = 1)
