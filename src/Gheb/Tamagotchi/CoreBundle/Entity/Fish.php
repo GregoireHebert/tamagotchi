@@ -31,7 +31,7 @@ class Fish
     private $cleanliness;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      * @var \DateTime
      */
     private $dateOfBirth;
@@ -353,19 +353,7 @@ class Fish
 
     public function isDead()
     {
-        if (
-            $this->health == 0
-//            $this->cleanliness == 0 ||
-//            $this->happiness == 0 ||
-//            $this->hunger == 0 ||
-//            $this->sleepFul == 0 ||
-//            $this->hunger == 40
-        )
-        {
-            return true;
-        }
-
-        return false;
+        return $this->health == 0;
     }
 
     public function newMood()
@@ -399,7 +387,7 @@ class Fish
         $moods = array_merge($moods, array_fill(count($moods), $state['Sleep'], self::MOOD_SLEEPY));
         $moods = array_merge($moods, array_fill(count($moods), $state['Still'], self::MOOD_STILL));
 
-        $this->setMood($moods[mt_rand(0,100)]);
+        $this->setMood($moods[mt_rand(0,count($moods))]);
     }
 
     /**

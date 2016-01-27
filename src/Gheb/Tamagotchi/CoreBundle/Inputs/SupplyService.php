@@ -53,11 +53,11 @@ class SupplyService
         } else {
 
             $personality = $this->character->getPersonality();
-            foreach ($personality['states'] as $state=>&$percents) {
+            foreach ($personality['States'] as $state=>&$percents) {
                 if ($state == 'Play') {
-                    array_walk($percents, function(&$item) { $item -= 2; });
+                    array_walk($percents, function(&$item) { $item = min(max(0,$item-2), 100); });
                 } else {
-                    $percents['Play'] += 2;
+                    $percents['Play'] = min(max(0,$percents['Play']+2), 100);
                 }
             }
 
@@ -86,11 +86,11 @@ class SupplyService
         } else {
             $this->character->increaseSleepFul();
             $personality = $this->character->getPersonality();
-            foreach ($personality['states'] as $state=>&$percents) {
+            foreach ($personality['States'] as $state=>&$percents) {
                 if ($state == 'Sleep') {
-                    array_walk($percents, function(&$item) { $item -= 2; });
+                    array_walk($percents, function(&$item) { $item = min(max(0,$item-2), 100); });
                 } else {
-                    $percents['Sleep'] += 2;
+                    $percents['Sleep'] = min(max(0,$percents['Sleep']+2), 100);
                 }
             }
 
@@ -119,11 +119,11 @@ class SupplyService
         } else {
             $this->character->increaseCleanliness();
             $personality = $this->character->getPersonality();
-            foreach ($personality['states'] as $state=>&$percents) {
+            foreach ($personality['States'] as $state=>&$percents) {
                 if ($state == 'Toilet') {
-                    array_walk($percents, function(&$item) { $item -= 2; });
+                    array_walk($percents, function(&$item) { $item = min(max(0,$item-2), 100); });
                 } else {
-                    $percents['Toilet'] += 2;
+                    $percents['Toilet'] = min(max(0,$percents['Toilet']+2), 100);
                 }
             }
 
@@ -147,16 +147,16 @@ class SupplyService
             return $el->getTakenAt()->diff($now)->d == 0 && $el->getAction() == LogSupplies::ACTION_FEED;
         });
 
-        if ($todayFeedLog->count() < 8) {
+        if ($todayFeedLog->count() < 5) {
             $this->character->decreaseHunger();
         } else {
             $this->character->decreaseHunger();
             $personality = $this->character->getPersonality();
-            foreach ($personality['states'] as $state=>&$percents) {
-                if ($state == 'Feed') {
-                    array_walk($percents, function(&$item) { $item -= 2; });
+            foreach ($personality['States'] as $state=>&$percents) {
+                if ($state == 'Still') {
+                    array_walk($percents, function(&$item) { $item = min(max(0,$item-2), 100); });
                 } else {
-                    $percents['Feed'] += 2;
+                    $percents['Still'] = min(max(0,$percents['Still']+2), 100);
                 }
             }
 

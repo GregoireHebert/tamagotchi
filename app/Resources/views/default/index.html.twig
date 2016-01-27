@@ -20,7 +20,7 @@
 {% block javascripts %}
     <script type="text/javascript">
         (function poll(){
-            $.ajax({ url: "/tamagotchi/howIsMyFish", success: function(data){
+            $.ajax({ url: "/howIsMyFish", success: function(data){
                 $('#health').html(data['Health']);
                 $('#mood').html(data['Mood']);
                 $('#hunger').html(data['Hunger']);
@@ -31,7 +31,7 @@
         })();
 
         $('#feed').click(function(){
-            $.ajax({ url: "/tamagotchi/feedTheFish", success: function(data){
+            $.ajax({ url: "/feedTheFish", success: function(data){
                 if (data['status'] == true){
                     alert('Nom Nom Nom !');
                 } else {
@@ -43,7 +43,7 @@
         });
 
         $('#play').click(function(){
-            $.ajax({ url: "/tamagotchi/goFish", success: function(data){
+            $.ajax({ url: "/goFish", success: function(data){
                 if (data['status'] == true){
                     alert('ouh yeah !');
                 } else {
@@ -55,7 +55,7 @@
         });
 
         $('#switch-off-light').click(function(){
-            $.ajax({ url: "/tamagotchi/inTheDarknessBindThem", success: function(data){
+            $.ajax({ url: "/inTheDarknessBindThem", success: function(data){
                 if (data['status'] == true){
                     alert('And in the darkness... Bind them !');
                 } else {
@@ -67,7 +67,7 @@
         });
 
         $('#heal').click(function(){
-            $.ajax({ url: "/tamagotchi/itsLupus", success: function(data){
+            $.ajax({ url: "/itsLupus", success: function(data){
                 if (data['status'] == true){
                     alert('Merci Docteur !');
                 } else {

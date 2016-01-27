@@ -31,7 +31,7 @@ class LogSupplies
     private $action;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      * @var \DateTime
      */
     private $takenAt;

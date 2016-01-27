@@ -45,6 +45,10 @@ class DefaultController extends Controller
      */
     public function howIsMyFishAction(Request $request)
     {
+        sleep(5);
+        $lifeService   = $this->container->get('gheb.tamagotchi.lifeService');
+        $lifeService->lifeIsUnfair();
+
         $em = $this->getDoctrine()->getManager();
 
         /** @var Fish $character */
