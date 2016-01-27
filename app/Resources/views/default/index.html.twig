@@ -29,5 +29,53 @@
                 $('#happiness').html(data['Happiness']);
             }, dataType: "json", complete: poll, timeout: 30000 });
         })();
+
+        $('#feed').click(function(){
+            $.ajax({ url: "/tamagotchi/feedTheFish", success: function(data){
+                if (data['status'] == true){
+                    alert('Nom Nom Nom !');
+                } else {
+                    alert('Heyyy ou est ma miette ?');
+                }
+            }, dataType: "json", error: function(data){
+                alert('Oups ! plus de miette ?');
+            }});
+        });
+
+        $('#play').click(function(){
+            $.ajax({ url: "/tamagotchi/goFish", success: function(data){
+                if (data['status'] == true){
+                    alert('ouh yeah !');
+                } else {
+                    alert('des bubulles ?! encore des bubulles !');
+                }
+            }, dataType: "json", error: function(data){
+                alert('aah ? pas de ballon ?');
+            }});
+        });
+
+        $('#switch-off-light').click(function(){
+            $.ajax({ url: "/tamagotchi/inTheDarknessBindThem", success: function(data){
+                if (data['status'] == true){
+                    alert('And in the darkness... Bind them !');
+                } else {
+                    alert('Qui a allumé la lumière ?');
+                }
+            }, dataType: "json", error: function(data){
+                alert('tu me borde ?');
+            }});
+        });
+
+        $('#heal').click(function(){
+            $.ajax({ url: "/tamagotchi/itsLupus", success: function(data){
+                if (data['status'] == true){
+                    alert('Merci Docteur !');
+                } else {
+                    alert('Do you want me to die ?');
+                }
+            }, dataType: "json", error: function(data) {
+                alert('Je crois que je prendrai encore une dose');
+            }});
+        });
     </script>
 {% endblock %}

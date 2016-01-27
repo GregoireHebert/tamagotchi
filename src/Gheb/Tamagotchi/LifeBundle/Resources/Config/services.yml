@@ -1,0 +1,7 @@
+parameters:
+  gheb.tamagotchi.lifeService.class: Gheb\Tamagotchi\LifeBundle\Services\LifeService
+
+services:
+  gheb.tamagotchi.lifeService:
+    class: %gheb.tamagotchi.LifeService.class%
+    arguments: ["@doctrine.orm.entity_manager"]

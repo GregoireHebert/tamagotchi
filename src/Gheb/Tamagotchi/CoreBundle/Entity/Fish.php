@@ -73,7 +73,7 @@ class Fish
     private $personality;
 
     /**
-     * @ORM\ManyToMany(targetEntity="LogSupplies")
+     * @ORM\ManyToMany(targetEntity="LogSupplies", cascade={"persist", "merge", "remove"})
      * @ORM\JoinTable(name="fish_logs",
      *      joinColumns={@ORM\JoinColumn(name="fish_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="log_id", referencedColumnName="id", unique=true)}
@@ -120,21 +120,25 @@ class Fish
     public function decreaseCleanliness($cleanliness = 1)
     {
         $this->cleanliness -= $cleanliness;
+        $this->cleanliness = min(max($this->cleanliness, 0), $this->getMaxCleanliness());
     }
 
     public function decreaseHappiness($happiness = 1)
     {
         $this->happiness -= $happiness;
+        $this->happiness = min(max($this->happiness, 0), $this->getMaxHappiness());
     }
 
     public function decreaseHunger($hunger = 3)
     {
         $this->hunger -= $hunger;
+        $this->hunger = min(max($this->hunger, 0), $this->getMaxHunger());
     }
 
     public function decreaseSleepFul($sleepFul = 1)
     {
         $this->sleepFul -= $sleepFul;
+        $this->sleepFul = min(max($this->sleepFul, 0), $this->getMaxSleepFul());
     }
 
     public function getAge()
@@ -174,7 +178,7 @@ class Fish
      */
     public function setCleanliness($cleanliness)
     {
-        $this->cleanliness = $cleanliness;
+        $this->cleanliness = min(max($cleanliness, 0), $this->getMaxCleanliness());
     }
 
     /**
@@ -190,7 +194,7 @@ class Fish
      */
     public function setHappiness($happiness)
     {
-        $this->happiness = $happiness;
+        $this->happiness = min(max($happiness, 0), $this->getMaxHappiness());
     }
 
     /**
@@ -222,7 +226,7 @@ class Fish
      */
     public function setHunger($hunger)
     {
-        $this->hunger = $hunger;
+        $this->hunger = min(max($hunger, 0), $this->getMaxHunger());
     }
 
     public function getMaxCleanliness()
@@ -290,27 +294,31 @@ class Fish
      */
     public function setSleepFul($sleepFul)
     {
-        $this->sleepFul = $sleepFul;
+        $this->sleepFul = min(max($sleepFul, 0), $this->getMaxSleepFul());
     }
 
     public function increaseCleanliness($cleanliness = 5)
     {
         $this->cleanliness += $cleanliness;
+        $this->cleanliness = min(max($this->cleanliness, 0), $this->getMaxCleanliness());
     }
 
     public function increaseHappiness($happiness = 5)
     {
         $this->happiness += $happiness;
+        $this->happiness = min(max($this->happiness, 0), $this->getHappiness());
     }
 
     public function increaseHunger($hunger = 1)
     {
         $this->hunger += $hunger;
+        $this->hunger = min(max($this->hunger, 0), $this->getMaxHunger());
     }
 
     public function increaseSleepFul($sleepFul = 7)
     {
         $this->sleepFul += $sleepFul;
+        $this->sleepFul = min(max($this->sleepFul, 0), $this->getMaxSleepFul());
     }
 
     public function addLog(LogSupplies $log)
@@ -346,12 +354,12 @@ class Fish
     public function isDead()
     {
         if (
-            $this->health == 0 ||
-            $this->cleanliness == 0 ||
-            $this->happiness == 0 ||
-            $this->hunger == 0 ||
-            $this->sleepFul == 0 ||
-            $this->hunger == 40
+            $this->health == 0
+//            $this->cleanliness == 0 ||
+//            $this->happiness == 0 ||
+//            $this->hunger == 0 ||
+//            $this->sleepFul == 0 ||
+//            $this->hunger == 40
         )
         {
             return true;

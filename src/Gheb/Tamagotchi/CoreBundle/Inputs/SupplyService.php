@@ -21,15 +21,17 @@ class SupplyService
      */
     private $manager;
 
-    public function __construct(EntityManager $manager)
+    public function __construct(EntityManager $em)
     {
-        $characterRepo = $manager->getRepository('Gheb\Tamagotchi\CoreBundle\Entity\Fish');
-        $this->character = array_pop($characterRepo->findAll());
+        $characters = $em->createQuery('select u from Gheb\Tamagotchi\CoreBundle\Entity\Fish u where u.health > 0')
+            ->getResult();
+        $this->character = array_pop($characters);
+        $this->manager = $em;
     }
 
     public function heal()
     {
-        $log = new LogSupplies($this->character, LogSupplies::ACTION_GIVE_MEDICINE, 'Owner');
+        $log = new LogSupplies(LogSupplies::ACTION_GIVE_MEDICINE, 'Owner');
         $this->character->addLog($log);
 
         $this->character->setMood(Fish::MOOD_STILL);
@@ -46,7 +48,7 @@ class SupplyService
             return $el->getTakenAt()->diff($now)->d == 0 && $el->getAction() == LogSupplies::ACTION_PLAY;
         });
 
-        if ($todayPlayLog < 2) {
+        if ($todayPlayLog->count() < 2) {
             $this->character->increaseHappiness();
         } else {
 
@@ -62,7 +64,7 @@ class SupplyService
             $this->character->setPersonality($personality);
         }
 
-        $log = new LogSupplies($this->character, LogSupplies::ACTION_PLAY, 'Owner');
+        $log = new LogSupplies(LogSupplies::ACTION_PLAY, 'Owner');
         $this->character->addLog($log);
 
         $this->character->setMood(Fish::MOOD_STILL);
@@ -79,7 +81,7 @@ class SupplyService
             return $el->getTakenAt()->diff($now)->d == 0 && $el->getAction() == LogSupplies::ACTION_TURN_OFF_LIGHT;
         });
 
-        if ($todaySleepLog < 2) {
+        if ($todaySleepLog->count() < 2) {
             $this->character->increaseSleepFul();
         } else {
             $this->character->increaseSleepFul();
@@ -95,7 +97,7 @@ class SupplyService
             $this->character->setPersonality($personality);
         }
 
-        $log = new LogSupplies($this->character, LogSupplies::ACTION_TURN_OFF_LIGHT, 'Owner');
+        $log = new LogSupplies(LogSupplies::ACTION_TURN_OFF_LIGHT, 'Owner');
         $this->character->addLog($log);
 
         $this->character->setMood(Fish::MOOD_STILL);
@@ -112,7 +114,7 @@ class SupplyService
             return $el->getTakenAt()->diff($now)->d == 0 && $el->getAction() == LogSupplies::ACTION_CLEAN;
         });
 
-        if ($todayCleanLog < 2) {
+        if ($todayCleanLog->count() < 2) {
             $this->character->increaseCleanliness();
         } else {
             $this->character->increaseCleanliness();
@@ -128,7 +130,7 @@ class SupplyService
             $this->character->setPersonality($personality);
         }
 
-        $log = new LogSupplies($this->character, LogSupplies::ACTION_CLEAN, 'Owner');
+        $log = new LogSupplies(LogSupplies::ACTION_CLEAN, 'Owner');
         $this->character->addLog($log);
 
         $this->character->setMood(Fish::MOOD_STILL);
@@ -145,7 +147,7 @@ class SupplyService
             return $el->getTakenAt()->diff($now)->d == 0 && $el->getAction() == LogSupplies::ACTION_FEED;
         });
 
-        if ($todayFeedLog < 8) {
+        if ($todayFeedLog->count() < 8) {
             $this->character->decreaseHunger();
         } else {
             $this->character->decreaseHunger();
@@ -161,10 +163,11 @@ class SupplyService
             $this->character->setPersonality($personality);
         }
 
-        $log = new LogSupplies($this->character, LogSupplies::ACTION_FEED, 'Owner');
+        $log = new LogSupplies(LogSupplies::ACTION_FEED, 'Owner');
         $this->character->addLog($log);
 
         $this->character->setMood(Fish::MOOD_STILL);
+
         $this->manager->flush();
     }
 }

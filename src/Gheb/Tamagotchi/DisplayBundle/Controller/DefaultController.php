@@ -3,7 +3,9 @@
 namespace Gheb\Tamagotchi\DisplayBundle\Controller;
 
 use Gheb\Tamagotchi\CoreBundle\Entity\Fish;
+use Gheb\Tamagotchi\CoreBundle\Inputs\SupplyService;
 use Gheb\Tamagotchi\CoreBundle\Personality\PersonalityLoader;
+use Gheb\Tamagotchi\LifeBundle\Services\LifeService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,6 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
+    protected $container;
+
     /**
      * @Route("/", name="homepage")
      * @param Request $request
@@ -18,7 +22,7 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $character = $em->createQuery('select u from Gheb\Tamagotchi\CoreBundle\Entity\Fish u where u.health > 0')
                          ->getResult();
 
@@ -41,7 +45,7 @@ class DefaultController extends Controller
      */
     public function howIsMyFishAction(Request $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         /** @var Fish $character */
         $characters =$em->createQuery('select u from Gheb\Tamagotchi\CoreBundle\Entity\Fish u where u.health > 0')
@@ -57,5 +61,81 @@ class DefaultController extends Controller
             'Sleepful' => $character->getSleepFul(),
             'Hunger' => $character->getHunger()
         )));
+    }
+
+    /**
+     * @Route("/feedTheFish", name="feedthefish")
+     */
+    public function feedTheFishAction(Request $request)
+    {
+        try {
+            /** @var SupplyService $supplyService */
+            /** @var LifeService $lifeService */
+            $supplyService = $this->container->get('gheb.tamagotchi.supplyService');
+            $lifeService   = $this->container->get('gheb.tamagotchi.lifeService');
+            $supplyService->feed();
+            $lifeService->lifeIsUnfair();
+
+            return new Response(json_encode(array('status'=>true)));
+        } catch (\Exception $e) {
+            return new Response(json_encode(array('status'=>false, 'error'=>$e->getMessage())));
+        }
+    }
+
+    /**
+     * @Route("/goFish", name="gofish")
+     */
+    public function goFishAction(Request $request)
+    {
+        /** @var SupplyService $supplyService */
+        /** @var LifeService $lifeService */
+        try {
+            $supplyService = $this->container->get('gheb.tamagotchi.supplyService');
+            $lifeService   = $this->container->get('gheb.tamagotchi.lifeService');
+            $supplyService->play();
+            $lifeService->lifeIsUnfair();
+
+            return new Response(json_encode(array('status'=>true)));
+        } catch (\Exception $e) {
+            return new Response(json_encode(array('status'=>false, 'error'=>$e->getMessage())));
+        }
+    }
+
+    /**
+     * @Route("/inTheDarknessBindThem", name="inthedarknessbindthem")
+     */
+    public function inTheDarknessBindThemAction(Request $request)
+    {
+        /** @var SupplyService $supplyService */
+        /** @var LifeService $lifeService */
+        try {
+            $supplyService = $this->container->get('gheb.tamagotchi.supplyService');
+            $lifeService   = $this->container->get('gheb.tamagotchi.lifeService');
+            $supplyService->turnOffLight();
+            $lifeService->lifeIsUnfair();
+
+            return new Response(json_encode(array('status'=>true)));
+        } catch (\Exception $e) {
+            return new Response(json_encode(array('status'=>false, 'error'=>$e->getMessage())));
+        }
+    }
+
+    /**
+     * @Route("/itsLupus", name="itslupus")
+     */
+    public function itsLupusAction(Request $request)
+    {
+        /** @var SupplyService $supplyService */
+        /** @var LifeService $lifeService */
+        try {
+            $supplyService = $this->container->get('gheb.tamagotchi.supplyService');
+            $lifeService   = $this->container->get('gheb.tamagotchi.lifeService');
+            $supplyService->heal();
+            $lifeService->lifeIsUnfair();
+
+            return new Response(json_encode(array('status'=>true)));
+        } catch (\Exception $e) {
+            return new Response(json_encode(array('status'=>false, 'error'=>$e->getMessage())));
+        }
     }
 }
