@@ -11,6 +11,7 @@
             Happiness : <span id="happiness"></span><br/>
         </div>
         <a href="javascript:void(0);" id="feed" class="btn">Feed</a>
+        <a href="javascript:void(0);" id="clean" class="btn">Clean</a>
         <a href="javascript:void(0);" id="play" class="btn">Play</a>
         <a href="javascript:void(0);" id="switch-off-light" class="btn">Switch off light</a>
         <a href="javascript:void(0);" id="heal" class="btn">Heal</a>
@@ -19,16 +20,36 @@
 
 {% block javascripts %}
     <script type="text/javascript">
+        var mood = {
+            1:'Sleepy',
+            2:'Player',
+            3:'Sick',
+            4:'Still',
+            5:'Natural'
+        };
+
         (function poll(){
             $.ajax({ url: "/howIsMyFish", success: function(data){
                 $('#health').html(data['Health']);
-                $('#mood').html(data['Mood']);
+                $('#mood').html(mood[data['Mood']]);
                 $('#hunger').html(data['Hunger']);
                 $('#sleepful').html(data['Sleepful']);
                 $('#cleanliness').html(data['Cleanliness']);
                 $('#happiness').html(data['Happiness']);
             }, dataType: "json", complete: poll, timeout: 30000 });
         })();
+
+        $('#clean').click(function(){
+            $.ajax({ url: "/cleanTheFish", success: function(data){
+                if (data['status'] == true){
+                    alert('ça brille !');
+                } else {
+                    alert('Il en reste encore un peu...');
+                }
+            }, dataType: "json", error: function(data){
+                alert('Avec du savon c\'est mieux ?');
+            }});
+        });
 
         $('#feed').click(function(){
             $.ajax({ url: "/feedTheFish", success: function(data){

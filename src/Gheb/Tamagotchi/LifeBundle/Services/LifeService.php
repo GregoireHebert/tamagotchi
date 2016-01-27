@@ -32,7 +32,7 @@ class LifeService
 
     public function lifeIsUnfair()
     {
-        if (!$this->character->isDead()) {
+        if ($this->character instanceof Fish && !$this->character->isDead()) {
 
             $now = new \DateTime();
 
@@ -50,17 +50,11 @@ class LifeService
             $lifeLog = new ArrayCollection(iterator_to_array($iterator));
             $lifeLog = $lifeLog->first();
 
-            $diff = $lifeLog instanceof LogSupplies ? $lifeLog->getTakenAt()->diff($now)->i : 0;
+            $diff = $lifeLog instanceof LogSupplies ? $lifeLog->getTakenAt()->diff($now)->s : 0;
             $lifeMustStrikeOnce = !$lifeLog instanceof LogSupplies;
             $lifeStrikesAgain = false;
 
             $lifeEffects = 'Life';
-
-            if (!$lifeMustStrikeOnce) {
-                dump($lifeLog->getTakenAt());
-            }
-            dump($now);
-            dump($diff);
 
             while ($lifeMustStrikeOnce || $diff > 0) {
                 $lifeStrikesAgain = true;
@@ -122,7 +116,7 @@ class LifeService
                     $lifeEffects .= ';reallydirty';
                 }
 
-                if ($this->character->getMood() == Fish::MOOD_STILL && $diff%6 == 0) {
+                if ($this->character->getMood() == Fish::MOOD_STILL || $now->format('i')%6 == 0) {
                     $this->character->newMood();
                     $lifeEffects .= ';newMood';
                 }

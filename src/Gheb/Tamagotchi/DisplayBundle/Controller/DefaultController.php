@@ -45,7 +45,7 @@ class DefaultController extends Controller
      */
     public function howIsMyFishAction(Request $request)
     {
-        sleep(5);
+        sleep(1);
         $lifeService   = $this->container->get('gheb.tamagotchi.lifeService');
         $lifeService->lifeIsUnfair();
 
@@ -78,6 +78,25 @@ class DefaultController extends Controller
             $supplyService = $this->container->get('gheb.tamagotchi.supplyService');
             $lifeService   = $this->container->get('gheb.tamagotchi.lifeService');
             $supplyService->feed();
+            $lifeService->lifeIsUnfair();
+
+            return new Response(json_encode(array('status'=>true)));
+        } catch (\Exception $e) {
+            return new Response(json_encode(array('status'=>false, 'error'=>$e->getMessage())));
+        }
+    }
+
+    /**
+     * @Route("/cleanTheFish", name="cleanthefish")
+     */
+    public function cleanTheFishAction(Request $request)
+    {
+        try {
+            /** @var SupplyService $supplyService */
+            /** @var LifeService $lifeService */
+            $supplyService = $this->container->get('gheb.tamagotchi.supplyService');
+            $lifeService   = $this->container->get('gheb.tamagotchi.lifeService');
+            $supplyService->clean();
             $lifeService->lifeIsUnfair();
 
             return new Response(json_encode(array('status'=>true)));
