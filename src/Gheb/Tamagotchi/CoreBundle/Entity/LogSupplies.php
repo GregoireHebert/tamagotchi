@@ -15,6 +15,7 @@ class LogSupplies
     const ACTION_FEED               = 4;
     const ACTION_GIVE_MEDICINE      = 5;
     const ACTION_LIFE_TAKE_PART     = 6;
+    const ACTION_HAPPY_BIRTHDAY     = 7;
 
     /**
      * @ORM\Column(type="integer")

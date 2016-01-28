@@ -41,33 +41,68 @@ class LifeService
                 return $el->getAction() == LogSupplies::ACTION_LIFE_TAKE_PART;
             });
 
-            $iterator = $logs->getIterator();
-            $iterator->uasort(function ($a, $b) {
+            $lastBirthday = $this->character->getLogs()->filter(function ($el) {
+                /** @var LogSupplies $el */
+                return $el->getAction() == LogSupplies::ACTION_HAPPY_BIRTHDAY;
+            });
+
+            $logIterator = $logs->getIterator();
+            $logIterator->uasort(function ($a, $b) {
+                return ($a->getTakenAt() > $b->getTakenAt()) ? -1 : 1;
+            });
+
+            $BDiterator = $lastBirthday->getIterator();
+            $BDiterator->uasort(function ($a, $b) {
                 return ($a->getTakenAt() > $b->getTakenAt()) ? -1 : 1;
             });
 
             /** @var LogSupplies $lifeLog */
-            $lifeLog = new ArrayCollection(iterator_to_array($iterator));
+            $lifeLog = new ArrayCollection(iterator_to_array($logIterator));
             $lifeLog = $lifeLog->first();
 
-            $diff = $lifeLog instanceof LogSupplies ? $lifeLog->getTakenAt()->diff($now)->s : 0;
+            /** @var LogSupplies $lifeLog */
+            $birthdayLog = new ArrayCollection(iterator_to_array($BDiterator));
+            $birthdayLog = $birthdayLog->first();
+
+            $diff = $lifeLog instanceof LogSupplies ? ($lifeLog->getTakenAt()->diff($now)->m%20) : 0;
             $lifeMustStrikeOnce = !$lifeLog instanceof LogSupplies;
             $lifeStrikesAgain = false;
 
             $lifeEffects = 'Life';
 
+            $aging = !$birthdayLog instanceof LogSupplies ? 1 : $birthdayLog->getTakenAt()->diff($now)->d;
+            if ($aging > 0) {
+                $this->character->setHealth($this->character->getHealth() - $aging);
+                $lifeEffects .= ';happyBirthday';
+            }
+
             while ($lifeMustStrikeOnce || $diff > 0) {
                 $lifeStrikesAgain = true;
                 $lifeMustStrikeOnce = false;
 
+                if ($this->character->getMood() == Fish::MOOD_STILL && $now->format('i')%20 == 0) {
+                    $this->character->newMood();
+                    $lifeEffects .= ';newMood';
+                }
+
                 if ($this->character->getMood() == Fish::MOOD_SLEEPY) {
+                    $this->character->decreaseSleepFul(1.5);
+                    $lifeEffects .= ';decreaseSleepFul';
+                } else {
                     $this->character->decreaseSleepFul();
                     $lifeEffects .= ';decreaseSleepFul';
                 }
+
+                if ($this->character->getMood() == Fish::MOOD_SICK) {
+                    $this->character->setHealth($this->character->getHealth() - 5);
+                    $lifeEffects .= ';sick';
+                }
+
                 if ($this->character->getMood() == Fish::MOOD_PLAYER) {
                     $this->character->decreaseHappiness();
                     $lifeEffects .= ';decreaseHappiness';
                 }
+
                 if ($this->character->getMood() == Fish::MOOD_NATURAL) {
                     $this->character->decreaseCleanliness();
                     $lifeEffects .= ';decreaseCleanliness';
@@ -76,49 +111,44 @@ class LifeService
                 $this->character->increaseHunger();
                 $lifeEffects .= ';increaseHunger';
 
-                if ($this->character->getHappiness() < 5) {
-                    $this->character->setHealth($this->character->getHealth() - 1);
-                    $lifeEffects .= ';missinghappiness';
-                }
-
-                if ($this->character->getHunger() > 30 || $this->character->getHunger() < 10) {
-                    $this->character->setHealth($this->character->getHealth() - 1);
-                    $lifeEffects .= ';badfood';
-                }
-
-                if ($this->character->getSleepFul() < 3) {
-                    $this->character->setHealth($this->character->getHealth() - 1);
-                    $lifeEffects .= ';notSleepful';
-                }
-
-                if ($this->character->getCleanliness() < 5) {
-                    $this->character->setHealth($this->character->getHealth() - 1);
-                    $lifeEffects .= ';notClean';
-                }
-
                 if ($this->character->getHappiness() <= 2) {
-                    $this->character->setHealth($this->character->getHealth() - 1);
+                    $this->character->setHealth($this->character->getHealth() - 5);
                     $lifeEffects .= ';nothappy';
                 }
 
-                if ($this->character->getHunger() >= 35 || $this->character->getHunger() <= 5) {
-                    $this->character->setHealth($this->character->getHealth() - 1);
-                    $lifeEffects .= ';starvingOrObesity';
+                if ($this->character->getHunger() <= 2) {
+                    $this->character->setHealth($this->character->getHealth() - 5);
+                    $lifeEffects .= ';tooMuchFeed';
                 }
 
-                if ($this->character->getSleepFul() == 1) {
-                    $this->character->setHealth($this->character->getHealth() - 1);
+                if ($this->character->getHunger() >= 8) {
+                    $this->character->setHealth($this->character->getHealth() - 5);
+                    $lifeEffects .= ';needToEat';
+                }
+
+                if ($this->character->getSleepFul() <= 2) {
+                    $this->character->setHealth($this->character->getHealth() - 5);
                     $lifeEffects .= ';needtosleep';
                 }
 
                 if ($this->character->getCleanliness() <= 2) {
-                    $this->character->setHealth($this->character->getHealth() - 1);
-                    $lifeEffects .= ';reallydirty';
+                    $this->character->setHealth($this->character->getHealth() - 5);
+                    $lifeEffects .= ';needToClean';
                 }
 
-                if ($this->character->getMood() == Fish::MOOD_STILL || $now->format('i')%6 == 0) {
-                    $this->character->newMood();
-                    $lifeEffects .= ';newMood';
+                if ($this->character->getWeight() > 100) {
+                    $this->character->setHealth($this->character->getHealth() - 5);
+                    $lifeEffects .= ';tooMuchWeight';
+                }
+
+                if ($this->character->getWeight() < 5) {
+                    $this->character->setHealth($this->character->getHealth() - 5);
+                    $lifeEffects .= ';tooSkinny';
+                }
+
+                if ($this->character->getMadness() > 25) {
+                    $this->character->setHealth($this->character->getHealth() - 5);
+                    $lifeEffects .= ';madness';
                 }
 
                 $diff--;

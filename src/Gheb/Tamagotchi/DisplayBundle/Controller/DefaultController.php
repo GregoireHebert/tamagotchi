@@ -63,7 +63,10 @@ class DefaultController extends Controller
             'Happiness' => $character->getHappiness(),
             'Cleanliness' => $character->getCleanliness(),
             'Sleepful' => $character->getSleepFul(),
-            'Hunger' => $character->getHunger()
+            'Hunger' => $character->getHunger(),
+            'Age' => $character->getAge(),
+            'Weight' => $character->getWeight(),
+            'Madness' => $character->getMadness()
         )));
     }
 

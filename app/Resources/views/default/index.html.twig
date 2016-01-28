@@ -3,12 +3,15 @@
 {% block body %}
     <div id="wrapper">
         <div id="container">
-            Health : <span id="health"></span><br/>
+            Health : <span id="health"></span>/100<br/>
             Mood : <span id="mood"></span><br/>
-            Hunger : <span id="hunger"></span><br/>
-            SleepFul : <span id="sleepful"></span><br/>
-            Cleanliness : <span id="cleanliness"></span><br/>
-            Happiness : <span id="happiness"></span><br/>
+            Hunger : <span id="hunger"></span>/10<br/>
+            SleepFul : <span id="sleepful"></span>/16<br/>
+            Cleanliness : <span id="cleanliness"></span>/8<br/>
+            Happiness : <span id="happiness"></span>/10<br/>
+            Age : <span id="age"></span><br/>
+            Weight : <span id="weight"></span><br/>
+            Madness : <span id="madness"></span><br/>
         </div>
         <a href="javascript:void(0);" id="feed" class="btn">Feed</a>
         <a href="javascript:void(0);" id="clean" class="btn">Clean</a>
@@ -28,21 +31,31 @@
             5:'Natural'
         };
 
-        (function poll(){
-            $.ajax({ url: "/howIsMyFish", success: function(data){
+        function poll(){
+            $.ajax({ url: "/tamagotchi/howIsMyFish", success: function(data){
                 $('#health').html(data['Health']);
                 $('#mood').html(mood[data['Mood']]);
                 $('#hunger').html(data['Hunger']);
                 $('#sleepful').html(data['Sleepful']);
                 $('#cleanliness').html(data['Cleanliness']);
                 $('#happiness').html(data['Happiness']);
-            }, dataType: "json", complete: poll, timeout: 30000 });
-        })();
+                $('#age').html(data['Age']);
+                $('#weight').html(data['Weight']);
+                $('#madness').html(data['Madness']);
+            }, dataType: "json"});
+
+            setTimeout(function(){
+                poll();
+            }, 30000);
+        }
+
+        poll();
 
         $('#clean').click(function(){
-            $.ajax({ url: "/cleanTheFish", success: function(data){
+            $.ajax({ url: "/tamagotchi/cleanTheFish", success: function(data){
                 if (data['status'] == true){
                     alert('ça brille !');
+                    poll();
                 } else {
                     alert('Il en reste encore un peu...');
                 }
@@ -52,9 +65,10 @@
         });
 
         $('#feed').click(function(){
-            $.ajax({ url: "/feedTheFish", success: function(data){
+            $.ajax({ url: "/tamagotchi/feedTheFish", success: function(data){
                 if (data['status'] == true){
                     alert('Nom Nom Nom !');
+                    poll();
                 } else {
                     alert('Heyyy ou est ma miette ?');
                 }
@@ -64,9 +78,10 @@
         });
 
         $('#play').click(function(){
-            $.ajax({ url: "/goFish", success: function(data){
+            $.ajax({ url: "/tamagotchi/goFish", success: function(data){
                 if (data['status'] == true){
                     alert('ouh yeah !');
+                    poll();
                 } else {
                     alert('des bubulles ?! encore des bubulles !');
                 }
@@ -76,9 +91,10 @@
         });
 
         $('#switch-off-light').click(function(){
-            $.ajax({ url: "/inTheDarknessBindThem", success: function(data){
+            $.ajax({ url: "/tamagotchi/inTheDarknessBindThem", success: function(data){
                 if (data['status'] == true){
                     alert('And in the darkness... Bind them !');
+                    poll();
                 } else {
                     alert('Qui a allumé la lumière ?');
                 }
@@ -88,9 +104,10 @@
         });
 
         $('#heal').click(function(){
-            $.ajax({ url: "/itsLupus", success: function(data){
+            $.ajax({ url: "/tamagotchi/itsLupus", success: function(data){
                 if (data['status'] == true){
                     alert('Merci Docteur !');
+                    poll();
                 } else {
                     alert('Do you want me to die ?');
                 }

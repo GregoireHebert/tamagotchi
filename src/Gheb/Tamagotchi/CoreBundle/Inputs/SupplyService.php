@@ -34,6 +34,8 @@ class SupplyService
         $log = new LogSupplies(LogSupplies::ACTION_GIVE_MEDICINE, 'Owner');
         $this->character->addLog($log);
 
+        $this->character->decreaseMadness();
+
         $this->character->setMood(Fish::MOOD_STILL);
         $this->manager->flush();
     }
@@ -51,18 +53,23 @@ class SupplyService
         if ($todayPlayLog->count() < 2) {
             $this->character->increaseHappiness();
         } else {
-
             $personality = $this->character->getPersonality();
             foreach ($personality['States'] as $state=>&$percents) {
-                if ($state == 'Play') {
-                    array_walk($percents, function(&$item) { $item = min(max(0,$item-2), 100); });
-                } else {
-                    $percents['Play'] = min(max(0,$percents['Play']+2), 100);
-                }
+                array_walk($percents, function(&$item, $key) {
+                    if ($key != 'Sick' && $key != 'Play') {
+                        $item = max(0,$item-5);
+                    }
+                    elseif ($key == 'Play')
+                    {
+                        $item = min($item+15, 95);
+                    }
+                });
             }
 
             $this->character->setPersonality($personality);
         }
+
+        $this->character->decreaseWeight();
 
         $log = new LogSupplies(LogSupplies::ACTION_PLAY, 'Owner');
         $this->character->addLog($log);
@@ -87,15 +94,22 @@ class SupplyService
             $this->character->increaseSleepFul();
             $personality = $this->character->getPersonality();
             foreach ($personality['States'] as $state=>&$percents) {
-                if ($state == 'Sleep') {
-                    array_walk($percents, function(&$item) { $item = min(max(0,$item-2), 100); });
-                } else {
-                    $percents['Sleep'] = min(max(0,$percents['Sleep']+2), 100);
-                }
+                array_walk($percents, function(&$item, $key) {
+                    if ($key != 'Sick' && $key != 'Sleep') {
+                        $item = max(0,$item-5);
+                    }
+                    elseif ($key == 'Sleep')
+                    {
+                        $item = min($item+15, 95);
+                    }
+                });
             }
 
+            $this->character->increaseMadness();
             $this->character->setPersonality($personality);
         }
+
+        $this->character->decreaseWeight(1);
 
         $log = new LogSupplies(LogSupplies::ACTION_TURN_OFF_LIGHT, 'Owner');
         $this->character->addLog($log);
@@ -120,13 +134,18 @@ class SupplyService
             $this->character->increaseCleanliness();
             $personality = $this->character->getPersonality();
             foreach ($personality['States'] as $state=>&$percents) {
-                if ($state == 'Toilet') {
-                    array_walk($percents, function(&$item) { $item = min(max(0,$item-2), 100); });
-                } else {
-                    $percents['Toilet'] = min(max(0,$percents['Toilet']+2), 100);
-                }
+                array_walk($percents, function(&$item, $key) {
+                    if ($key != 'Sick' && $key != 'Play') {
+                        $item = max(0,$item-5);
+                    }
+                    elseif ($key == 'Play')
+                    {
+                        $item = min($item+15, 95);
+                    }
+                });
             }
 
+            $this->character->increaseMadness();
             $this->character->setPersonality($personality);
         }
 
@@ -153,15 +172,21 @@ class SupplyService
             $this->character->decreaseHunger();
             $personality = $this->character->getPersonality();
             foreach ($personality['States'] as $state=>&$percents) {
-                if ($state == 'Still') {
-                    array_walk($percents, function(&$item) { $item = min(max(0,$item-2), 100); });
-                } else {
-                    $percents['Still'] = min(max(0,$percents['Still']+2), 100);
-                }
+                array_walk($percents, function(&$item, $key) {
+                    if ($key != 'Sick' && $key != 'Still') {
+                        $item = max(0,$item-5);
+                    }
+                    elseif ($key == 'Still')
+                    {
+                        $item = min($item+15, 95);
+                    }
+                });
             }
 
             $this->character->setPersonality($personality);
         }
+
+        $this->character->increaseWeight();
 
         $log = new LogSupplies(LogSupplies::ACTION_FEED, 'Owner');
         $this->character->addLog($log);

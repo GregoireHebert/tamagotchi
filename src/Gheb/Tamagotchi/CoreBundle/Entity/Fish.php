@@ -73,6 +73,18 @@ class Fish
     private $personality;
 
     /**
+     * @var @ORM\Column(type="decimal", scale=2)
+     * @var float
+     */
+    private $weight;
+
+    /**
+     * @var @ORM\Column(type="decimal", scale=2)
+     * @var float
+     */
+    private $madness;
+
+    /**
      * @ORM\ManyToMany(targetEntity="LogSupplies", cascade={"persist", "merge", "remove"})
      * @ORM\JoinTable(name="fish_logs",
      *      joinColumns={@ORM\JoinColumn(name="fish_id", referencedColumnName="id")},
@@ -91,14 +103,16 @@ class Fish
     public function __construct()
     {
         $this->name = 'fishy';
-        $this->hunger = 20;
+        $this->hunger = 8;
         $this->health = 100;
-        $this->happiness = 10;
-        $this->sleepFul = 10;
-        $this->cleanliness = 10;
+        $this->happiness = 8;
+        $this->sleepFul = 14;
+        $this->cleanliness = 6;
         $this->mood = self::MOOD_STILL;
         $this->logs = new ArrayCollection();
         $this->dateOfBirth = new \DateTime();
+        $this->weight = 30;
+        $this->madness = 5;
     }
 
     /**
@@ -117,10 +131,47 @@ class Fish
         $this->id = $id;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+
+    /**
+     * @param mixed $weight
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMadness()
+    {
+        return $this->madness;
+    }
+
+    /**
+     * @param mixed $madness
+     */
+    public function setMadness($madness)
+    {
+        $this->madness = $madness;
+    }
+
     public function decreaseCleanliness($cleanliness = 1)
     {
         $this->cleanliness -= $cleanliness;
         $this->cleanliness = min(max($this->cleanliness, 0), $this->getMaxCleanliness());
+    }
+
+    public function getMaxCleanliness()
+    {
+        return 8;
     }
 
     public function decreaseHappiness($happiness = 1)
@@ -129,16 +180,61 @@ class Fish
         $this->happiness = min(max($this->happiness, 0), $this->getMaxHappiness());
     }
 
-    public function decreaseHunger($hunger = 3)
+    public function getMaxHappiness()
+    {
+        return 10;
+    }
+
+    public function decreaseHunger($hunger = 5)
     {
         $this->hunger -= $hunger;
         $this->hunger = min(max($this->hunger, 0), $this->getMaxHunger());
+    }
+
+    public function getMaxHunger()
+    {
+        return 10;
+    }
+
+    public function decreaseWeight($weight = 5)
+    {
+        $this->weight = max(0, $this->weight - $weight);
+    }
+
+    public function increaseWeight($weight = 10)
+    {
+        $this->weight = min($this->getMaxWeight(), $this->weight + $weight);
+    }
+
+    public function getMaxWeight()
+    {
+        return 200;
+    }
+
+    public function decreaseMadness($madness = 5)
+    {
+        $this->madness = max(0, $this->madness - $madness);
+    }
+
+    public function increaseMadness($madness = 10)
+    {
+        $this->madness = min($this->getMaxMadness(), $this->madness+$madness);
+    }
+
+    public function getMaxMadness()
+    {
+        return 50;
     }
 
     public function decreaseSleepFul($sleepFul = 1)
     {
         $this->sleepFul -= $sleepFul;
         $this->sleepFul = min(max($this->sleepFul, 0), $this->getMaxSleepFul());
+    }
+
+    public function getMaxSleepFul()
+    {
+        return 16;
     }
 
     public function getAge()
@@ -229,26 +325,6 @@ class Fish
         $this->hunger = min(max($hunger, 0), $this->getMaxHunger());
     }
 
-    public function getMaxCleanliness()
-    {
-        return 10;
-    }
-
-    public function getMaxHappiness()
-    {
-        return 10;
-    }
-
-    public function getMaxHunger()
-    {
-        return 40;
-    }
-
-    public function getMaxSleepFul()
-    {
-        return 10;
-    }
-
     /**
      * @return string
      */
@@ -306,7 +382,7 @@ class Fish
     public function increaseHappiness($happiness = 5)
     {
         $this->happiness += $happiness;
-        $this->happiness = min(max($this->happiness, 0), $this->getHappiness());
+        $this->happiness = min(max($this->happiness, 0), $this->getMaxHappiness());
     }
 
     public function increaseHunger($hunger = 1)
