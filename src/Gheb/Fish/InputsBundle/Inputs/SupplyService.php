@@ -1,9 +1,9 @@
 <?php
-namespace Gheb\Tamagotchi\CoreBundle\Inputs;
+namespace Gheb\Fish\InputsBundle\Inputs;
 
 use Doctrine\ORM\EntityManager;
-use Gheb\Tamagotchi\CoreBundle\Entity\Fish;
-use Gheb\Tamagotchi\CoreBundle\Entity\LogSupplies;
+use Gheb\Fish\FishBundle\Entity\Fish;
+use Gheb\Fish\FishBundle\Life\Life;
 
 /**
  * Class SupplyService
@@ -21,12 +21,10 @@ class SupplyService
      */
     private $manager;
 
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $em, Life $life)
     {
-        $characters = $em->createQuery('select u from Gheb\Tamagotchi\CoreBundle\Entity\Fish u where u.health > 0')
-            ->getResult();
-        $this->character = array_pop($characters);
         $this->manager = $em;
+        $this->character = $life->createLife();
     }
 
     public function heal()
@@ -52,7 +50,9 @@ class SupplyService
 
         if ($todayPlayLog->count() < 2) {
             $this->character->increaseHappiness();
+            $this->character->decreaseSleepFul();
         } else {
+            $this->character->decreaseSleepFul(2);
             $personality = $this->character->getPersonality();
             foreach ($personality['States'] as $state=>&$percents) {
                 array_walk($percents, function(&$item, $key) {

@@ -1,0 +1,7 @@
+parameters:
+  gheb.fish.life.class: Gheb\Fish\FishBundle\Life\Life
+
+services:
+  gheb.fish.life:
+    class: %gheb.fish.life.class%
+    arguments: ["@doctrine.orm.entity_manager"]

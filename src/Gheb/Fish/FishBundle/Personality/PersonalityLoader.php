@@ -1,5 +1,5 @@
 <?php
-namespace Gheb\Tamagotchi\CoreBundle\Personality;
+namespace Gheb\Fish\FishBundle\Personality;
 
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Parser;

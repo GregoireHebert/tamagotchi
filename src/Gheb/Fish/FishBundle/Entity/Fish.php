@@ -1,5 +1,5 @@
 <?php
-namespace Gheb\Tamagotchi\CoreBundle\Entity;
+namespace Gheb\Fish\FishBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;

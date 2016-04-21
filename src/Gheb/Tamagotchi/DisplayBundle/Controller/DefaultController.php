@@ -46,28 +46,35 @@ class DefaultController extends Controller
     public function howIsMyFishAction(Request $request)
     {
         sleep(1);
-        $lifeService   = $this->container->get('gheb.tamagotchi.lifeService');
-        $lifeService->lifeIsUnfair();
 
         $em = $this->getDoctrine()->getManager();
 
-        /** @var Fish $character */
-        $characters =$em->createQuery('select u from Gheb\Tamagotchi\CoreBundle\Entity\Fish u where u.health > 0')
-            ->getResult();
+        try {
+            $lifeService = $this->container->get('gheb.tamagotchi.lifeService');
+            $lifeService->lifeIsUnfair();
 
-        $character = array_pop($characters);
+            /** @var Fish $character */
+            $characters =$em->createQuery('select u from Gheb\Tamagotchi\CoreBundle\Entity\Fish u where u.health > 0')
+                ->getResult();
 
-        return new Response(json_encode(array(
-            'Mood' => $character->getMood(),
-            'Health' => $character->getHealth(),
-            'Happiness' => $character->getHappiness(),
-            'Cleanliness' => $character->getCleanliness(),
-            'Sleepful' => $character->getSleepFul(),
-            'Hunger' => $character->getHunger(),
-            'Age' => $character->getAge(),
-            'Weight' => $character->getWeight(),
-            'Madness' => $character->getMadness()
-        )));
+            $character = array_pop($characters);
+
+            return new Response(json_encode(array(
+                'status' => true,
+                'Mood' => $character->getMood(),
+                'Health' => $character->getHealth(),
+                'Happiness' => $character->getHappiness(),
+                'Cleanliness' => $character->getCleanliness(),
+                'Sleepful' => $character->getSleepFul(),
+                'Hunger' => $character->getHunger(),
+                'Age' => $character->getAge(),
+                'Weight' => $character->getWeight(),
+                'Madness' => $character->getMadness()
+            )));
+
+        } catch(\Exception $e) {
+            return new Response(json_encode(array('status'=>false, 'error'=>$e->getMessage())));
+        }
     }
 
     /**

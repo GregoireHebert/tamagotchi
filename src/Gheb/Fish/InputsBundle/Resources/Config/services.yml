@@ -1,0 +1,7 @@
+parameters:
+  gheb.tamagotchi.supplyService.class: Gheb\Tamagotchi\CoreBundle\Inputs\SupplyService
+
+services:
+  gheb.tamagotchi.supplyService:
+    class: %gheb.tamagotchi.supplyService.class%
+    arguments: ["@doctrine.orm.entity_manager"]
