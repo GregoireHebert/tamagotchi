@@ -1,0 +1,29 @@
+parameters:
+  fish.life.class: Gheb\Fish\FishBundle\Services\Life
+  fish.life.obligation.hunger.class: Gheb\Fish\FishBundle\Services\HungerObligation
+  fish.life.obligation.sleepiness.class: Gheb\Fish\FishBundle\Services\SleepinessObligation
+  fish.life.obligation.time.class: Gheb\Fish\FishBundle\Services\TimeObligation
+
+services:
+  fish.life.service:
+      class: %fish.life.class%
+      tags:
+          - { name: doctrine.event_listener, event: preUpdate }
+
+  fish.life.obligation.hunger:
+      class: %fish.life.obligation.hunger.class%
+      public: false
+      tags:
+          - { name: fish.life.obligation }
+
+  fish.life.obligation.sleepiness:
+        class: %fish.life.obligation.sleepiness.class%
+        public: false
+        tags:
+            - { name: fish.life.obligation }
+
+  fish.life.obligation.time:
+          class: %fish.life.obligation.time.class%
+          public: false
+          tags:
+              - { name: fish.life.obligation }

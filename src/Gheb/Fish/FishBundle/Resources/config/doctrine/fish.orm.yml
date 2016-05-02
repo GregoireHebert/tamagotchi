@@ -1,0 +1,15 @@
+Gheb\Fish\FishBundle\Entity\Fish:
+    type: entity
+    table: fish
+
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+        fields:
+            health:
+                type: integer
+            hunger:
+                type: integer
+            sleepiness:
+                type: integer
