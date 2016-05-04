@@ -1,6 +1,7 @@
 Gheb\Fish\FishBundle\Entity\Fish:
     type: entity
     table: fish
+    repositoryClass: Gheb\Fish\FishBundle\Entity\FishRepository
 
     id:
         id:

@@ -1,19 +1,19 @@
 <?php
 
-namespace Gheb\Fish\IOBundle\Services\Outputs;
+namespace Gheb\Fish\IOBundle\Outputs;
 
 use Gheb\Fish\FishBundle\Entity\Fish;
 use \DateTime;
 
 /**
- * Class Sleepy
+ * Class Hunger
  * @author  Grégoire Hébert <gregoire@opo.fr>
- * @package Gheb\Fish\IOBundle\Services\Outputs
+ * @package Gheb\Fish\IOBundle\Outputs
  */
-class Hunger extends AbstractOutputs
+class Hunger extends AbstractOutput
 {
     /**
-     * A.K.A Feed
+     * Feed
      */
     public function apply()
     {

@@ -1,0 +1,16 @@
+parameters:
+  fish.io.aggregator.inputs.class: Gheb\Fish\IOBundle\Inputs\InputsAggregator
+  fish.io.aggregator.outputs.class: Gheb\Fish\IOBundle\Inputs\OutputsAggregator
+
+services:
+  fish.io.aggregator.inputs:
+    class: %fish.io.aggregator.inputs.class%
+    arguments: ["@doctrine.orm.entity_manager"]
+    calls:
+      - [aggregate]
+
+  fish.io.aggregator.outputs:
+    class: %fish.io.aggregator.outputs.class%
+    arguments: ["@doctrine.orm.entity_manager"]
+    calls:
+      - [aggregate]

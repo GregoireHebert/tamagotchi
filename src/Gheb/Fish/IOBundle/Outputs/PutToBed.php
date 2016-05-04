@@ -1,18 +1,18 @@
 <?php
 
-namespace Gheb\Fish\IOBundle\Services\Outputs;
+namespace Gheb\Fish\IOBundle\Outputs;
 
 use \DateTime;
 
 /**
- * Class Sleepy
+ * Class PutToBed
  * @author  Grégoire Hébert <gregoire@opo.fr>
- * @package Gheb\Fish\IOBundle\Services\Outputs
+ * @package Gheb\Fish\IOBundle\Outputs
  */
-class PutToBed extends AbstractOutputs
+class PutToBed extends AbstractOutput
 {
     /**
-     * A.K.A Put to bed
+     *Put to bed
      */
     public function apply()
     {
