@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityNotFoundException;
 use Gheb\Fish\FishBundle\Entity\Fish;
 use Gheb\Fish\FishBundle\Entity\FishRepository;
+use Gheb\Fish\IOBundle\Monolog\IOLogger;
 
 /**
  * Class AbstractInput
@@ -15,20 +16,50 @@ use Gheb\Fish\FishBundle\Entity\FishRepository;
 abstract class AbstractInput
 {
     /**
+     * @var EntityManager
+     */
+    protected $em;
+
+    /**
      * @var Fish
      */
     protected $fish;
 
-    public function __construct(EntityManager $em)
+    /**
+     * @var IOLogger
+     */
+    protected $logger;
+
+    /**
+     * AbstractInput constructor.
+     *
+     * @param EntityManager $em
+     * @param IOLogger      $logger
+     *
+     * @throws EntityNotFoundException
+     */
+    public function __construct(EntityManager $em, IOLogger $logger)
+    {
+        $this->em = $em;
+        $this->logger = $logger;
+    }
+
+    protected function getFish()
     {
         /** @var FishRepository $repo */
-        $repo = $em->getRepository('FishBundle:Fish');
+        $repo = $this->em->getRepository('FishBundle:Fish');
         $this->fish = $repo->findAliveFish();
 
         if ($this->fish == null) {
             throw new EntityNotFoundException('There is no fish alive...');
         }
     }
+
+    /**
+     * Return the InputName for command retrieval
+     * @return string
+     */
+    public abstract function getName();
 
     /**
      * Getting the value of the input

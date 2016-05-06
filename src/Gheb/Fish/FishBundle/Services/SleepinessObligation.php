@@ -9,13 +9,14 @@ use Gheb\Fish\FishBundle\Entity\Fish;
  * @author  Grégoire Hébert <gregoire@opo.fr>
  * @package Gheb\Fish\FishBundle\Services
  */
-class SleepinessObligation implements AbstractLifeObligation
+class SleepinessObligation extends AbstractLifeObligation
 {
-    public static function applyEffect(Fish &$fish)
+    public function applyEffect(Fish &$fish)
     {
         // As it's too high, it's getting worse for it's life
         if ($fish->getSleepiness() >= 8) {
             $fish->setHealth($fish->getHealth() - 5);
+            $this->application .= 'Sleepiness >= 8 :'."\t".' -5 Health'."\n";
         }
     }
 }

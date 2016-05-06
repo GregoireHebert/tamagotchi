@@ -13,11 +13,17 @@ use Gheb\Fish\IOBundle\Inputs\AbstractInput;
  */
 class Hunger extends AbstractInput
 {
+    public function getName()
+    {
+        return 'hunger';
+    }
+
     /**
      * get the Hunger
      */
     public function getValue()
     {
+        $this->getFish();
         return $this->fish->getHunger();
     }
 }

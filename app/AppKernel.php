@@ -5,6 +5,21 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 
 class AppKernel extends Kernel
 {
+    public function getCacheDir()
+    {
+        return dirname(__DIR__).'/var/cache/'.$this->getEnvironment();
+    }
+
+    public function getLogDir()
+    {
+        return dirname(__DIR__).'/var/logs';
+    }
+
+    public function getRootDir()
+    {
+        return __DIR__;
+    }
+
     public function registerBundles()
     {
         $bundles = [
@@ -17,9 +32,8 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
         ];
 
-        $bundles[] = new \Gheb\Tamagotchi\CoreBundle\CoreBundle();
-        $bundles[] = new \Gheb\Tamagotchi\DisplayBundle\DisplayBundle();
-        $bundles[] = new \Gheb\Tamagotchi\LifeBundle\LifeBundle();
+        $bundles[] = new \Gheb\Fish\FishBundle\FishBundle();
+        $bundles[] = new \Gheb\Fish\IOBundle\IOBundle();
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
@@ -29,21 +43,6 @@ class AppKernel extends Kernel
         }
 
         return $bundles;
-    }
-
-    public function getRootDir()
-    {
-        return __DIR__;
-    }
-
-    public function getCacheDir()
-    {
-        return dirname(__DIR__).'/var/cache/'.$this->getEnvironment();
-    }
-
-    public function getLogDir()
-    {
-        return dirname(__DIR__).'/var/logs';
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)

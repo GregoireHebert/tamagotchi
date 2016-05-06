@@ -12,7 +12,13 @@ web_profiler:
     intercept_redirects: false
 
 monolog:
+    channels: ['obligations', 'io']
     handlers:
+        obligations:
+            type: stream
+            path: "%kernel.logs_dir%/obligations.log"
+            level: debug
+            channels: obligations
         main:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.log"

@@ -2,15 +2,14 @@ Gheb\Fish\FishBundle\Entity\Fish:
     type: entity
     table: fish
     repositoryClass: Gheb\Fish\FishBundle\Entity\FishRepository
-
     id:
         id:
             type: integer
             generator: { strategy: AUTO }
-        fields:
-            health:
-                type: integer
-            hunger:
-                type: integer
-            sleepiness:
-                type: integer
+    fields:
+        health:
+            type: integer
+        hunger:
+            type: integer
+        sleepiness:
+            type: integer

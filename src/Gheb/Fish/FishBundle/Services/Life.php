@@ -7,7 +7,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Gheb\Fish\FishBundle\Entity\Fish;
 
 /**
- * Class Health
+ * Class Life
  * @author  Grégoire Hébert <gregoire@opo.fr>
  * @package Gheb\Fish\FishBundle\Services
  */
@@ -17,6 +17,11 @@ class Life
      * @var ArrayCollection
      */
     private $obligations;
+
+    public function __construct()
+    {
+        $this->obligations = new ArrayCollection();
+    }
 
     /**
      * Add a life obligation
@@ -29,21 +34,17 @@ class Life
         }
     }
 
-    public function preUpdate(LifecycleEventArgs $args)
+    public function applyEffect(Fish $fish)
     {
-        $fish = $args->getEntity();
-
-        if (!$fish instanceof Fish) {
+        if ($fish->getHealth() == 0) {
             return;
         }
 
         foreach ($this->obligations as $obligation) {
             if ($obligation instanceof AbstractLifeObligation) {
                 $obligation->applyEffect($fish);
+                $obligation->logEffect();
             }
         }
-
-        $entityManager = $args->getEntityManager();
-        $entityManager->flush();
     }
 }

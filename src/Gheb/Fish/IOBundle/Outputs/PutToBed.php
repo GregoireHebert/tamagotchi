@@ -16,7 +16,15 @@ class PutToBed extends AbstractOutput
      */
     public function apply()
     {
+        $this->getFish();
         $sleepiness = $this->fish->getSleepiness();
         $this->fish->setSleepiness($sleepiness-5);
+        $this->em->flush();
+        $this->logger->logger->info('Sleep :'."\t".' -5 Sleepiness'."\n");
+    }
+
+    public function getName()
+    {
+        return 'putToBed';
     }
 }

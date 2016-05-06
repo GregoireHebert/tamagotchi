@@ -1,8 +1,9 @@
 <?php
-namespace Gheb\Fish\InputsBundle;
+namespace Gheb\Fish\IOBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class IOBundle extends Bundle
 {
+
 }

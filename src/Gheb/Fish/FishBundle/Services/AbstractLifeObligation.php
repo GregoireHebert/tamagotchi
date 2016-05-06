@@ -1,23 +1,53 @@
 <?php
 
-/**
- * This file is part of the FairPlay package.
- *
- * (c) Oeil Pour Oeil
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 namespace Gheb\Fish\FishBundle\Services;
 
 use Gheb\Fish\FishBundle\Entity\Fish;
+use Gheb\Fish\FishBundle\Monolog\ObligationsLogger;
 
 /**
  * Class AbstractLifeObligation
  * @author  Grégoire Hébert <gregoire@opo.fr>
  * @package Gheb\Fish\FishBundle\Services
  */
-interface AbstractLifeObligation
+abstract class AbstractLifeObligation
 {
-    public static function applyEffect(Fish &$fish);
+    /**
+     * What has been applied
+     * @var string
+     */
+    protected $application;
+
+    /**
+     * @var Logger
+     */
+    protected $logger;
+
+    public function __construct(ObligationsLogger $logger)
+    {
+        $this->logger = $logger;
+    }
+
+    /**
+     * Apply any effect upon the fish
+     *
+     * @param Fish $fish
+     *
+     * @return mixed
+     */
+    public abstract function applyEffect(Fish &$fish);
+
+    /**
+     * Record the application onto logs
+     *
+     * @param string $application
+     *
+     * @return mixed
+     */
+    public function logEffect()
+    {
+        if (!empty($this->application)) {
+            $this->logger->logger->debug($this->application);
+        }
+    }
 }

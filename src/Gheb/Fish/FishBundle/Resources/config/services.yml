@@ -3,27 +3,61 @@ parameters:
   fish.life.obligation.hunger.class: Gheb\Fish\FishBundle\Services\HungerObligation
   fish.life.obligation.sleepiness.class: Gheb\Fish\FishBundle\Services\SleepinessObligation
   fish.life.obligation.time.class: Gheb\Fish\FishBundle\Services\TimeObligation
+  fish.command.givebirth.class: Gheb\Fish\FishBundle\Command\GiveBirthCommand
+  fish.command.kill.class: Gheb\Fish\FishBundle\Command\KillCommand
+  fish.command.apply.life.class: Gheb\Fish\FishBundle\Command\ApplyLifeCommand
+  fish.command.apply.time.class: Gheb\Fish\FishBundle\Command\ApplyTimeCommand
 
 services:
-  fish.life.service:
-      class: %fish.life.class%
-      tags:
-          - { name: doctrine.event_listener, event: preUpdate }
+
+  fish.command.givebirth:
+    class: %fish.command.givebirth.class%
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: console.command }
+
+  fish.command.kill:
+    class: %fish.command.kill.class%
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: console.command }
+
+  fish.command.apply.life:
+    class: %fish.command.apply.life.class%
+    arguments: [ "@doctrine.orm.entity_manager", "@fish.life" ]
+    tags:
+      - { name: console.command }
+
+  fish.command.apply.time:
+    class: %fish.command.apply.time.class%
+    arguments: [ "@doctrine.orm.entity_manager", "@fish.life.obligation.time" ]
+    tags:
+      - { name: console.command }
+
+  fish.logger.obligations:
+    class: Gheb\Fish\FishBundle\Monolog\ObligationsLogger
+    arguments: ['@logger']
+    tags:
+        - { name: monolog.logger, channel: obligations }
+
+  fish.life:
+    class: %fish.life.class%
 
   fish.life.obligation.hunger:
-      class: %fish.life.obligation.hunger.class%
-      public: false
-      tags:
-          - { name: fish.life.obligation }
+    class: %fish.life.obligation.hunger.class%
+    public: false
+    arguments: ['@fish.logger.obligations']
+    tags:
+      - { name: fish.life.obligation }
 
   fish.life.obligation.sleepiness:
-        class: %fish.life.obligation.sleepiness.class%
-        public: false
-        tags:
-            - { name: fish.life.obligation }
+    class: %fish.life.obligation.sleepiness.class%
+    public: false
+    arguments: ['@fish.logger.obligations']
+    tags:
+      - { name: fish.life.obligation }
 
   fish.life.obligation.time:
-          class: %fish.life.obligation.time.class%
-          public: false
-          tags:
-              - { name: fish.life.obligation }
+    class: %fish.life.obligation.time.class%
+    public: false
+    arguments: ['@fish.logger.obligations']

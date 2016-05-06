@@ -20,7 +20,7 @@ class FishRepository extends EntityRepository
     public function findAliveFish()
     {
         $qb = $this->createQueryBuilder('f');
-        $qb->where('health > 0');
+        $qb->where('f.health > 0');
 
         return $qb->getQuery()->getOneOrNullResult();
     }

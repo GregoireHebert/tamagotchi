@@ -11,5 +11,4 @@ use Gheb\Fish\IOBundle\Aggregator;
  */
 class OutputsAggregator extends Aggregator
 {
-
 }

@@ -19,12 +19,12 @@ class HealthCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $validator = $container->getDefinition('fish.life.obligation');
+        $life = $container->getDefinition('fish.life');
 
         $factories = array_keys($container->findTaggedServiceIds('fish.life.obligation'));
         foreach ($factories as $factoryID) {
             $factory = new Reference($factoryID);
-            $validator->addMethodCall('addObligation', array($factory));
+            $life->addMethodCall('addObligation', array($factory));
         }
     }
 }
