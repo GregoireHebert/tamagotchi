@@ -34,6 +34,7 @@ class AppKernel extends Kernel
 
         $bundles[] = new \Gheb\Fish\FishBundle\FishBundle();
         $bundles[] = new \Gheb\Fish\IOBundle\IOBundle();
+        $bundles[] = new \Gheb\Fish\NeatBundle\NeatBundle();
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
