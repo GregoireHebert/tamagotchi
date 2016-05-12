@@ -87,6 +87,14 @@ class Aggregator
     }
 
     /**
+     * @return int
+     */
+    public function count()
+    {
+        return $this->aggregate->count();
+    }
+
+    /**
      * Return a aggregated input/output according to it's name
      *
      * @param $name
