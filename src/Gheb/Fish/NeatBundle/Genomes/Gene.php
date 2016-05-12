@@ -8,10 +8,17 @@ class Gene
      * @var bool
      */
     public $enabled = true;
+
+    /**
+     * @var Genome
+     */
+    public $genome;
+
     /**
      * @var int
      */
     public $innovation = 0;
+
     /**
      * @var int
      */
@@ -21,10 +28,19 @@ class Gene
      * @var int
      */
     public $out = 0;
+
     /**
      * @var float
      */
     public $weight = 0.0;
+
+    /**
+     * @return Genome
+     */
+    public function getGenome()
+    {
+        return $this->genome;
+    }
 
     /**
      * @return int
@@ -72,6 +88,14 @@ class Gene
     public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
+    }
+
+    /**
+     * @param Genome $genome
+     */
+    public function setGenome($genome)
+    {
+        $this->genome = $genome;
     }
 
     /**

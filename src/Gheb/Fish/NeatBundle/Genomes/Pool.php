@@ -28,19 +28,21 @@ class Pool
      * @var int
      */
     public $innovation = 0;
-    /**
-     * @var int
-     */
-    public $maxFitness = 0;
-    /**
-     * @var ArrayCollection
-     */
-    public $species;
 
     /**
      * @var InputsAggregator
      */
     private $inputAggregator;
+
+    /**
+     * @var int
+     */
+    public $maxFitness = 0;
+
+    /**
+     * @var ArrayCollection
+     */
+    public $species;
 
     /**
      * Pool constructor.
@@ -53,6 +55,12 @@ class Pool
         $this->inputAggregator = $inputsAggregator;
     }
 
+    public function addSpecie(Specie $specie)
+    {
+        $this->species->add($specie);
+        $specie->setPool($this);
+    }
+
     public function createBasicGenome()
     {
         $genome = new Genome();
@@ -61,7 +69,6 @@ class Pool
 
         return $genome;
     }
-
 
     /**
      * @return int
@@ -115,6 +122,11 @@ class Pool
     {
         $this->innovation++;
         return $this->innovation;
+    }
+
+    public function removeSpecie(Specie $specie)
+    {
+        $this->species->removeElement($specie);
     }
 
     /**

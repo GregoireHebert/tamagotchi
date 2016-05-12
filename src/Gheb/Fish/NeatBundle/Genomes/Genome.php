@@ -7,19 +7,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Genome
 {
     /**
-     * @var ArrayCollection
-     */
-    public $genes;
-
-    /**
      * @var int
      */
     public $fitness = 0;
 
     /**
-     * @var array
+     * @var ArrayCollection
      */
-    public $network = array();
+    public $genes;
 
     /**
      * @var int
@@ -31,8 +26,20 @@ class Genome
      */
     public $mutationRates = array();
 
+    /**
+     * @var array
+     */
+    public $network = array();
+
+    /**
+     * @var Specie
+     */
+    public $specie;
+
     public function __construct()
     {
+        $this->genes = new ArrayCollection();
+
         $this->mutationRates["connections"] = 0.25;
         $this->mutationRates["link"] = 2.0;
         $this->mutationRates["bias"] = 0.40;
@@ -40,6 +47,15 @@ class Genome
         $this->mutationRates["enable"] = 0.2;
         $this->mutationRates["disable"] = 0.4;
         $this->mutationRates["step"] = 0.1;
+    }
+
+    /**
+     * @param Gene $gene
+     */
+    public function addGene(Gene $gene)
+    {
+        $this->genes->add($gene);
+        $gene->setGenome($this);
     }
 
     /**
@@ -51,27 +67,11 @@ class Genome
     }
 
     /**
-     * @param int $fitness
+     * @return ArrayCollection
      */
-    public function setFitness($fitness)
+    public function getGenes()
     {
-        $this->fitness = $fitness;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getNetwork()
-    {
-        return $this->network;
-    }
-
-    /**
-     * @param mixed $network
-     */
-    public function setNetwork($network)
-    {
-        $this->network = $network;
+        return $this->genes;
     }
 
     /**
@@ -83,19 +83,56 @@ class Genome
     }
 
     /**
-     * @param int $maxNeuron
-     */
-    public function setMaxNeuron($maxNeuron)
-    {
-        $this->maxNeuron = $maxNeuron;
-    }
-
-    /**
      * @return array
      */
     public function getMutationRates()
     {
         return $this->mutationRates;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNetwork()
+    {
+        return $this->network;
+    }
+
+    /**
+     * @return Specie
+     */
+    public function getSpecie()
+    {
+        return $this->specie;
+    }
+
+    public function removeGene(Gene $gene)
+    {
+        $this->genes->removeElement($gene);
+    }
+
+    /**
+     * @param int $fitness
+     */
+    public function setFitness($fitness)
+    {
+        $this->fitness = $fitness;
+    }
+
+    /**
+     * @param ArrayCollection $genes
+     */
+    public function setGenes($genes)
+    {
+        $this->genes = $genes;
+    }
+
+    /**
+     * @param int $maxNeuron
+     */
+    public function setMaxNeuron($maxNeuron)
+    {
+        $this->maxNeuron = $maxNeuron;
     }
 
     /**
@@ -107,31 +144,18 @@ class Genome
     }
 
     /**
-     * @param Gene $gene
+     * @param mixed $network
      */
-    public function addGene(Gene $gene)
+    public function setNetwork($network)
     {
-        $this->genes->add($gene);
-    }
-
-    public function removeGene(Gene $gene)
-    {
-        $this->genes->removeElement($gene);
+        $this->network = $network;
     }
 
     /**
-     * @return ArrayCollection
+     * @param Specie $specie
      */
-    public function getGenes()
+    public function setSpecie($specie)
     {
-        return $this->genes;
-    }
-
-    /**
-     * @param ArrayCollection $genes
-     */
-    public function setGenes($genes)
-    {
-        $this->genes = $genes;
+        $this->specie = $specie;
     }
 }
