@@ -55,6 +55,29 @@ class Pool
         $this->inputAggregator = $inputsAggregator;
     }
 
+    public function cutSpecies($cutToOne)
+    {
+        /** @var Specie $specie */
+        foreach ($this->species as $specie) {
+
+            $iterator = $specie->getGenomes()->getIterator();
+            $iterator->uasort(
+                function ($first, $second) {
+                    /** @var Genome $first */ /** @var Genome $second */
+                    return $first->getFitness() > $second->getFitness() ? -1 : 1;
+                }
+            );
+
+            $remaining = $cutToOne ? 1 : ceil($specie->getGenomes()->count()/2);
+            $remainingSpecie = array();
+            while($specie->getGenomes()->count() > $remaining) {
+                $remainingSpecie = array_pop(iterator_to_array($iterator, true));
+            }
+
+            $specie->setGenomes($remainingSpecie);
+        }
+    }
+
     public function addSpecie(Specie $specie)
     {
         $this->species->add($specie);
