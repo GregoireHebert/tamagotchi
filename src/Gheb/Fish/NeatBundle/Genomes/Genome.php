@@ -32,6 +32,11 @@ class Genome
     public $network = array();
 
     /**
+     * @var int
+     */
+    public $globalRank;
+
+    /**
      * @var Specie
      */
     public $specie;
@@ -47,6 +52,22 @@ class Genome
         $this->mutationRates["enable"] = 0.2;
         $this->mutationRates["disable"] = 0.4;
         $this->mutationRates["step"] = 0.1;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGlobalRank()
+    {
+        return $this->globalRank;
+    }
+
+    /**
+     * @param int $globalRank
+     */
+    public function setGlobalRank($globalRank)
+    {
+        $this->globalRank = $globalRank;
     }
 
     /**
