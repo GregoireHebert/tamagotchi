@@ -36,6 +36,11 @@ class Specie
      */
     public $topFitness = 0;
 
+    public function __construct()
+    {
+        $this->genomes = new ArrayCollection();
+    }
+
     public function addGenome(Genome $genome)
     {
         $this->genomes->add($genome);

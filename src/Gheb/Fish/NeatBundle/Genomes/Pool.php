@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Gheb\Fish\IOBundle\Inputs\InputsAggregator;
 use Gheb\Fish\IOBundle\Outputs\OutputsAggregator;
+use Gheb\Fish\NeatBundle\Aggregator;
 
 /**
  * Class Pool regroups every species
@@ -24,14 +25,22 @@ class Pool
      * @var int
      */
     public $currentGenome = 1;
+
     /**
      * @var int
      */
     public $currentSpecies = 1;
+
+    /**
+     * @var EntityManager
+     */
+    public $em;
+
     /**
      * @var int
      */
     public $generation = 0;
+
     /**
      * @var int
      */
@@ -48,55 +57,56 @@ class Pool
     public $maxFitness = 0;
 
     /**
-     * @var ArrayCollection
-     */
-    public $species;
-
-    /**
      * @var Mutation
      */
     public $mutation;
 
     /**
-     * @var EntityManager
+     * @var ArrayCollection
      */
-    public $em;
+    public $species;
 
     /**
      * Pool constructor.
+     *
      * @param EntityManager $em
-     * @param OutputsAggregator $outputsAggregator
-     * @param InputsAggregator $inputsAggregator
-     * @param Mutation $mutation
+     * @param Aggregator    $outputsAggregator
+     * @param Aggregator    $inputsAggregator
+     * @param Mutation      $mutation
      */
-    public function __construct(EntityManager $em, OutputsAggregator $outputsAggregator, InputsAggregator $inputsAggregator, Mutation $mutation)
+    public function __construct(EntityManager $em, Aggregator $outputsAggregator, Aggregator $inputsAggregator, Mutation $mutation)
     {
         $this->em = $em;
         $this->innovation = $outputsAggregator->count();
         $this->inputAggregator = $inputsAggregator;
         $this->mutation = $mutation;
+
+        $this->species = new ArrayCollection();
     }
 
-    public function cutSpecies($cutToOne)
+    public function addSpecie(Specie $specie)
     {
+        $this->species->add($specie);
+        $specie->setPool($this);
+    }
+
+    public function addToSpecies(Genome $child)
+    {
+        $foundSpecie = false;
+
         /** @var Specie $specie */
         foreach ($this->species as $specie) {
-
-            $iterator = $specie->getGenomes()->getIterator();
-            $iterator->uasort(
-                function ($first, $second) {
-                    /** @var Genome $first */ /** @var Genome $second */
-                    return $first->getFitness() > $second->getFitness() ? -1 : 1;
-                }
-            );
-
-            $remaining = $cutToOne ? 1 : ceil($specie->getGenomes()->count()/2);
-            $remainingSpecie = array();
-            while($specie->getGenomes()->count() > $remaining) {
-                $remainingSpecie = array_pop(iterator_to_array($iterator, true));
+            if ($this->sameSpecies($child, $specie->genomes->offsetGet(0))) {
+                $specie->genomes->add($child);
+                $foundSpecie = true;
+                break;
             }
+        }
 
-            $specie->setGenomes($remainingSpecie);
+        if (!$foundSpecie) {
+            $childSpecie = new Specie();
+            $childSpecie->addGenome($child);
+            $this->species->add($childSpecie);
         }
     }
 
@@ -114,94 +124,37 @@ class Pool
         return $child;
     }
 
-    /**
-     * @return InputsAggregator
-     */
-    public function getInputAggregator()
+    public function createBasicGenome()
     {
-        return $this->inputAggregator;
+        $genome = new Genome();
+        $genome->setMaxNeuron($this->inputAggregator->count() + 1);
+        $this->mutation->mutate($genome);
+
+        return $genome;
     }
 
-    /**
-     * @param InputsAggregator $inputAggregator
-     */
-    public function setInputAggregator($inputAggregator)
+    public function cutSpecies($cutToOne)
     {
-        $this->inputAggregator = $inputAggregator;
-    }
+        /** @var Specie $specie */
+        foreach ($this->species as $specie) {
 
-    /**
-     * @return Mutation
-     */
-    public function getMutation()
-    {
-        return $this->mutation;
-    }
-
-    /**
-     * @param Mutation $mutation
-     */
-    public function setMutation($mutation)
-    {
-        $this->mutation = $mutation;
-    }
-
-    /**
-     * @return EntityManager
-     */
-    public function getEm()
-    {
-        return $this->em;
-    }
-
-    /**
-     * @param EntityManager $em
-     */
-    public function setEm($em)
-    {
-        $this->em = $em;
-    }
-
-    public function removeStaleSpecies()
-    {
-        $survived = new ArrayCollection();
-
-        /**
-         * @var int $key
-         * @var Specie $specie
-         */
-        foreach ($this->species as $key => $specie) {
             $iterator = $specie->getGenomes()->getIterator();
             $iterator->uasort(
                 function ($first, $second) {
-                    /** @var Genome $first */ /** @var Genome $second */
+                    /** @var Genome $first */
+                    /** @var Genome $second */
                     return $first->getFitness() > $second->getFitness() ? -1 : 1;
                 }
             );
 
-            if ($iterator->offsetGet(0)->getFitness() > $specie->getTopFitness()) {
-                $specie->setTopFitness($iterator->offsetGet(0)->getFitness());
-                $specie->setStaleness(0);
-            } else {
-                $specie->staleness++;
+            $remaining = $cutToOne ? 1 : ceil($specie->getGenomes()->count() / 2);
+            $remainingSpecie = array();
+            while ($specie->getGenomes()->count() > $remaining) {
+                $remainingSpecie = array_pop(iterator_to_array($iterator, true));
             }
 
-            if ($specie->getStaleness() < self::STALE_SPECIES ||
-                $specie->getTopFitness() >= $this->getMaxFitness()) {
-                $survived->add($specie);
-            }
+            $specie->setGenomes($remainingSpecie);
         }
-        $this->setSpecies($survived);
-    }
-
-    public function totalAverageFitness()
-    {
-        $total = 0;
-        /** @var Specie $specie */
-        foreach ($this->species as $specie) {
-            $total += $specie->getAverageFitness();
-        }
-        return $total;
     }
 
     public function disjoint(Genome $g1, Genome $g2)
@@ -233,71 +186,130 @@ class Pool
         }
 
         $max = max($g1->getGenes()->count(), $g2->getGenes()->count());
+
         return $disjointGenes / $max;
     }
 
-    public function weight(Genome $g1, Genome $g2)
+    /**
+     * @return int
+     */
+    public function getCurrentGenome()
     {
-        $innovation2 = array();
-        /** @var Gene $gene */ /** @var Gene $gene2 */
-        foreach ($g2->getGenes() as $gene) {
-            $innovation2[$gene->getInnovation()] = $gene;
-        }
-
-        $sum = 0;
-        $coincident = 0;
-
-        foreach ($g1->getGenes() as $gene) {
-            if (isset($innovation2[$gene->getInnovation()])) {
-                $gene2 = $innovation2[$gene->getInnovation()];
-                $sum += abs($gene->getWeight() - $gene2->getWeight());
-                $coincident++;
-            }
-        }
-
-        return $sum / $coincident;
+        return $this->currentGenome;
     }
 
-    public function removeWeakSpecies()
+    /**
+     * @return int
+     */
+    public function getCurrentSpecies()
     {
-        $survived = new ArrayCollection();
+        return $this->currentSpecies;
+    }
+
+    /**
+     * @return EntityManager
+     */
+    public function getEm()
+    {
+        return $this->em;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGeneration()
+    {
+        return $this->generation;
+    }
+
+    /**
+     * @return int
+     */
+    public function getInnovation()
+    {
+        return $this->innovation;
+    }
+
+    /**
+     * @return InputsAggregator
+     */
+    public function getInputAggregator()
+    {
+        return $this->inputAggregator;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxFitness()
+    {
+        return $this->maxFitness;
+    }
+
+    /**
+     * @return Mutation
+     */
+    public function getMutation()
+    {
+        return $this->mutation;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getSpecies()
+    {
+        return $this->species;
+    }
+
+    public function newGeneration()
+    {
+        // Cull the bottom half of each species
+        $this->cutSpecies(false);
+        $this->rankGlobally();
+        $this->removeStaleSpecies();
+        $this->rankGlobally();
+
+        /** @var Specie $specie */
+        foreach ($this->species as $specie) {
+            $specie->calculateAverageFitness();
+        }
+
+        $this->removeWeakSpecies();
+
         $sum = $this->totalAverageFitness();
+        $children = new ArrayCollection();
 
-        /** @var Specie $specie */
         foreach ($this->species as $specie) {
-            $breed = floor($specie->getAverageFitness() / $sum * self::POPULATION);
-            if ($breed >= 1) {
-                $survived->add($specie);
+            $breed = floor($specie->getAverageFitness() / $sum * self::POPULATION) - 1;
+
+            for ($i = 0; $i < $breed; $i++) {
+                $children->add($this->breedChild($specie));
             }
         }
 
-        $this->setSpecies($survived);
+        $this->cutSpecies(true);
+
+        while ($children->count() + $this->species->count() < self::POPULATION) {
+            $specie = $this->species->offsetGet(rand(0, $this->species->count()));
+            $children->add($this->breedChild($specie));
+        }
+
+        /** @var Genome $child */
+        foreach ($children as $child) {
+            $this->addToSpecies($child);
+        }
+
+        $this->generation++;
+
+        $this->em->flush();
     }
 
-    public function sameSpecies($genome1, $genome2) {
-        $dd = self::DELTA_DISJOINT * $this->disjoint($genome1, $genome2);
-        $dw = self::DELTA_WEIGHT * $this->weight($genome1, $genome2);
-        return $dd + $dw < self::DELTA_THRESHOLD;
-    }
-
-    public function addToSpecies(Genome $child)
+    public function newInnovation()
     {
-        $foundSpecie = false;
+        $this->innovation++;
 
-        /** @var Specie $specie */
-        foreach ($this->species as $specie) {
-            if ($this->sameSpecies($child, $specie->genomes->offsetGet(0))) {
-                $specie->genomes->add($child);
-                $foundSpecie = true;
-                break;
-            }
-        }
-
-        if (!$foundSpecie) {
-            $childSpecie = new Specie();
-            $childSpecie->addGenome($child);
-            $this->species->add($childSpecie);
-        }
+        return $this->innovation;
     }
 
     public function rankGlobally()
@@ -306,7 +318,7 @@ class Pool
 
 
         /**
-         * @var int $key
+         * @var int    $key
          * @var Specie $specie
          */
         foreach ($this->species as $key => $specie) {
@@ -331,121 +343,67 @@ class Pool
         }
     }
 
-    public function newGeneration()
-    {
-        // Cull the bottom half of each species
-        $this->cutSpecies(false);
-        $this->rankGlobally();
-        $this->removeStaleSpecies();
-        $this->rankGlobally();
-
-        /** @var Specie $specie */
-        foreach ($this->species as $specie) {
-            $specie->calculateAverageFitness();
-        }
-
-        $this->removeWeakSpecies();
-
-        $sum = $this->totalAverageFitness();
-        $children = new ArrayCollection();
-
-        foreach ($this->species as $specie) {
-            $breed = floor($specie->getAverageFitness() / $sum * self::POPULATION) - 1;
-
-            for ($i=0; $i<$breed; $i++) {
-                $children->add($this->breedChild($specie));
-            }
-        }
-
-        $this->cutSpecies(true);
-
-        while ($children->count() + $this->species->count() < self::POPULATION) {
-            $specie = $this->species->offsetGet(rand(0, $this->species->count()));
-            $children->add($this->breedChild($specie));
-        }
-
-        /** @var Genome $child */
-        foreach ($children as $child) {
-            $this->addToSpecies($child);
-        }
-
-        $this->generation++;
-
-        $this->em->flush();
-    }
-
-    public function addSpecie(Specie $specie)
-    {
-        $this->species->add($specie);
-        $specie->setPool($this);
-    }
-
-    public function createBasicGenome()
-    {
-        $genome = new Genome();
-        $genome->setMaxNeuron($this->inputAggregator->count()+1);
-        $this->mutation->mutate($genome);
-
-        return $genome;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCurrentGenome()
-    {
-        return $this->currentGenome;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCurrentSpecies()
-    {
-        return $this->currentSpecies;
-    }
-
-    /**
-     * @return int
-     */
-    public function getGeneration()
-    {
-        return $this->generation;
-    }
-
-    /**
-     * @return int
-     */
-    public function getInnovation()
-    {
-        return $this->innovation;
-    }
-
-    /**
-     * @return int
-     */
-    public function getMaxFitness()
-    {
-        return $this->maxFitness;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getSpecies()
-    {
-        return $this->species;
-    }
-
-    public function newInnovation()
-    {
-        $this->innovation++;
-        return $this->innovation;
-    }
-
     public function removeSpecie(Specie $specie)
     {
         $this->species->removeElement($specie);
+    }
+
+    public function removeStaleSpecies()
+    {
+        $survived = new ArrayCollection();
+
+        /**
+         * @var int    $key
+         * @var Specie $specie
+         */
+        foreach ($this->species as $key => $specie) {
+            $iterator = $specie->getGenomes()->getIterator();
+            $iterator->uasort(
+                function ($first, $second) {
+                    /** @var Genome $first */
+                    /** @var Genome $second */
+                    return $first->getFitness() > $second->getFitness() ? -1 : 1;
+                }
+            );
+
+            if ($iterator->offsetGet(0)->getFitness() > $specie->getTopFitness()) {
+                $specie->setTopFitness($iterator->offsetGet(0)->getFitness());
+                $specie->setStaleness(0);
+            } else {
+                $specie->staleness++;
+            }
+
+            if ($specie->getStaleness() < self::STALE_SPECIES ||
+                $specie->getTopFitness() >= $this->getMaxFitness()
+            ) {
+                $survived->add($specie);
+            }
+        }
+        $this->setSpecies($survived);
+    }
+
+    public function removeWeakSpecies()
+    {
+        $survived = new ArrayCollection();
+        $sum = $this->totalAverageFitness();
+
+        /** @var Specie $specie */
+        foreach ($this->species as $specie) {
+            $breed = floor($specie->getAverageFitness() / $sum * self::POPULATION);
+            if ($breed >= 1) {
+                $survived->add($specie);
+            }
+        }
+
+        $this->setSpecies($survived);
+    }
+
+    public function sameSpecies($genome1, $genome2)
+    {
+        $dd = self::DELTA_DISJOINT * $this->disjoint($genome1, $genome2);
+        $dw = self::DELTA_WEIGHT * $this->weight($genome1, $genome2);
+
+        return $dd + $dw < self::DELTA_THRESHOLD;
     }
 
     /**
@@ -465,6 +423,14 @@ class Pool
     }
 
     /**
+     * @param EntityManager $em
+     */
+    public function setEm($em)
+    {
+        $this->em = $em;
+    }
+
+    /**
      * @param int $generation
      */
     public function setGeneration($generation)
@@ -481,6 +447,14 @@ class Pool
     }
 
     /**
+     * @param InputsAggregator $inputAggregator
+     */
+    public function setInputAggregator($inputAggregator)
+    {
+        $this->inputAggregator = $inputAggregator;
+    }
+
+    /**
      * @param int $maxFitness
      */
     public function setMaxFitness($maxFitness)
@@ -489,10 +463,55 @@ class Pool
     }
 
     /**
+     * @param Mutation $mutation
+     */
+    public function setMutation($mutation)
+    {
+        $this->mutation = $mutation;
+    }
+
+    /**
      * @param ArrayCollection $species
      */
     public function setSpecies($species)
     {
         $this->species = $species;
+    }
+
+    public function totalAverageFitness()
+    {
+        $total = 0;
+        /** @var Specie $specie */
+        foreach ($this->species as $specie) {
+            $total += $specie->getAverageFitness();
+        }
+
+        return $total;
+    }
+
+    public function weight(Genome $g1, Genome $g2)
+    {
+        $innovation = array();
+
+        /** @var Gene $gene */
+        /** @var Gene $gene2 */
+        foreach ($g2->getGenes() as $gene) {
+            $innovation[$gene->getInnovation()] = $gene;
+        }
+
+        $sum = 0;
+        $coincident = 0;
+
+        foreach ($g1->getGenes() as $gene) {
+            if (isset($innovation[$gene->getInnovation()])) {
+                $gene2 = $innovation[$gene->getInnovation()];
+                $sum += abs($gene->getWeight() - $gene2->getWeight());
+                $coincident++;
+            }
+        }
+
+        // on php7 a division by zero (forced) returns INF Or before that, it returned false.
+        // if INF is always > to any number, false is not.
+        return (@($sum/$coincident) === false) ? (($sum < 0) ? -INF : (($sum == 0) ? NAN : INF)) : @($sum/$coincident);
     }
 }

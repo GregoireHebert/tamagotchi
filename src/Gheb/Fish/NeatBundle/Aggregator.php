@@ -1,6 +1,6 @@
 <?php
 
-namespace Gheb\Fish\IOBundle;
+namespace Gheb\Fish\NeatBundle;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Tests\Fixtures\Entity;
 /**
  * Class Aggregator
  * @author  Grégoire Hébert <gregoire@opo.fr>
- * @package Gheb\Fish\IOBundle
+ * @package Gheb\Fish\NeatBundle
  */
 class Aggregator
 {

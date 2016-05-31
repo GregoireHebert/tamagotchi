@@ -2,7 +2,7 @@
 
 namespace Gheb\Fish\IOBundle\Outputs;
 
-use Gheb\Fish\IOBundle\Aggregator;
+use Gheb\Fish\NeatBundle\Aggregator;
 
 /**
  * Class OutputsAggregator
