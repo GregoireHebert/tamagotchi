@@ -13,7 +13,7 @@
 
     <testsuites>
         <testsuite name="Tamagotchi Test Suite">
-            <directory suffix=".php">src/Gheb/Tamagotchi/*Bundle/Tests</directory>
+            <directory suffix=".php">src/Gheb/Fish/*Bundle/Tests</directory>
         </testsuite>
     </testsuites>
 
@@ -36,7 +36,7 @@
         <whitelist>
             <directory>src</directory>
             <exclude>
-                <directory>Gheb/Tamagotchi/</directory>
+                <directory>Gheb/Fish/</directory>
             </exclude>
         </whitelist>
     </filter>
