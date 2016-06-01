@@ -5,7 +5,6 @@ namespace Gheb\Fish\NeatBundle\Genomes;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Gheb\Fish\IOBundle\Inputs\InputsAggregator;
-use Gheb\Fish\IOBundle\Outputs\OutputsAggregator;
 use Gheb\Fish\NeatBundle\Aggregator;
 
 /**
@@ -84,12 +83,20 @@ class Pool
         $this->species = new ArrayCollection();
     }
 
+    /**
+     * Add a specie to the pool
+     * @param Specie $specie
+     */
     public function addSpecie(Specie $specie)
     {
         $this->species->add($specie);
         $specie->setPool($this);
     }
 
+    /**
+     * Add a genome to a specie. If it does not belong to any existing specie according to it's weight and evolution number, create a new specie.
+     * @param Genome $child
+     */
     public function addToSpecies(Genome $child)
     {
         $foundSpecie = false;
@@ -105,11 +112,24 @@ class Pool
 
         if (!$foundSpecie) {
             $childSpecie = new Specie();
+
+
             $childSpecie->addGenome($child);
             $this->species->add($childSpecie);
+
+            $this->em->persist($childSpecie);
+            $this->em->flush();
         }
     }
 
+    /**
+     * For a specie, has a chance X over 0.75 to crossover 2 random genomes and return it,
+     * or to create a new genome based on a random existing one
+     *
+     *@param Specie $specie
+     *
+     * @return Genome
+     */
     public function breedChild(Specie $specie)
     {
         if (lcg_value() < self::CROSSOVER_CHANCE) {
@@ -124,39 +144,84 @@ class Pool
         return $child;
     }
 
+    /**
+     * Create a Genome and set it's maxNeuron to the amount of inputs +1 and then applies a first mutation
+     *
+     * @use Mutation::mutate
+     * @return Genome
+     */
     public function createBasicGenome()
     {
         $genome = new Genome();
+
         $genome->setMaxNeuron($this->inputAggregator->count() + 1);
         $this->mutation->mutate($genome);
+
+        $this->em->persist($genome);
+        $this->em->flush();
 
         return $genome;
     }
 
-    public function cutSpecies($cutToOne)
+    /**
+     * Tries to get to the next genome. If we passed the number of genome available, we try a new specie.
+     * If we passed the number of species available, create a new generation.
+     */
+    public function nextGenome()
+    {
+        $this->currentGenome++;
+
+        if ($this->currentGenome > $this->species->offsetGet($this->currentSpecies)->getGenomes()->count()) {
+            $this->currentGenome = 1;
+            $this->currentSpecies++;
+            if ($this->currentSpecies > $this->species->count()) {
+                $this->newGeneration();
+                $this->currentSpecies = 1;
+            }
+        }
+    }
+
+    /**
+     * Remove the lower fitness half genomes of each specie or keep only the highest fitness genome of each specie.
+     * @param bool $cutToOne
+     */
+    public function cullSpecies($cutToOne = false)
     {
         /** @var Specie $specie */
         foreach ($this->species as $specie) {
 
             $iterator = $specie->getGenomes()->getIterator();
+
+            // order from lower to higher
             $iterator->uasort(
                 function ($first, $second) {
                     /** @var Genome $first */
                     /** @var Genome $second */
-                    return $first->getFitness() > $second->getFitness() ? -1 : 1;
+                    return $first->getFitness() < $second->getFitness() ? -1 : 1;
                 }
             );
 
             $remaining = $cutToOne ? 1 : ceil($specie->getGenomes()->count() / 2);
-            $remainingSpecie = array();
-            while ($specie->getGenomes()->count() > $remaining) {
-                $remainingSpecie = array_pop(iterator_to_array($iterator, true));
+            $remainingGenomes = array();
+            $genomes = iterator_to_array($iterator, true);
+            while (count($genomes) > $remaining) {
+                // get the highest
+                $remainingGenomes = array_pop($genomes);
             }
 
-            $specie->setGenomes($remainingSpecie);
+            $specie->setGenomes($remainingGenomes);
         }
     }
 
+    /**
+     * Calculate how far two genomes are different based on genes innovation number.
+     * Each time a genome gene innovation is not found in the second genome genes innovation push the genome away from each other.
+     *
+     * @param Genome $g1
+     * @param Genome $g2
+     *
+     * @return float
+     */
     public function disjoint(Genome $g1, Genome $g2)
     {
         $disjointGenes = 0;
@@ -262,12 +327,21 @@ class Pool
         return $this->species;
     }
 
+    /**
+     * Create a all new generation
+     */
     public function newGeneration()
     {
-        // Cull the bottom half of each species
-        $this->cutSpecies(false);
+        // Remove the lower fitness half genomes of each specie
+        $this->cullSpecies(false);
+
+        // give a rank based on it's fitness
         $this->rankGlobally();
+
+        // Remove all species not having enough fitness for the pool previous maxfitness
         $this->removeStaleSpecies();
+
+        // give a rank based on it's fitness
         $this->rankGlobally();
 
         /** @var Specie $specie */
@@ -275,11 +349,14 @@ class Pool
             $specie->calculateAverageFitness();
         }
 
+        // Remove all species having a fitness lower than the average
         $this->removeWeakSpecies();
 
         $sum = $this->totalAverageFitness();
         $children = new ArrayCollection();
 
+        // for each specie, if it average fitness is higher than the global population,
+        // it has a chance to create a new child
         foreach ($this->species as $specie) {
             $breed = floor($specie->getAverageFitness() / $sum * self::POPULATION) - 1;
 
@@ -288,14 +365,19 @@ class Pool
             }
         }
 
-        $this->cutSpecies(true);
+        // keep only the highest fitness genome of each specie
+        $this->cullSpecies(true);
 
+        // Since the creation of new child is based on top fitness species,
+        // it does not contains as much population as the maximum defined.
+        // Therefor we create a new child from a random specie until the max population is reached
         while ($children->count() + $this->species->count() < self::POPULATION) {
             $specie = $this->species->offsetGet(rand(0, $this->species->count()));
             $children->add($this->breedChild($specie));
         }
 
         /** @var Genome $child */
+        // we re-dispatch the new children through all the existing species (or new thanks to mutations)
         foreach ($children as $child) {
             $this->addToSpecies($child);
         }
@@ -305,17 +387,22 @@ class Pool
         $this->em->flush();
     }
 
+    /**
+     * Up innovation number of 1 and returns it
+     * @return int
+     */
     public function newInnovation()
     {
         $this->innovation++;
-
         return $this->innovation;
     }
 
+    /**
+     * Higher is better
+     */
     public function rankGlobally()
     {
         $global = new ArrayCollection();
-
 
         /**
          * @var int    $key
@@ -329,6 +416,7 @@ class Pool
         }
 
         $iterator = $global->getIterator();
+        // from lower to higher
         $iterator->uasort(
             function ($first, $second) {
                 /** @var Genome $first */
@@ -341,13 +429,19 @@ class Pool
         foreach ($iterator as $rank => $genome) {
             $genome->setGlobalRank($rank);
         }
+
+        $this->em->flush();
     }
 
     public function removeSpecie(Specie $specie)
     {
+        $specie->setPool(null);
         $this->species->removeElement($specie);
     }
 
+    /**
+     * Remove all species not having enough fitness for the pool previous maxfitness
+     */
     public function removeStaleSpecies()
     {
         $survived = new ArrayCollection();
@@ -358,6 +452,8 @@ class Pool
          */
         foreach ($this->species as $key => $specie) {
             $iterator = $specie->getGenomes()->getIterator();
+
+            // from higher to lower
             $iterator->uasort(
                 function ($first, $second) {
                     /** @var Genome $first */
@@ -366,6 +462,7 @@ class Pool
                 }
             );
 
+            // if the highest fitness is higher than specie fitness, replace it
             if ($iterator->offsetGet(0)->getFitness() > $specie->getTopFitness()) {
                 $specie->setTopFitness($iterator->offsetGet(0)->getFitness());
                 $specie->setStaleness(0);
@@ -373,15 +470,21 @@ class Pool
                 $specie->staleness++;
             }
 
+            // if the staleness is under the max or if the top fitness of the species overpasses the pool max fitness, then keep it.
             if ($specie->getStaleness() < self::STALE_SPECIES ||
                 $specie->getTopFitness() >= $this->getMaxFitness()
             ) {
                 $survived->add($specie);
+            } else {
+                $specie->setPool(null);
             }
         }
         $this->setSpecies($survived);
     }
 
+    /**
+     * Remove all species having a fitness lower than the average
+     */
     public function removeWeakSpecies()
     {
         $survived = new ArrayCollection();
@@ -392,18 +495,30 @@ class Pool
             $breed = floor($specie->getAverageFitness() / $sum * self::POPULATION);
             if ($breed >= 1) {
                 $survived->add($specie);
+            } else {
+                $specie->setPool(null);
             }
         }
 
         $this->setSpecies($survived);
     }
 
+    /**
+     * Return if two genome seems to be part of a same specie or not based on it's desjoint and weight.
+     *
+     * @param $genome1
+     * @param $genome2
+     *
+     * @return bool
+     */
     public function sameSpecies($genome1, $genome2)
     {
         $dd = self::DELTA_DISJOINT * $this->disjoint($genome1, $genome2);
         $dw = self::DELTA_WEIGHT * $this->weight($genome1, $genome2);
 
-        return $dd + $dw < self::DELTA_THRESHOLD;
+        $add = $dd + $dw;
+
+        return $add == NAN ? true : $add < self::DELTA_THRESHOLD;
     }
 
     /**
@@ -478,6 +593,10 @@ class Pool
         $this->species = $species;
     }
 
+    /**
+     * Return the sum of species average fitness
+     * @return int
+     */
     public function totalAverageFitness()
     {
         $total = 0;
@@ -489,6 +608,13 @@ class Pool
         return $total;
     }
 
+    /**
+     * Return the weight difference between two genomes
+     * @param Genome $g1
+     * @param Genome $g2
+     *
+     * @return float
+     */
     public function weight(Genome $g1, Genome $g2)
     {
         $innovation = array();

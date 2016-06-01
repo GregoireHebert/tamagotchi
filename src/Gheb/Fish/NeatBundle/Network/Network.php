@@ -24,6 +24,7 @@ class Network
     private $inputsAggregator;
 
     /**
+     * Structure a network of neurons based on genes in and out
      * @param Genome $genome
      * @param OutputsAggregator $outputsAggregator
      * @param InputsAggregator $inputsAggregator
@@ -41,6 +42,7 @@ class Network
             $this->neurons[self::MAX_NODES + $j] = new Neuron();
         }
 
+        // from lower to higher
         $iterator = $genome->getGenes()->getIterator();
         $iterator->uasort(
             function ($first, $second) {
@@ -72,11 +74,18 @@ class Network
         $genome->setNetwork($this);
     }
 
+    /**
+     * Receive inputs and evaluate them in function of their values
+     *
+     * @param $inputs
+     *
+     * @return array|void
+     * @throws \Exception
+     */
     public function evaluate($inputs)
     {
         if ($this->inputsAggregator->count() != count($inputs)) {
             throw new \Exception('Incorrect number of neural network inputs');
-
             return;
         }
 

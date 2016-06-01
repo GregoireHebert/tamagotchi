@@ -37,6 +37,12 @@ class Mutation
         $this->outputsAggregator = $outputsAggregator;
     }
 
+    /**
+     * Clone an entity and persist it
+     * @param $entity
+     *
+     * @return mixed
+     */
     public function cloneEntity($entity)
     {
         $this->em->clear($entity);
@@ -47,6 +53,7 @@ class Mutation
     }
 
     /**
+     * Create a new genome based on two genomes
      * @param Genome $g1
      * @param Genome $g2
      *
@@ -68,10 +75,13 @@ class Mutation
             $newInnovation[$gene->getInnovation()] = $gene;
         }
 
+        // add to the genome each gene contained in the first genome.
+        // If the second genome has also an enabled gene for the same innovation number,
+        // the gene added is randomly chosen between the two.
         foreach ($g1->getGenes() as $gene) {
             /** @var Gene $gene2 */
             $gene2 = isset($newInnovation[$gene->getInnovation()]) ? $newInnovation[$gene->getInnovation()] : null;
-            if ($gene != null && mt_rand(1,2) == 1 && $gene2->isEnabled()) {
+            if ($gene2 != null && mt_rand(1,2) == 1 && $gene2->isEnabled()) {
                 $child->addGene($this->cloneEntity($gene2));
             } else {
                 $child->addGene($this->cloneEntity($gene));
@@ -82,7 +92,6 @@ class Mutation
         $child->setMutationRates($g1->getMutationRates());
 
         $this->em->persist($child);
-        $this->em->flush();
         return $child;
     }
 
@@ -111,39 +120,55 @@ class Mutation
         $this->em->flush();
     }
 
+    /**
+     * Return a random neuron. A neuron can be an input, an output or an hidden node
+     * @param      $genes
+     * @param bool $nonInput
+     *
+     * @return mixed
+     */
     public function getRandomNeuron($genes, $nonInput = false)
     {
         $neurons = array();
         if (!$nonInput) {
             for ($i = 0; $i < $this->inputsAggregator->count(); $i++) {
-                $neurons[] = $i;
+                $neurons[$i] = $i;
             }
         }
 
         for ($j = 0; $j < $this->outputsAggregator->count(); $j++) {
-            $neurons[] = Network::MAX_NODES+$j;
+            $neurons[Network::MAX_NODES+$j] = Network::MAX_NODES+$j;
         }
 
         /** @var Gene $gene */
         foreach ($genes as $gene) {
             if (!$nonInput || $gene->getInto() > $this->inputsAggregator->count()) {
-                $neurons[] = $gene->getInto();
+                $neurons[$gene->getInto()] = $gene->getInto();
             }
 
             if (!$nonInput || $gene->getOut() > $this->inputsAggregator->count()) {
-                $neurons[] = $gene->getOut();
+                $neurons[$gene->getOut()] = $gene->getOut();
             }
         }
 
-        return $neurons[mt_rand(0,count($neurons) - 1)];
+        $r = mt_rand(1,count($neurons)) -1;
+        $n = array_values($neurons);
+
+        return $n[$r];
     }
 
+    /**
+     * Has a chance to create a new gene in between two random in and out genes
+     * or a chance to create a new link from a bias to the output
+     * @param Genome $genome
+     * @param        $forceBias
+     */
     public function linkMutate(Genome $genome, $forceBias)
     {
         $rn1 = $this->getRandomNeuron($genome->getGenes(), false);
         $rn2 = $this->getRandomNeuron($genome->getGenes(), true);
 
-        // both inputs... nothing to do
+        // both are inputs, nothing to do
         if ($rn1 <= $this->inputsAggregator->count() && $rn2 <= $this->inputsAggregator->count()) {
             return;
         }
@@ -176,13 +201,21 @@ class Mutation
         $newLink->setWeight(lcg_value()*4-2);
 
         $genome->addGene($newLink);
+
+        $this->em->persist($newLink);
         $this->em->flush();
     }
 
+    /**
+     * Applies a mutation upon a genome
+     *
+     * @param Genome $genome
+     */
     public function mutate(Genome $genome)
     {
         $rates = $genome->mutationRates;
 
+        // has a chance to reduce the mutation rate or rise it up
         foreach ($rates as $mutation=>$rate) {
             if (mt_rand(1,2) == 1) {
                 $genome->mutationRates[$mutation] = 0.95*$rate;
@@ -191,6 +224,7 @@ class Mutation
             }
         }
 
+        // has a chance to create a new link in between 2 input and output nodes
         $linkRate = $genome->mutationRates['link'];
         while ($linkRate > 0) {
             if (lcg_value() < $linkRate) {
@@ -200,6 +234,7 @@ class Mutation
             $linkRate = $linkRate-1;
         }
 
+        // has a chance to create a new link in between a bias node and an output nodes
         $biasRate = $genome->mutationRates['bias'];
         while ($biasRate > 0) {
             if (lcg_value() < $biasRate) {
@@ -209,6 +244,7 @@ class Mutation
             $biasRate = $biasRate-1;
         }
 
+        // has a chance to split a link in adding a new node in between
         $nodeRate = $genome->mutationRates['node'];
         while ($nodeRate > 0) {
             if (lcg_value() < $nodeRate) {
@@ -218,6 +254,7 @@ class Mutation
             $nodeRate = $nodeRate-1;
         }
 
+        // has a chance to enable a disabled gene
         $enableRate = $genome->mutationRates['enable'];
         while ($enableRate > 0) {
             if (lcg_value() < $enableRate) {
@@ -227,6 +264,7 @@ class Mutation
             $enableRate = $enableRate-1;
         }
 
+        // has a chance to disable an enabled gene
         $disableRate = $genome->mutationRates['disable'];
         while ($disableRate > 0) {
             if (lcg_value() < $disableRate) {
@@ -237,6 +275,13 @@ class Mutation
         }
     }
 
+    /**
+     * Adds a new node in between two existing nodes and disable the initial node in order to
+     * get from A--C to A--B--C making the weight between A and B to 1.0
+     * This new node is here to break the linearity in the network and expand the structure that will may evolve for speciation later.
+     *
+     * @param Genome $genome
+     */
     public function nodeMutate(Genome $genome)
     {
         if ($genome->getGenes()->count() == 0) return;
@@ -244,7 +289,7 @@ class Mutation
         $genome->setMaxNeuron($genome->getMaxNeuron()+1);
 
         /** @var Gene $gene */
-        $gene = $genome->getGenes()->get(mt_rand(0, $genome->getGenes()->count()));
+        $gene = $genome->getGenes()->get(mt_rand(1, $genome->getGenes()->count())-1);
         if ($gene->isEnabled() == false) return;
 
         $gene->setEnabled(false);
@@ -259,8 +304,7 @@ class Mutation
 
         $clone2 = clone $gene;
 
-        $clone2->setOut($genome->getMaxNeuron());
-        $clone2->setWeight(1.0);
+        $clone2->setInto($genome->getMaxNeuron());
         $clone2->setInnovation($clone->getGenome()->getSpecie()->getPool()->newInnovation());
         $clone2->setEnabled(true);
 

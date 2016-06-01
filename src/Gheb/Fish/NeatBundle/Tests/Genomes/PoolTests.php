@@ -100,4 +100,5 @@ class PoolTests extends KernelTestCase
         $this->assertEquals(new ArrayCollection(array($genome, $genome2)), $pool->getSpecies()->first()->getGenomes());
         $this->assertEquals(new ArrayCollection(array($genome3)), $pool->getSpecies()->offsetGet(1)->getGenomes());
     }
+
 }

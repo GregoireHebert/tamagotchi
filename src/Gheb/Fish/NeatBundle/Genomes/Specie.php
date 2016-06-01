@@ -47,6 +47,9 @@ class Specie
         $genome->setSpecie($this);
     }
 
+    /**
+     * Calculate the average fitness based on genome global rank
+     */
     public function calculateAverageFitness()
     {
         $total = 0;
