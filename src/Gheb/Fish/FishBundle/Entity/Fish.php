@@ -10,9 +10,9 @@ namespace Gheb\Fish\FishBundle\Entity;
 class Fish
 {
     /**
-     * @var \DateTime
+     * @var int
      */
-    private $birthDate;
+    private $lifeTick;
 
     /**
      * @var int
@@ -39,23 +39,25 @@ class Fish
         $this->health = 100;
         $this->hunger = 2;
         $this->sleepiness = 2;
-        $this->birthDate = new \DateTime();
+        $this->lifeTick = 0;
     }
 
-    public function getAge()
+    public function getLifeTick()
     {
-        $now = new \DateTime();
-        $diff = $this->getBirthDate()->diff($now);
-
-        return $diff->h;
+        return $this->lifeTick;
     }
 
     /**
      * @return \DateTime
      */
-    public function getBirthDate()
+    public function setLifeTick($lifeTick)
     {
-        return $this->birthDate;
+        $this->lifeTick = $lifeTick;
+    }
+
+    public function addLifeTick()
+    {
+        $this->lifeTick++;
     }
 
     /**
@@ -88,14 +90,6 @@ class Fish
     public function getSleepiness()
     {
         return $this->sleepiness;
-    }
-
-    /**
-     * @param \DateTime $birthDate
-     */
-    public function setBirthDate($birthDate)
-    {
-        $this->birthDate = $birthDate;
     }
 
     /**

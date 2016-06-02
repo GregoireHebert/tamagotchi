@@ -15,6 +15,7 @@ class TimeObligation extends AbstractLifeObligation
     {
         // time goes by, health is going down
         $fish->setHealth($fish->getHealth() -1);
+        $fish->addLifeTick();
 
         $fish->setHunger($fish->getHunger() +1);
         $fish->setSleepiness($fish->getSleepiness() +1);
