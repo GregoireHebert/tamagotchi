@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Gheb\Fish\IOBundle\Inputs\InputsAggregator;
 use Gheb\Fish\IOBundle\Outputs\AbstractOutput;
 use Gheb\Fish\IOBundle\Outputs\OutputsAggregator;
+use Gheb\Fish\NeatBundle\Aggregator;
 use Gheb\Fish\NeatBundle\Genomes\Genome;
 use Gheb\Fish\NeatBundle\Genomes\Mutation;
 use Gheb\Fish\NeatBundle\Genomes\Pool;
@@ -26,6 +27,11 @@ class Manager
     private $inputsAggregator;
 
     /**
+     * @var OutputsAggregator
+     */
+    private $outputsAggregator;
+
+    /**
      * @var Mutation
      */
     private $mutation;
@@ -36,19 +42,18 @@ class Manager
     private $pool;
 
     /**
-     * @var Network
-     */
-    private $network;
-
-    /**
      * Manager constructor.
      * @param EntityManager $em
-     * @param InputsAggregator $inputsAggregator
-     * @param OutputsAggregator $outputsAggregator
+     * @param Aggregator $inputsAggregator
+     * @param Aggregator $outputsAggregator
      * @param Mutation $mutation
      */
-    public function __construct(EntityManager $em, InputsAggregator $inputsAggregator, OutputsAggregator $outputsAggregator, Mutation $mutation)
-    {
+    public function __construct(
+        EntityManager $em,
+        Aggregator $inputsAggregator,
+        Aggregator $outputsAggregator,
+        Mutation $mutation
+    ) {
         $this->em = $em;
         $this->inputsAggregator = $inputsAggregator;
         $this->outputsAggregator = $outputsAggregator;
@@ -94,7 +99,7 @@ class Manager
     {
         $this->pool = new Pool($this->em, $this->outputsAggregator, $this->inputsAggregator, $this->mutation);
         $this->pool->setInnovation(1);
-        for ($i=0; $i < Pool::POPULATION; $i++) {
+        for ($i = 0; $i < Pool::POPULATION; $i++) {
             $this->pool->addToSpecies($this->pool->createBasicGenome());
         }
 
@@ -106,18 +111,20 @@ class Manager
         /** @var Specie $specie */
         $specie = $this->pool->getSpecies()->offsetGet($this->pool->getCurrentSpecies());
         $genome = $specie->getGenomes()->offsetGet($this->pool->getCurrentGenome());
-        $this->network = new Network($genome, $this->outputsAggregator, $this->inputsAggregator);
+        new Network($genome, $this->outputsAggregator, $this->inputsAggregator);
 
         $this->evaluateCurrent();
     }
 
     public function evaluateCurrent()
     {
+        /** @var Specie $specie */
         $specie = $this->pool->getSpecies()->offsetGet($this->pool->getCurrentSpecies());
+        /** @var Genome $genome */
         $genome = $specie->getGenomes()->offsetGet($this->pool->getCurrentGenome());
 
         $inputs = $this->inputsAggregator->aggregate->toArray();
-        $outputs = $this->network->evaluate($inputs);
+        $outputs = $genome->getNetwork()->evaluate($inputs);
 
         $this->applyOutputs($outputs);
     }
@@ -128,5 +135,85 @@ class Manager
         foreach ($outputs as $output) {
             $output->apply();
         }
+    }
+
+    /**
+     * @return EntityManager
+     */
+    public function getEm()
+    {
+        return $this->em;
+    }
+
+    /**
+     * @param EntityManager $em
+     */
+    public function setEm($em)
+    {
+        $this->em = $em;
+    }
+
+    /**
+     * @return InputsAggregator
+     */
+    public function getInputsAggregator()
+    {
+        return $this->inputsAggregator;
+    }
+
+    /**
+     * @param InputsAggregator $inputsAggregator
+     */
+    public function setInputsAggregator($inputsAggregator)
+    {
+        $this->inputsAggregator = $inputsAggregator;
+    }
+
+    /**
+     * @return Mutation
+     */
+    public function getMutation()
+    {
+        return $this->mutation;
+    }
+
+    /**
+     * @param Mutation $mutation
+     */
+    public function setMutation($mutation)
+    {
+        $this->mutation = $mutation;
+    }
+
+    /**
+     * @return Pool
+     */
+    public function getPool()
+    {
+        return $this->pool;
+    }
+
+    /**
+     * @param Pool $pool
+     */
+    public function setPool($pool)
+    {
+        $this->pool = $pool;
+    }
+
+    /**
+     * @return OutputsAggregator
+     */
+    public function getOutputsAggregator()
+    {
+        return $this->outputsAggregator;
+    }
+
+    /**
+     * @param OutputsAggregator $outputsAggregator
+     */
+    public function setOutputsAggregator($outputsAggregator)
+    {
+        $this->outputsAggregator = $outputsAggregator;
     }
 }

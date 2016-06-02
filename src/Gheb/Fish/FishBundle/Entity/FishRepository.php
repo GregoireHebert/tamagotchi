@@ -24,4 +24,15 @@ class FishRepository extends EntityRepository
 
         return $qb->getQuery()->getOneOrNullResult();
     }
+
+    public function findLastAliveFish()
+    {
+        $qb = $this->createQueryBuilder('f');
+        $qb->where('f.health <= 0');
+        $qb->orderBy('f.id', 'DESC');
+        $qb->setFirstResult(0);
+        $qb->setMaxResults(1);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }
