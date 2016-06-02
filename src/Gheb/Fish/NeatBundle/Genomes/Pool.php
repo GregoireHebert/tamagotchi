@@ -23,6 +23,11 @@ class Pool
     /**
      * @var int
      */
+    public $id;
+
+    /**
+     * @var int
+     */
     public $currentGenome = 1;
 
     /**
@@ -81,6 +86,22 @@ class Pool
         $this->mutation = $mutation;
 
         $this->species = new ArrayCollection();
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**

@@ -1,0 +1,22 @@
+Gheb\Fish\NeatBundle\Genomes\Pool:
+    type: entity
+    table: Pool
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        currentGenome:
+            type: integer
+        currentSpecies:
+            type: integer
+        generation:
+            type: integer
+        innovation:
+            type: integer
+        maxFitness:
+            type: integer
+
+    oneToMany:
+        targetEntity: 'Gheb\Fish\NeatBundle\Genomes\Pool'
+        cascade: ['persist', 'remove', 'refresh']

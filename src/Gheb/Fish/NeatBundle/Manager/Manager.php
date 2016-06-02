@@ -11,7 +11,7 @@ use Gheb\Fish\NeatBundle\Aggregator;
 use Gheb\Fish\NeatBundle\Genomes\Genome;
 use Gheb\Fish\NeatBundle\Genomes\Mutation;
 use Gheb\Fish\NeatBundle\Genomes\Pool;
-use Gheb\Fish\NEATBundle\Genomes\Specie;
+use Gheb\Fish\NeatBundle\Genomes\Specie;
 use Gheb\Fish\NeatBundle\Network\Network;
 
 class Manager
@@ -58,6 +58,9 @@ class Manager
         $this->inputsAggregator = $inputsAggregator;
         $this->outputsAggregator = $outputsAggregator;
         $this->mutation = $mutation;
+
+        $repo = $this->em->getRepository('NeatBundle:Pool');
+        $this->pool = $repo->findOneBy(array());
 
         if (!$this->pool instanceof Pool) {
             $this->initializePool();

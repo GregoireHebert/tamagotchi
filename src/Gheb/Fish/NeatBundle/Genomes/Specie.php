@@ -1,13 +1,13 @@
 <?php
 
-namespace Gheb\Fish\NEATBundle\Genomes;
+namespace Gheb\Fish\NeatBundle\Genomes;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Class Species
  * @author  Grégoire Hébert <gregoire@opo.fr>
- * @package Gheb\Fish\NEATBundle\Genomes
+ * @package Gheb\Fish\NeatBundle\Genomes
  */
 class Specie
 {
