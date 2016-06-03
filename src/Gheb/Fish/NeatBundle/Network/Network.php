@@ -21,11 +21,15 @@ class Network
     public static function generateNetwork(Genome $genome, OutputsAggregator $outputsAggregator, InputsAggregator $inputsAggregator)
     {
         for ($i = 0; $i < $inputsAggregator->count(); $i++) {
-            $genome->addNeuron($i, new Neuron());
+            $neuron = new Neuron();
+            $neuron->setPosition($i);
+            $genome->addNeuron($neuron);
         }
 
         for ($j = 0; $j < $outputsAggregator->count(); $j++) {
-            $genome->addNeuron(self::MAX_NODES + $j, new Neuron());
+            $neuron = new Neuron();
+            $neuron->setPosition(self::MAX_NODES + $j);
+            $genome->addNeuron($neuron);
         }
 
         // from lower to higher
@@ -43,16 +47,20 @@ class Network
             $gene = $iterator->offsetGet($i);
 
             if ($gene->isEnabled()) {
-                if (null == $genome->network->offsetGet($gene->getOut())) {
-                    $genome->addNeuron($gene->getOut(), new Neuron());
+                if (null == $genome->getNeuron($gene->getOut())) {
+                    $neuron = new Neuron();
+                    $neuron->setPosition($gene->getOut());
+                    $genome->addNeuron($neuron);
                 }
 
                 /** @var Neuron $neuron */
-                $neuron = $genome->network->offsetGet($gene->getOut());
+                $neuron = $genome->getNeuron($gene->getOut());
                 $neuron->incoming->add($gene);
 
-                if (null == $genome->network->offsetGet($gene->getInto())) {
-                    $genome->addNeuron($gene->getInto(), new Neuron());
+                if (null == $genome->getNeuron($gene->getInto())) {
+                    $neuron = new Neuron();
+                    $neuron->setPosition($gene->getInto());
+                    $genome->addNeuron($neuron);
                 }
             }
         }
@@ -61,7 +69,7 @@ class Network
     /**
      * Receive inputs and evaluate them in function of their values
      *
-     * @param array network
+     * @param Genome $genome
      * @param $inputs
      * @param OutputsAggregator $outputsAggregator
      * @param InputsAggregator $inputsAggregator
@@ -69,23 +77,23 @@ class Network
      * @return array|void
      * @throws \Exception
      */
-    public static function evaluate(Array $network, $inputs, OutputsAggregator $outputsAggregator, InputsAggregator $inputsAggregator)
+    public static function evaluate(Genome $genome, $inputs, OutputsAggregator $outputsAggregator, InputsAggregator $inputsAggregator)
     {
         if ($inputsAggregator->count() != count($inputs)) {
             throw new \Exception('Incorrect number of neural network inputs');
         }
 
         for ($i = 0; $i < $inputsAggregator->count(); $i++) {
-            $network[$i]->setValue($inputs[$i]->getValue());
+            $genome->getNeuron($i)->setValue($inputs[$i]->getValue());
         }
 
         /** @var Neuron $neuron */
-        foreach ($network as $neuron) {
+        foreach ($genome->getNetwork() as $neuron) {
             $sum = 0;
             /** @var Gene $incoming */
             foreach ($neuron->getIncoming() as $incoming) {
                 /** @var Neuron $other */
-                $other = $network[$incoming->getInto()];
+                $other = $genome->getNeuron($incoming->getInto());
                 $sum += $incoming->getWeight() * $other->getValue();
             }
 
@@ -96,7 +104,7 @@ class Network
 
         $triggeredOutputs = array();
         for ($j = 0; $j < $outputsAggregator->count(); $j++) {
-            if ($network[self::MAX_NODES + $j]->getValue() > 0) {
+            if ($genome->getNeuron(self::MAX_NODES + $j)->getValue() > 0) {
                 $triggeredOutputs[] = $outputsAggregator->aggregate->offsetGet($j);
             }
         }

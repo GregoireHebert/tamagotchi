@@ -46,8 +46,9 @@ abstract class AbstractLifeObligation
      */
     public function logEffect()
     {
-        if (!empty($this->application)) {
-            $this->logger->logger->debug($this->application);
+        if (!empty(trim($this->application))) {
+            //var_dump($this->application);
+            //$this->logger->logger->debug($this->application);
         }
     }
 }

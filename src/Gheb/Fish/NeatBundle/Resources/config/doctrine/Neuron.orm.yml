@@ -6,6 +6,8 @@ Gheb\Fish\NeatBundle\Network\Neuron:
       type: integer
       generator: { strategy: AUTO }
   fields:
+    position:
+      type: integer
     value:
       type: decimal
       precision: 8

@@ -119,7 +119,7 @@ class Manager
         $genome = $specie->getGenomes()->offsetGet($this->pool->getCurrentGenome());
 
         $inputs = $this->inputsAggregator->aggregate->toArray();
-        $outputs = Network::evaluate($genome->getNetwork()->toArray(), $inputs, $this->outputsAggregator, $this->inputsAggregator);
+        $outputs = Network::evaluate($genome, $inputs, $this->outputsAggregator, $this->inputsAggregator);
 
         $this->applyOutputs($outputs);
     }
@@ -128,7 +128,12 @@ class Manager
     {
         /** @var AbstractOutput $output */
         foreach ($outputs as $output) {
-            $output->apply();
+            try {
+                $output->apply();
+            } catch (\Exception $e) {
+                var_dump($e->getMessage());
+                return;
+            }
         }
     }
 

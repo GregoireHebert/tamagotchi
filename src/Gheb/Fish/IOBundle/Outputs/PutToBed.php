@@ -20,7 +20,8 @@ class PutToBed extends AbstractOutput
         $sleepiness = $this->fish->getSleepiness();
         $this->fish->setSleepiness($sleepiness-5);
         $this->em->flush();
-        $this->logger->logger->info('Sleep :'."\t".' -5 Sleepiness'."\n");
+        //var_dump('Sleep :'."\t".' -5 Sleepiness');
+        //$this->logger->logger->info('Sleep :'."\t".' -5 Sleepiness'."\n");
     }
 
     public function getName()

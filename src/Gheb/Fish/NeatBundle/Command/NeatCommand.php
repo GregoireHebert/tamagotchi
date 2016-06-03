@@ -79,70 +79,82 @@ class NeatCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $manager = new Manager($this->em, $this->inputsAggregator, $this->outputsAggregator, $this->mutation);
-        $manager->evaluateCurrent();
-
-        $pool = $manager->getPool();
-
-        /** @var Specie $specie */
-        $specie = $pool->getSpecies()->offsetGet($pool->getCurrentSpecies());
-
-        /** @var Genome $genome */
-        $genome = $specie->getGenomes()->offsetGet($pool->getCurrentGenome());
-
         /** @var FishRepository $repo */
         $repo = $this->em->getRepository('FishBundle:Fish');
-        /** @var Fish $fish */
-        $fish = $repo->findAliveFish();
 
-        if ($fish == null) {
-            /** @var Fish $lastFish */
-            $lastFish = $repo->findLastAliveFish();
-            $fitness = $lastFish->getLifeTick();
-            $genome->setFitness($fitness);
-
-            if ($fitness > $pool->getMaxFitness()) {
-                $pool->setMaxFitness($fitness);
-                $this->em->flush();
-            }
-
-            $pool->setCurrentSpecies(0);
-            $pool->setCurrentGenome(0);
-            while ($manager->fitnessAlreadyMeasured()) {
-                $pool->nextGenome();
-            }
-
-            $command = $this->getApplication()->find('fish:give:birth');
-
-            $nullOutput = new NullOutput();
-            $birthInput = new ArrayInput(array(
-                'command' => 'fish:give:birth'
-            ));
-
-            $command->run($birthInput, $nullOutput);
+        while (true) {
+            /** @var Fish $fish */
             $fish = $repo->findAliveFish();
-            $output->writeln('New Life.');
-        }
 
-        $this->em->flush();
+            $pool = $manager->getPool();
 
-        $command = $this->getApplication()->find('fish:time:apply');
+            /** @var Specie $specie */
+            $specie = $pool->getSpecies()->offsetGet($pool->getCurrentSpecies());
 
-        $nullOutput = new NullOutput();
-        $timeInput = new ArrayInput(array(
-            'command' => 'fish:time:apply'
-        ));
+            /** @var Genome $genome */
+            $genome = $specie->getGenomes()->offsetGet($pool->getCurrentGenome());
 
-        $command->run($timeInput, $nullOutput);
+            if ($fish == null) {
+                /** @var Fish $lastFish */
+                $lastFish = $repo->findLastAliveFish();
+                $fitness = $lastFish->getLifeTick();
+                $genome->setFitness($fitness);
 
-        if ($fish->getLifeTick() % 5 == 0) {
-            $command = $this->getApplication()->find('fish:life:apply');
+                if ($fitness > $pool->getMaxFitness()) {
+                    $pool->setMaxFitness($fitness);
+                    $this->em->flush();
+                }
+
+                $pool->setCurrentSpecies(0);
+                $pool->setCurrentGenome(0);
+
+                while ($manager->fitnessAlreadyMeasured()) {
+                    $pool->nextGenome();
+                }
+
+                $command = $this->getApplication()->find('fish:give:birth');
+
+                $nullOutput = new NullOutput();
+                $birthInput = new ArrayInput(
+                    array(
+                        'command' => 'fish:give:birth'
+                    )
+                );
+
+                $command->run($birthInput, $nullOutput);
+                $fish = $repo->findAliveFish();
+                $output->writeln('New Life.');
+
+                $manager->initializeRun();
+            }
+
+            $manager->evaluateCurrent();
+
+            $this->em->flush();
+
+            $command = $this->getApplication()->find('fish:time:apply');
 
             $nullOutput = new NullOutput();
-            $timeInput = new ArrayInput(array(
-                'command' => 'fish:life:apply'
-            ));
+            $timeInput = new ArrayInput(
+                array(
+                    'command' => 'fish:time:apply'
+                )
+            );
 
             $command->run($timeInput, $nullOutput);
+
+            if ($fish->getLifeTick() % 5 == 0) {
+                $command = $this->getApplication()->find('fish:life:apply');
+
+                $nullOutput = new NullOutput();
+                $timeInput = new ArrayInput(
+                    array(
+                        'command' => 'fish:life:apply'
+                    )
+                );
+
+                $command->run($timeInput, $nullOutput);
+            }
         }
     }
 }

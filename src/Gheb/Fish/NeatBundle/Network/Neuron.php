@@ -18,6 +18,11 @@ class Neuron
     public $incoming ;
 
     /**
+     * @var int
+     */
+    public $position;
+
+    /**
      * @var float
      */
     public $value = 0.0;
@@ -25,6 +30,22 @@ class Neuron
     public function __construct()
     {
         $this->incoming = new ArrayCollection();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param mixed $position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
     }
 
     /**

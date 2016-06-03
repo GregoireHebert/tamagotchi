@@ -185,10 +185,10 @@ class Pool
     {
         $this->currentGenome++;
 
-        if ($this->currentGenome > $this->species->offsetGet($this->currentSpecies)->getGenomes()->count()) {
+        if ($this->currentGenome > $this->species->offsetGet($this->currentSpecies)->getGenomes()->count()-1) {
             $this->currentGenome = 0;
             $this->currentSpecies++;
-            if ($this->currentSpecies > $this->species->count()) {
+            if ($this->currentSpecies > $this->species->count()-1) {
                 $this->newGeneration();
                 $this->currentSpecies = 0;
             }

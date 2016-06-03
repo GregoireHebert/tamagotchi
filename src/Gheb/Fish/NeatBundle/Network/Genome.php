@@ -63,9 +63,20 @@ class Genome
     /**
      * @param Neuron $neuron
      */
-    public function addNeuron($offset, Neuron $neuron)
+    public function addNeuron(Neuron $neuron)
     {
-        $this->network->offsetSet($offset, $neuron);
+        $this->network->add($neuron);
+    }
+
+    /**
+     * @param $position
+     * @return Neuron|null
+     */
+    public function getNeuron($position) {
+        $neurons = $this->network->filter(function($neuron) use ($position) {
+            return $neuron->getPosition() == $position;
+        });
+        return $neurons->first();
     }
 
     /**

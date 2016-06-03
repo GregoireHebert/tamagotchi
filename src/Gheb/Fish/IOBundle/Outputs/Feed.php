@@ -21,7 +21,8 @@ class Feed extends AbstractOutput
         $hunger = $this->fish->getHunger();
         $this->fish->setHunger($hunger-3);
         $this->em->flush();
-        $this->logger->logger->info('Feed :'."\t".' -3 Hunger'."\n");
+        //var_dump('Feed :'."\t".' -3 Hunger');
+        //$this->logger->logger->info('Feed :'."\t".' -3 Hunger'."\n");
     }
 
     /**
