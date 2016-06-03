@@ -9,6 +9,10 @@ class Genome
     /**
      * @var int
      */
+    public $id;
+    /**
+     * @var int
+     */
     public $fitness = 0;
 
     /**
@@ -34,7 +38,7 @@ class Genome
     /**
      * @var int
      */
-    public $globalRank;
+    public $globalRank = 0;
 
     /**
      * @var Specie
@@ -52,6 +56,22 @@ class Genome
         $this->mutationRates["enable"] = 0.2;
         $this->mutationRates["disable"] = 0.4;
         $this->mutationRates["step"] = 0.1;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**
@@ -129,6 +149,7 @@ class Genome
 
     public function removeGene(Gene $gene)
     {
+        $gene->setGenome(null);
         $this->genes->removeElement($gene);
     }
 

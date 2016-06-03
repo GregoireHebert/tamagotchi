@@ -2,7 +2,6 @@
 
 namespace Gheb\Fish\NeatBundle\Manager;
 
-
 use Doctrine\ORM\EntityManager;
 use Gheb\Fish\IOBundle\Inputs\InputsAggregator;
 use Gheb\Fish\IOBundle\Outputs\AbstractOutput;
@@ -59,7 +58,7 @@ class Manager
         $this->outputsAggregator = $outputsAggregator;
         $this->mutation = $mutation;
 
-        $repo = $this->em->getRepository('NeatBundle:Pool');
+        $repo = $this->em->getRepository('Gheb\Fish\NeatBundle\Genomes\Pool');
         $this->pool = $repo->findOneBy(array());
 
         if (!$this->pool instanceof Pool) {
@@ -114,7 +113,9 @@ class Manager
         /** @var Specie $specie */
         $specie = $this->pool->getSpecies()->offsetGet($this->pool->getCurrentSpecies());
         $genome = $specie->getGenomes()->offsetGet($this->pool->getCurrentGenome());
-        new Network($genome, $this->outputsAggregator, $this->inputsAggregator);
+
+
+        Network::generateNetwork($genome, $this->outputsAggregator, $this->inputsAggregator);
 
         $this->evaluateCurrent();
     }
@@ -127,7 +128,7 @@ class Manager
         $genome = $specie->getGenomes()->offsetGet($this->pool->getCurrentGenome());
 
         $inputs = $this->inputsAggregator->aggregate->toArray();
-        $outputs = $genome->getNetwork()->evaluate($inputs);
+        $outputs = Network::evaluate($genome->getNetwork(), $inputs, $this->outputsAggregator, $this->inputsAggregator);
 
         $this->applyOutputs($outputs);
     }

@@ -134,9 +134,8 @@ class Pool
         if (!$foundSpecie) {
             $childSpecie = new Specie();
 
-
             $childSpecie->addGenome($child);
-            $this->species->add($childSpecie);
+            $this->addSpecie($childSpecie);
 
             $this->em->persist($childSpecie);
             $this->em->flush();
@@ -154,11 +153,11 @@ class Pool
     public function breedChild(Specie $specie)
     {
         if (lcg_value() < self::CROSSOVER_CHANCE) {
-            $g1 = $specie->genomes->offsetGet(mt_rand(0, $specie->genomes->count()));
-            $g2 = $specie->genomes->offsetGet(mt_rand(0, $specie->genomes->count()));
+            $g1 = $specie->genomes->offsetGet(mt_rand(1, $specie->genomes->count())-1);
+            $g2 = $specie->genomes->offsetGet(mt_rand(1, $specie->genomes->count())-1);
             $child = $this->mutation->crossOver($g1, $g2);
         } else {
-            $g = $specie->genomes->offsetGet(mt_rand(0, $specie->genomes->count()));
+            $g = $specie->genomes->offsetGet(mt_rand(1, $specie->genomes->count())-1);
             $child = $this->mutation->cloneEntity($g);
         }
 
@@ -176,7 +175,7 @@ class Pool
         $genome = new Genome();
 
         $genome->setMaxNeuron($this->inputAggregator->count() + 1);
-        $this->mutation->mutate($genome);
+        $this->mutation->mutate($genome, $this);
 
         $this->em->persist($genome);
         $this->em->flush();

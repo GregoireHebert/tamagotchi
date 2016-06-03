@@ -11,17 +11,6 @@ use Gheb\Fish\NeatBundle\Genomes\Genome;
 class Network
 {
     const MAX_NODES = 1000000;
-    public $neurons = array();
-
-    /**
-     * @var OutputsAggregator
-     */
-    private $outputsAggregator;
-
-    /**
-     * @var InputsAggregator
-     */
-    private $inputsAggregator;
 
     /**
      * Structure a network of neurons based on genes in and out
@@ -29,17 +18,16 @@ class Network
      * @param OutputsAggregator $outputsAggregator
      * @param InputsAggregator $inputsAggregator
      */
-    public function _construct(Genome $genome, OutputsAggregator $outputsAggregator, InputsAggregator $inputsAggregator)
+    public static function generateNetwork(Genome $genome, OutputsAggregator $outputsAggregator, InputsAggregator $inputsAggregator)
     {
-        $this->outputsAggregator = $outputsAggregator;
-        $this->inputsAggregator = $inputsAggregator;
+        $neurons = array();
 
-        for ($i = 0; $i < $this->inputsAggregator->count(); $i++) {
-            $this->neurons[$i] = new Neuron();
+        for ($i = 0; $i < $inputsAggregator->count(); $i++) {
+            $neurons[$i] = new Neuron();
         }
 
-        for ($j = 0; $j < $this->outputsAggregator->count(); $j++) {
-            $this->neurons[self::MAX_NODES + $j] = new Neuron();
+        for ($j = 0; $j < $outputsAggregator->count(); $j++) {
+            $neurons[self::MAX_NODES + $j] = new Neuron();
         }
 
         // from lower to higher
@@ -57,61 +45,63 @@ class Network
             $gene = $iterator->offsetGet($i);
 
             if ($gene->isEnabled()) {
-                if (!isset($this->neurons[$gene->getOut()])) {
-                    $this->neurons[$gene->getOut()] = new Neuron();
+                if (!isset($neurons[$gene->getOut()])) {
+                    $neurons[$gene->getOut()] = new Neuron();
                 }
 
                 /** @var Neuron $neuron */
-                $neuron = $this->neurons[$gene->getOut()];
+                $neuron = $neurons[$gene->getOut()];
                 $neuron->incoming->add($gene);
 
-                if (!isset($this->neurons[$gene->getInto()])) {
-                    $this->neurons[$gene->getInto()] = new Neuron();
+                if (!isset($neurons[$gene->getInto()])) {
+                    $neurons[$gene->getInto()] = new Neuron();
                 }
             }
         }
 
-        $genome->setNetwork($this);
+        $genome->setNetwork($neurons);
     }
 
     /**
      * Receive inputs and evaluate them in function of their values
      *
+     * @param array network
      * @param $inputs
+     * @param OutputsAggregator $outputsAggregator
+     * @param InputsAggregator $inputsAggregator
      *
      * @return array|void
      * @throws \Exception
      */
-    public function evaluate($inputs)
+    public static function evaluate(Array $network, $inputs, OutputsAggregator $outputsAggregator, InputsAggregator $inputsAggregator)
     {
-        if ($this->inputsAggregator->count() != count($inputs)) {
+        if ($inputsAggregator->count() != count($inputs)) {
             throw new \Exception('Incorrect number of neural network inputs');
-            return;
         }
-
-        for ($i = 0; $i < $this->inputsAggregator->count(); $i++) {
-            $this->neurons[$i]->setValue($inputs[$i]->getValue());
+        
+        for ($i = 0; $i < $inputsAggregator->count(); $i++) {
+            $network[$i]->setValue($inputs[$i]->getValue());
         }
 
         /** @var Neuron $neuron */
-        foreach ($this->neurons as $neuron) {
+        foreach ($network as $neuron) {
             $sum = 0;
             /** @var Gene $incoming */
             foreach ($neuron->getIncoming() as $incoming) {
                 /** @var Neuron $other */
-                $other = $this->neurons[$incoming->getInto()];
+                $other = $network[$incoming->getInto()];
                 $sum += $incoming->getWeight() * $other->getValue();
             }
 
             if ($neuron->getIncoming()->count() > 0) {
-                $neuron->setValue($this->sigmoid($sum));
+                $neuron->setValue(self::sigmoid($sum));
             }
         }
 
         $triggeredOutputs = array();
-        for ($j = 0; $j < $this->outputsAggregator->count(); $j++) {
-            if ($this->neurons[self::MAX_NODES + $j]->getValue() > 0) {
-                $triggeredOutputs[] = $this->outputsAggregator->aggregate->offsetGet($j);
+        for ($j = 0; $j < $outputsAggregator->count(); $j++) {
+            if ($network[self::MAX_NODES + $j]->getValue() > 0) {
+                $triggeredOutputs[] = $outputsAggregator->aggregate->offsetGet($j);
             }
         }
 

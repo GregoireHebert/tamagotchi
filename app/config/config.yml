@@ -56,9 +56,20 @@ doctrine:
         #     path:     "%database_path%"
 
     orm:
-        auto_generate_proxy_classes: "%kernel.debug%"
-        naming_strategy: doctrine.orm.naming_strategy.underscore
-        auto_mapping: true
+        auto_generate_proxy_classes: %kernel.debug%
+
+        mappings:
+            FishBundle:
+                is_bundle: true
+
+            genome:
+                type: yml
+                dir: %kernel.root_dir%/../src/Gheb/Fish/NeatBundle/Resources/config/doctrine
+                alias: NeatBundle
+                prefix: Gheb\Fish\NeatBundle\Genomes
+                is_bundle: false
+        #auto_generate_proxy_classes: "%kernel.debug%"
+        #auto_mapping: true
 
 # Swiftmailer Configuration
 swiftmailer:

@@ -5,7 +5,6 @@ namespace Gheb\Fish\NeatBundle\Command;
 use Doctrine\ORM\EntityManager;
 use Gheb\Fish\FishBundle\Entity\Fish;
 use Gheb\Fish\FishBundle\Entity\FishRepository;
-use Gheb\Fish\IOBundle\Inputs\AbstractInput;
 use Gheb\Fish\IOBundle\Inputs\InputsAggregator;
 use Gheb\Fish\NeatBundle\Aggregator;
 use Gheb\Fish\NeatBundle\Genomes\Genome;
@@ -14,7 +13,6 @@ use Gheb\Fish\NEATBundle\Genomes\Specie;
 use Gheb\Fish\NeatBundle\Manager\Manager;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\output\OutputInterface;
@@ -107,8 +105,8 @@ class NeatCommand extends ContainerAwareCommand
                 $this->em->flush();
             }
 
-            $pool->setCurrentSpecies(1);
-            $pool->setCurrentGenome(1);
+            $pool->setCurrentSpecies(0);
+            $pool->setCurrentGenome(0);
             while ($manager->fitnessAlreadyMeasured()) {
                 $pool->nextGenome();
             }

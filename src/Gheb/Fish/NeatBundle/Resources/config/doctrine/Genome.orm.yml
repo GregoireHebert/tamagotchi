@@ -1,0 +1,33 @@
+Gheb\Fish\NeatBundle\Genomes\Genome:
+  type: entity
+  table: Genome
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    fitness:
+      type: integer
+    maxNeuron:
+      type: integer
+    mutationRates:
+      type: array
+    network:
+      type: array
+    globalRank:
+      type: integer
+
+  oneToMany:
+    genes:
+      targetEntity: 'Gheb\Fish\NeatBundle\Genomes\Gene'
+      cascade: ['persist', 'remove', 'refresh']
+      mappedBy: genome
+
+  manyToOne:
+    specie:
+      targetEntity: 'Gheb\Fish\NeatBundle\Genomes\Specie'
+      cascade: ['persist', 'remove', 'refresh']
+      inversedBy: genomes
+      joinColumn:
+        name: specie_id
+        referencedColumnName: id

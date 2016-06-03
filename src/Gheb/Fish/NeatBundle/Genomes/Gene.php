@@ -5,6 +5,11 @@ namespace Gheb\Fish\NeatBundle\Genomes;
 class Gene
 {
     /**
+     * @var int
+     */
+    public $id;
+
+    /**
      * @var bool
      */
     public $enabled = true;
@@ -33,6 +38,22 @@ class Gene
      * @var float
      */
     public $weight = 0.0;
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 
     /**
      * @return Genome

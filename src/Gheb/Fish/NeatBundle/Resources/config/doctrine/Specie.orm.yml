@@ -1,0 +1,28 @@
+Gheb\Fish\NeatBundle\Genomes\Specie:
+  type: entity
+  table: Specie
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    averageFitness:
+      type: integer
+    staleness:
+      type: integer
+    topFitness:
+      type: integer
+
+  oneToMany:
+    genomes:
+      targetEntity: 'Gheb\Fish\NeatBundle\Genomes\Genome'
+      cascade: ['persist', 'remove', 'refresh']
+      mappedBy: specie
+  manyToOne:
+    pool:
+      targetEntity: 'Gheb\Fish\NeatBundle\Genomes\Pool'
+      cascade: ['persist', 'remove', 'refresh']
+      inversedBy: species
+      joinColumn:
+        name: pool_id
+        referencedColumnName: id

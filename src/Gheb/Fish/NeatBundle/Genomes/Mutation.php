@@ -24,6 +24,8 @@ class Mutation
      */
     private $em;
 
+    private $pool;
+
     /**
      * Manager constructor.
      * @param EntityManager $em
@@ -115,7 +117,7 @@ class Mutation
 
         if ($candidates->count() == 0) return;
 
-        $gene = $candidates->get(mt_rand(0,$candidates->count()));
+        $gene = $candidates->get(mt_rand(1,$candidates->count())-1);
         $gene->setEnabled(!$gene->isEnabled());
         $this->em->flush();
     }
@@ -197,7 +199,8 @@ class Mutation
             return;
         }
 
-        $newLink->setInnovation($genome->getSpecie()->getPool()->newInnovation());
+        $pool = $this->pool instanceof Pool ? $this->pool : $genome->getSpecie()->getPool();
+        $newLink->setInnovation($pool->newInnovation());
         $newLink->setWeight(lcg_value()*4-2);
 
         $genome->addGene($newLink);
@@ -210,9 +213,11 @@ class Mutation
      * Applies a mutation upon a genome
      *
      * @param Genome $genome
+     * @param Pool $pool pool to innovate, when the genome hasn't been attached to it yet
      */
-    public function mutate(Genome $genome)
+    public function mutate(Genome $genome, $pool = null)
     {
+        $this->pool = $pool;
         $rates = $genome->mutationRates;
 
         // has a chance to reduce the mutation rate or rise it up
@@ -293,11 +298,13 @@ class Mutation
         if ($gene->isEnabled() == false) return;
 
         $gene->setEnabled(false);
+
+        $pool = $this->pool instanceof Pool ? $this->pool : $gene->getGenome()->getSpecie()->getPool();
         $clone = clone $gene;
 
         $clone->setOut($genome->getMaxNeuron());
         $clone->setWeight(1.0);
-        $clone->setInnovation($clone->getGenome()->getSpecie()->getPool()->newInnovation());
+        $clone->setInnovation($pool->newInnovation());
         $clone->setEnabled(true);
 
         $genome->addGene($clone);
@@ -305,7 +312,7 @@ class Mutation
         $clone2 = clone $gene;
 
         $clone2->setInto($genome->getMaxNeuron());
-        $clone2->setInnovation($clone->getGenome()->getSpecie()->getPool()->newInnovation());
+        $clone2->setInnovation($pool->newInnovation());
         $clone2->setEnabled(true);
 
         $genome->addGene($clone2);

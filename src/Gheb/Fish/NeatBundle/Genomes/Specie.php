@@ -14,6 +14,11 @@ class Specie
     /**
      * @var int
      */
+    public $id;
+
+    /**
+     * @var int
+     */
     public $averageFitness = 0;
 
     /**
@@ -39,6 +44,22 @@ class Specie
     public function __construct()
     {
         $this->genomes = new ArrayCollection();
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     public function addGenome(Genome $genome)
@@ -103,6 +124,7 @@ class Specie
 
     public function removeGenome(Genome $genome)
     {
+        $genome->setSpecie(null);
         $this->genomes->removeElement($genome);
     }
 

@@ -1,0 +1,31 @@
+Gheb\Fish\NeatBundle\Genomes\Gene:
+  type: entity
+  table: Gene
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    enabled:
+      type: boolean
+    innovation:
+      type: integer
+    into:
+      column: fromNeuron
+      type: integer
+    out:
+      column: toNeuron
+      type: integer
+    weight:
+      type: decimal
+      precision: 8
+      scale: 2
+
+  manyToOne:
+    genome:
+      targetEntity: 'Gheb\Fish\NeatBundle\Genomes\Genome'
+      cascade: ['persist', 'remove', 'refresh']
+      inversedBy: genes
+      joinColumn:
+        name: genome_id
+        referencedColumnName: id
