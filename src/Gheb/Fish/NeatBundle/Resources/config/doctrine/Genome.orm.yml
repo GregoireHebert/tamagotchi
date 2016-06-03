@@ -1,4 +1,4 @@
-Gheb\Fish\NeatBundle\Genomes\Genome:
+Gheb\Fish\NeatBundle\Network\Genome:
   type: entity
   table: Genome
   id:
@@ -12,22 +12,34 @@ Gheb\Fish\NeatBundle\Genomes\Genome:
       type: integer
     mutationRates:
       type: array
-    network:
-      type: array
     globalRank:
       type: integer
 
   oneToMany:
     genes:
-      targetEntity: 'Gheb\Fish\NeatBundle\Genomes\Gene'
+      targetEntity: 'Gheb\Fish\NeatBundle\Network\Gene'
       cascade: ['persist', 'remove', 'refresh']
       mappedBy: genome
 
   manyToOne:
     specie:
-      targetEntity: 'Gheb\Fish\NeatBundle\Genomes\Specie'
+      targetEntity: 'Gheb\Fish\NeatBundle\Network\Specie'
       cascade: ['persist', 'remove', 'refresh']
       inversedBy: genomes
       joinColumn:
         name: specie_id
         referencedColumnName: id
+
+  manyToMany:
+    network:
+      targetEntity: 'Gheb\Fish\NeatBundle\Network\Neuron'
+      cascade: ['persist', 'remove', 'refresh']
+      joinTable:
+        name: Genome_neurons
+        joinColumns:
+          genome_id:
+            referencedColumnName: id
+        inverseJoinColumns:
+          neuron_id:
+            referencedColumnName: id
+            unique: true

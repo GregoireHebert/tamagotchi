@@ -7,9 +7,9 @@ use Gheb\Fish\FishBundle\Entity\Fish;
 use Gheb\Fish\FishBundle\Entity\FishRepository;
 use Gheb\Fish\IOBundle\Inputs\InputsAggregator;
 use Gheb\Fish\NeatBundle\Aggregator;
-use Gheb\Fish\NeatBundle\Genomes\Genome;
-use Gheb\Fish\NeatBundle\Genomes\Mutation;
-use Gheb\Fish\NEATBundle\Genomes\Specie;
+use Gheb\Fish\NeatBundle\Network\Genome;
+use Gheb\Fish\NeatBundle\Network\Mutation;
+use Gheb\Fish\NEATBundle\Network\Specie;
 use Gheb\Fish\NeatBundle\Manager\Manager;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -122,6 +122,8 @@ class NeatCommand extends ContainerAwareCommand
             $fish = $repo->findAliveFish();
             $output->writeln('New Life.');
         }
+
+        $this->em->flush();
 
         $command = $this->getApplication()->find('fish:time:apply');
 

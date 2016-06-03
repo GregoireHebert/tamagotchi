@@ -5,8 +5,8 @@ namespace Gheb\Fish\NeatBundle\Network;
 
 use Gheb\Fish\IOBundle\Inputs\InputsAggregator;
 use Gheb\Fish\IOBundle\Outputs\OutputsAggregator;
-use Gheb\Fish\NeatBundle\Genomes\Gene;
-use Gheb\Fish\NeatBundle\Genomes\Genome;
+use Gheb\Fish\NeatBundle\Network\Gene;
+use Gheb\Fish\NeatBundle\Network\Genome;
 
 class Network
 {
@@ -20,14 +20,12 @@ class Network
      */
     public static function generateNetwork(Genome $genome, OutputsAggregator $outputsAggregator, InputsAggregator $inputsAggregator)
     {
-        $neurons = array();
-
         for ($i = 0; $i < $inputsAggregator->count(); $i++) {
-            $neurons[$i] = new Neuron();
+            $genome->addNeuron($i, new Neuron());
         }
 
         for ($j = 0; $j < $outputsAggregator->count(); $j++) {
-            $neurons[self::MAX_NODES + $j] = new Neuron();
+            $genome->addNeuron(self::MAX_NODES + $j, new Neuron());
         }
 
         // from lower to higher
@@ -45,21 +43,19 @@ class Network
             $gene = $iterator->offsetGet($i);
 
             if ($gene->isEnabled()) {
-                if (!isset($neurons[$gene->getOut()])) {
-                    $neurons[$gene->getOut()] = new Neuron();
+                if (null == $genome->network->offsetGet($gene->getOut())) {
+                    $genome->addNeuron($gene->getOut(), new Neuron());
                 }
 
                 /** @var Neuron $neuron */
-                $neuron = $neurons[$gene->getOut()];
+                $neuron = $genome->network->offsetGet($gene->getOut());
                 $neuron->incoming->add($gene);
 
-                if (!isset($neurons[$gene->getInto()])) {
-                    $neurons[$gene->getInto()] = new Neuron();
+                if (null == $genome->network->offsetGet($gene->getInto())) {
+                    $genome->addNeuron($gene->getInto(), new Neuron());
                 }
             }
         }
-
-        $genome->setNetwork($neurons);
     }
 
     /**
@@ -113,7 +109,7 @@ class Network
      * @param $x
      * @return float
      */
-    public function sigmoid($x){
+    public static function sigmoid($x){
 	    return 2/(1+exp(-4.9*$x))-1;
     }
 }

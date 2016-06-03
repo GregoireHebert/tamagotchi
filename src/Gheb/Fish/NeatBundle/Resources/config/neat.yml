@@ -1,6 +1,6 @@
 parameters:
   fish.neat.command.class: Gheb\Fish\NeatBundle\Command\NeatCommand
-  fish.neat.mutation.class: Gheb\Fish\NeatBundle\Genomes\Mutation
+  fish.neat.mutation.class: Gheb\Fish\NeatBundle\Network\Mutation
 
 services:
 

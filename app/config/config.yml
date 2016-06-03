@@ -61,12 +61,11 @@ doctrine:
         mappings:
             FishBundle:
                 is_bundle: true
-
             genome:
                 type: yml
                 dir: %kernel.root_dir%/../src/Gheb/Fish/NeatBundle/Resources/config/doctrine
                 alias: NeatBundle
-                prefix: Gheb\Fish\NeatBundle\Genomes
+                prefix: Gheb\Fish\NeatBundle\Network
                 is_bundle: false
         #auto_generate_proxy_classes: "%kernel.debug%"
         #auto_mapping: true

@@ -8,6 +8,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Neuron
 {
     /**
+     * @var int
+     */
+    public $id;
+
+    /**
      * @var ArrayCollection
      */
     public $incoming ;
@@ -20,6 +25,30 @@ class Neuron
     public function __construct()
     {
         $this->incoming = new ArrayCollection();
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @param $gene
+     */
+    public function addIncoming($gene)
+    {
+        $this->incoming->add($gene);
     }
 
     /**

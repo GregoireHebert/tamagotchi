@@ -1,4 +1,4 @@
-Gheb\Fish\NeatBundle\Genomes\Pool:
+Gheb\Fish\NeatBundle\Network\Pool:
   type: entity
   table: Pool
   id:
@@ -19,6 +19,6 @@ Gheb\Fish\NeatBundle\Genomes\Pool:
 
   oneToMany:
     species:
-      targetEntity: 'Gheb\Fish\NeatBundle\Genomes\Specie'
+      targetEntity: 'Gheb\Fish\NeatBundle\Network\Specie'
       cascade: ['persist', 'remove', 'refresh']
       mappedBy: pool

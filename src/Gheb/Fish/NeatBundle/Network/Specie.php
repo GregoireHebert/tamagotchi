@@ -1,6 +1,6 @@
 <?php
 
-namespace Gheb\Fish\NeatBundle\Genomes;
+namespace Gheb\Fish\NeatBundle\Network;
 
 use Doctrine\Common\Collections\ArrayCollection;
 

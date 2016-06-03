@@ -1,4 +1,4 @@
-Gheb\Fish\NeatBundle\Genomes\Gene:
+Gheb\Fish\NeatBundle\Network\Gene:
   type: entity
   table: Gene
   id:
@@ -23,7 +23,7 @@ Gheb\Fish\NeatBundle\Genomes\Gene:
 
   manyToOne:
     genome:
-      targetEntity: 'Gheb\Fish\NeatBundle\Genomes\Genome'
+      targetEntity: 'Gheb\Fish\NeatBundle\Network\Genome'
       cascade: ['persist', 'remove', 'refresh']
       inversedBy: genes
       joinColumn:

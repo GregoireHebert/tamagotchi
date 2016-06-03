@@ -1,10 +1,10 @@
 <?php
 
-Namespace Gheb\Fish\NeatBundle\Tests\Genomes;
+Namespace Gheb\Fish\NeatBundle\Tests\Network;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Gheb\Fish\NeatBundle\Genomes\Mutation;
-use Gheb\Fish\NeatBundle\Genomes\Pool;
+use Gheb\Fish\NeatBundle\Network\Mutation;
+use Gheb\Fish\NeatBundle\Network\Pool;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class PoolTests extends KernelTestCase
@@ -29,14 +29,14 @@ class PoolTests extends KernelTestCase
         $input = $imb->disableOriginalConstructor()->getMock();
         $input->expects($this->once())->method('count')->willReturn(4);
 
-        $mb = $this->getMockBuilder('Gheb\Fish\NeatBundle\Genomes\Mutation');
+        $mb = $this->getMockBuilder('Gheb\Fish\NeatBundle\Network\Mutation');
         $mutation = $mb->disableOriginalConstructor()->getMock();
         $mutation->expects($this->once())->method('mutate');
 
         $pool = new Pool($em, $output, $input, $mutation);
 
         $genome = $pool->createBasicGenome();
-        $this->assertInstanceOf('Gheb\Fish\NeatBundle\Genomes\Genome', $genome);
+        $this->assertInstanceOf('Gheb\Fish\NeatBundle\Network\Genome', $genome);
         $this->assertEquals(5, $genome->getMaxNeuron());
     }
 
@@ -51,12 +51,12 @@ class PoolTests extends KernelTestCase
         $imb = $this->getMockBuilder('Gheb\Fish\NeatBundle\Aggregator');
         $input = $imb->disableOriginalConstructor()->getMock();
 
-        $mb = $this->getMockBuilder('Gheb\Fish\NeatBundle\Genomes\Mutation');
+        $mb = $this->getMockBuilder('Gheb\Fish\NeatBundle\Network\Mutation');
         $mutation = $mb->disableOriginalConstructor()->getMock();
 
         $pool = new Pool($em, $output, $input, $mutation);
 
-        $gmb = $this->getMockBuilder('Gheb\Fish\NeatBundle\Genomes\Genome');
+        $gmb = $this->getMockBuilder('Gheb\Fish\NeatBundle\Network\Genome');
         $genome = $gmb->disableOriginalConstructor()->getMock();
 
         $this->assertEquals(0, $pool->getSpecies()->count());
@@ -68,7 +68,7 @@ class PoolTests extends KernelTestCase
         $this->assertEquals(1, $pool->getSpecies()->first()->getGenomes()->count());
         $this->assertEquals($genome, $pool->getSpecies()->first()->getGenomes()->first());
 
-        $genemb = $this->getMockBuilder('Gheb\Fish\NeatBundle\Genomes\Gene');
+        $genemb = $this->getMockBuilder('Gheb\Fish\NeatBundle\Network\Gene');
         $gene1 = $genemb->disableOriginalConstructor()->getMock();
         $gene2 = $genemb->disableOriginalConstructor()->getMock();
         $gene3 = $genemb->disableOriginalConstructor()->getMock();

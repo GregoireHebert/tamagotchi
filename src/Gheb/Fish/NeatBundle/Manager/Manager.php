@@ -7,10 +7,10 @@ use Gheb\Fish\IOBundle\Inputs\InputsAggregator;
 use Gheb\Fish\IOBundle\Outputs\AbstractOutput;
 use Gheb\Fish\IOBundle\Outputs\OutputsAggregator;
 use Gheb\Fish\NeatBundle\Aggregator;
-use Gheb\Fish\NeatBundle\Genomes\Genome;
-use Gheb\Fish\NeatBundle\Genomes\Mutation;
-use Gheb\Fish\NeatBundle\Genomes\Pool;
-use Gheb\Fish\NeatBundle\Genomes\Specie;
+use Gheb\Fish\NeatBundle\Network\Genome;
+use Gheb\Fish\NeatBundle\Network\Mutation;
+use Gheb\Fish\NeatBundle\Network\Pool;
+use Gheb\Fish\NeatBundle\Network\Specie;
 use Gheb\Fish\NeatBundle\Network\Network;
 
 class Manager
@@ -58,27 +58,12 @@ class Manager
         $this->outputsAggregator = $outputsAggregator;
         $this->mutation = $mutation;
 
-        $repo = $this->em->getRepository('Gheb\Fish\NeatBundle\Genomes\Pool');
+        $repo = $this->em->getRepository('Gheb\Fish\NeatBundle\Network\Pool');
         $this->pool = $repo->findOneBy(array());
 
         if (!$this->pool instanceof Pool) {
             $this->initializePool();
         }
-    }
-
-    /**
-     * Duplicate an entity
-     * @param $entity
-     *
-     * @return mixed
-     */
-    public function cloneEntity($entity)
-    {
-        $this->em->clear($entity);
-        $this->em->persist($entity);
-        $this->em->flush();
-
-        return $entity;
     }
 
     /**
@@ -99,7 +84,13 @@ class Manager
 
     public function initializePool()
     {
-        $this->pool = new Pool($this->em, $this->outputsAggregator, $this->inputsAggregator, $this->mutation);
+        $pool = new Pool($this->em, $this->outputsAggregator, $this->inputsAggregator, $this->mutation);
+        $this->em->persist($pool);
+        $this->em->flush();
+
+        $repo = $this->em->getRepository('Gheb\Fish\NeatBundle\Network\Pool');
+        $this->pool = $repo->findOneBy(array());
+
         $this->pool->setInnovation(1);
         for ($i = 0; $i < Pool::POPULATION; $i++) {
             $this->pool->addToSpecies($this->pool->createBasicGenome());
@@ -128,7 +119,7 @@ class Manager
         $genome = $specie->getGenomes()->offsetGet($this->pool->getCurrentGenome());
 
         $inputs = $this->inputsAggregator->aggregate->toArray();
-        $outputs = Network::evaluate($genome->getNetwork(), $inputs, $this->outputsAggregator, $this->inputsAggregator);
+        $outputs = Network::evaluate($genome->getNetwork()->toArray(), $inputs, $this->outputsAggregator, $this->inputsAggregator);
 
         $this->applyOutputs($outputs);
     }
