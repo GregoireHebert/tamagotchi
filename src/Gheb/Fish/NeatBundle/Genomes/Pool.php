@@ -125,7 +125,7 @@ class Pool
         /** @var Specie $specie */
         foreach ($this->species as $specie) {
             if ($this->sameSpecies($child, $specie->genomes->offsetGet(0))) {
-                $specie->genomes->add($child);
+                $specie->addGenome($child);
                 $foundSpecie = true;
                 break;
             }
@@ -192,11 +192,11 @@ class Pool
         $this->currentGenome++;
 
         if ($this->currentGenome > $this->species->offsetGet($this->currentSpecies)->getGenomes()->count()) {
-            $this->currentGenome = 1;
+            $this->currentGenome = 0;
             $this->currentSpecies++;
             if ($this->currentSpecies > $this->species->count()) {
                 $this->newGeneration();
-                $this->currentSpecies = 1;
+                $this->currentSpecies = 0;
             }
         }
     }

@@ -78,7 +78,7 @@ class Network
         if ($inputsAggregator->count() != count($inputs)) {
             throw new \Exception('Incorrect number of neural network inputs');
         }
-        
+
         for ($i = 0; $i < $inputsAggregator->count(); $i++) {
             $network[$i]->setValue($inputs[$i]->getValue());
         }
