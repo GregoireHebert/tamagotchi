@@ -63,6 +63,10 @@ class Manager
 
         if (!$this->pool instanceof Pool) {
             $this->initializePool();
+        } else {
+            $this->pool->setEm($em);
+            $this->pool->setInputAggregator($inputsAggregator);
+            $this->pool->setMutation($mutation);
         }
     }
 

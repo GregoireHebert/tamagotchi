@@ -25,4 +25,3 @@ Gheb\Fish\NeatBundle\Network\Neuron:
         inverseJoinColumns:
           incoming_id:
             referencedColumnName: id
-            unique: true

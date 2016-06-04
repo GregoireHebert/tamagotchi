@@ -216,11 +216,11 @@ class Pool
             );
 
             $remaining = $cutToOne ? 1 : ceil($specie->getGenomes()->count() / 2);
-            $remainingGenomes = array();
+            $remainingGenomes = new ArrayCollection();
             $genomes = iterator_to_array($iterator, true);
             while (count($genomes) > $remaining) {
                 // get the highest
-                $remainingGenomes = array_pop($genomes);
+                $remainingGenomes->add(array_pop($genomes));
             }
 
             $specie->setGenomes($remainingGenomes);
@@ -419,14 +419,12 @@ class Pool
         $global = new ArrayCollection();
 
         /**
-         * @var int    $key
          * @var Specie $specie
          */
-        foreach ($this->species as $key => $specie) {
+        foreach ($this->species as $specie) {
             foreach ($specie->getGenomes() as $genome) {
                 $global->add($genome);
             }
-
         }
 
         $iterator = $global->getIterator();
@@ -576,7 +574,7 @@ class Pool
     }
 
     /**
-     * @param InputsAggregator $inputAggregator
+     * @param Aggregator $inputAggregator
      */
     public function setInputAggregator($inputAggregator)
     {
