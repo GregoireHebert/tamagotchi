@@ -20,9 +20,9 @@ class SleepinessObligation extends AbstractLifeObligation
         }
 
         // As it's too low, it's getting worse for it's life
-//        if ($fish->getSleepiness() <= 2) {
-//            $fish->setHealth($fish->getHealth() - 3);
-//            $this->application .= 'Sleepiness <= 2 :'."\t".' -3 Health'."\n";
-//        }
+        if ($fish->getSleepiness() <= 2) {
+            $fish->setHealth($fish->getHealth() - 3);
+            $this->application .= 'Sleepiness <= 2 :'."\t".' -3 Health'."\n";
+        }
     }
 }

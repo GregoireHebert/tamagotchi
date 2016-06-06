@@ -221,4 +221,23 @@ class Genome
     {
         $this->specie = $specie;
     }
+
+    public function __clone() {
+        if ($this->id) {
+            $this->setId(null);
+            $this->setFitness(0);
+            $this->setNetwork(new ArrayCollection());
+            $this->setMaxNeuron(0);
+            $this->setGlobalRank(0);
+
+            $genesClone = new ArrayCollection();
+            foreach ($this->getGenes() as $gene) {
+                /** @var Gene $geneClone */
+                $geneClone = clone $gene;
+                $geneClone->setGenome($this);
+                $genesClone->add($geneClone);
+            }
+            $this->setGenes($genesClone);
+        }
+    }
 }

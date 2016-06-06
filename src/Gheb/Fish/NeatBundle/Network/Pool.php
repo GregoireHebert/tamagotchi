@@ -15,7 +15,7 @@ class Pool
 {
     const CROSSOVER_CHANCE = 0.75;
     const STALE_SPECIES = 15;
-    const POPULATION = 300;
+    const POPULATION = 20;
     const DELTA_DISJOINT = 2.0;
     const DELTA_WEIGHT = 0.4;
     const DELTA_THRESHOLD = 1.0;
@@ -202,7 +202,7 @@ class Pool
     public function cullSpecies($cutToOne = false)
     {
         /** @var Specie $specie */
-        foreach ($this->species as $specie) {
+        foreach ($this->species as &$specie) {
 
             $iterator = $specie->getGenomes()->getIterator();
 
@@ -218,7 +218,7 @@ class Pool
             $remaining = $cutToOne ? 1 : ceil($specie->getGenomes()->count() / 2);
             $remainingGenomes = new ArrayCollection();
             $genomes = iterator_to_array($iterator, true);
-            while (count($genomes) > $remaining) {
+            while (count($genomes) >= $remaining) {
                 // get the highest
                 $remainingGenomes->add(array_pop($genomes));
             }
@@ -386,7 +386,8 @@ class Pool
         // it does not contains as much population as the maximum defined.
         // Therefor we create a new child from a random specie until the max population is reached
         while ($children->count() + $this->species->count() < self::POPULATION) {
-            $specie = $this->species->offsetGet(rand(0, $this->species->count()));
+            var_dump($this->species->count());
+            $specie = $this->species->offsetGet(rand(1, $this->species->count())-1);
             $children->add($this->breedChild($specie));
         }
 
@@ -428,7 +429,7 @@ class Pool
         }
 
         $iterator = $global->getIterator();
-        // from lower to higher
+        // from lower to higher, because higher rank is better
         $iterator->uasort(
             function ($first, $second) {
                 /** @var Genome $first */
@@ -483,15 +484,17 @@ class Pool
             }
 
             // if the staleness is under the max or if the top fitness of the species overpasses the pool max fitness, then keep it.
-            if ($specie->getStaleness() < self::STALE_SPECIES ||
-                $specie->getTopFitness() >= $this->getMaxFitness()
+            if ($specie->getStaleness() >= self::STALE_SPECIES ||
+                $specie->getTopFitness() < $this->getMaxFitness()
             ) {
-                $survived->add($specie);
-            } else {
+                $this->species->removeElement($specie);
                 $specie->setPool(null);
+                $this->em->remove($specie);
+                $this->em->flush();
             }
         }
-        $this->setSpecies($survived);
+
+        $this->setSpecies(new ArrayCollection($this->species->toArray()));
     }
 
     /**
@@ -505,14 +508,16 @@ class Pool
         /** @var Specie $specie */
         foreach ($this->species as $specie) {
             $breed = floor($specie->getAverageFitness() / $sum * self::POPULATION);
-            if ($breed >= 1) {
-                $survived->add($specie);
-            } else {
+            if ($breed < 1) {
+                $this->species->removeElement($specie);
                 $specie->setPool(null);
+                $this->em->remove($specie);
+                $this->em->flush();
             }
         }
 
-        $this->setSpecies($survived);
+
+        $this->setSpecies(new ArrayCollection($this->species->toArray()));
     }
 
     /**
@@ -530,7 +535,7 @@ class Pool
 
         $add = $dd + $dw;
 
-        return is_nan($add) ? true : ($add < self::DELTA_THRESHOLD);
+        return is_nan($add) ? false : ($add < self::DELTA_THRESHOLD);
     }
 
     /**

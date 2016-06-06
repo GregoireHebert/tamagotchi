@@ -47,11 +47,12 @@ class Mutation
      */
     public function cloneEntity($entity)
     {
-        $this->em->clear($entity);
-        $this->em->persist($entity);
+        $clone = clone $entity;
+        $this->em->clear($clone);
+        $this->em->persist($clone);
         $this->em->flush();
 
-        return $entity;
+        return $clone;
     }
 
     /**

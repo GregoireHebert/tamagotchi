@@ -19,12 +19,14 @@ Gheb\Fish\NeatBundle\Network\Genome:
     genes:
       targetEntity: 'Gheb\Fish\NeatBundle\Network\Gene'
       cascade: ['persist', 'remove', 'refresh']
+      orphanRemoval: true
       mappedBy: genome
 
   manyToOne:
     specie:
       targetEntity: 'Gheb\Fish\NeatBundle\Network\Specie'
       cascade: ['persist', 'remove', 'refresh']
+      orphanRemoval: true
       inversedBy: genomes
       joinColumn:
         name: specie_id
@@ -34,6 +36,7 @@ Gheb\Fish\NeatBundle\Network\Genome:
     network:
       targetEntity: 'Gheb\Fish\NeatBundle\Network\Neuron'
       cascade: ['persist', 'remove', 'refresh']
+      orphanRemoval: true
       joinTable:
         name: Genome_neurons
         joinColumns:

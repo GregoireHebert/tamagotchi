@@ -15,3 +15,5 @@ Gheb\Fish\FishBundle\Entity\Fish:
             type: integer
         sleepiness:
             type: integer
+        playfull:
+            type: integer

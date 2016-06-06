@@ -107,10 +107,12 @@ class NeatCommand extends ContainerAwareCommand
 
                 $pool->setCurrentSpecies(0);
                 $pool->setCurrentGenome(0);
+                $this->em->flush();
 
                 while ($manager->fitnessAlreadyMeasured()) {
                     $pool->nextGenome();
                 }
+                $this->em->flush();
 
                 $command = $this->getApplication()->find('fish:give:birth');
 

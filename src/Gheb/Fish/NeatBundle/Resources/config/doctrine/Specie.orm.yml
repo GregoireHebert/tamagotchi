@@ -17,11 +17,13 @@ Gheb\Fish\NeatBundle\Network\Specie:
     genomes:
       targetEntity: 'Gheb\Fish\NeatBundle\Network\Genome'
       cascade: ['persist', 'remove', 'refresh']
+      orphanRemoval: true
       mappedBy: specie
   manyToOne:
     pool:
       targetEntity: 'Gheb\Fish\NeatBundle\Network\Pool'
       cascade: ['persist', 'remove', 'refresh']
+      orphanRemoval: true
       inversedBy: species
       joinColumn:
         name: pool_id

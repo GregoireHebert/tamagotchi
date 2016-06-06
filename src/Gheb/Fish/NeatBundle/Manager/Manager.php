@@ -95,7 +95,6 @@ class Manager
         $repo = $this->em->getRepository('Gheb\Fish\NeatBundle\Network\Pool');
         $this->pool = $repo->findOneBy(array());
 
-        $this->pool->setInnovation(1);
         for ($i = 0; $i < Pool::POPULATION; $i++) {
             $this->pool->addToSpecies($this->pool->createBasicGenome());
         }

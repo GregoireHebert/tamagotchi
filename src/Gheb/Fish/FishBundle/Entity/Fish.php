@@ -27,6 +27,11 @@ class Fish
     /**
      * @var int
      */
+    private $playfull;
+
+    /**
+     * @var int
+     */
     private $id;
 
     /**
@@ -37,8 +42,9 @@ class Fish
     public function __construct()
     {
         $this->health = 100;
-        $this->hunger = 2;
-        $this->sleepiness = 2;
+        $this->hunger = 3;
+        $this->sleepiness = 3;
+        $this->playfull = 3;
         $this->lifeTick = 0;
     }
 
@@ -48,7 +54,7 @@ class Fish
     }
 
     /**
-     * @return \DateTime
+     * @param $lifeTick
      */
     public function setLifeTick($lifeTick)
     {
@@ -122,5 +128,21 @@ class Fish
     public function setSleepiness($sleepiness)
     {
         $this->sleepiness = min(10, max(0, $sleepiness));
+    }
+
+    /**
+     * @return int
+     */
+    public function getPlayfull()
+    {
+        return $this->playfull;
+    }
+
+    /**
+     * @param int $playfull
+     */
+    public function setPlayfull($playfull)
+    {
+        $this->playfull = min(10, max(0, $playfull));
     }
 }

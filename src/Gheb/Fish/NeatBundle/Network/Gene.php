@@ -150,4 +150,11 @@ class Gene
     {
         $this->weight = $weight;
     }
+
+    public function __clone()
+    {
+        if ($this->id) {
+            $this->setId(null);
+        }
+    }
 }

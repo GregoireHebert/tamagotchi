@@ -17,11 +17,14 @@ Gheb\Fish\NeatBundle\Network\Neuron:
     incoming:
       targetEntity: 'Gheb\Fish\NeatBundle\Network\Gene'
       cascade: ['persist', 'remove', 'refresh']
+      orphanRemoval: true
       joinTable:
         name: neuron_incoming
         joinColumns:
           neuron_id:
             referencedColumnName: id
+            onDelete: CASCADE
         inverseJoinColumns:
           incoming_id:
             referencedColumnName: id
+            onDelete: CASCADE

@@ -21,4 +21,5 @@ Gheb\Fish\NeatBundle\Network\Pool:
     species:
       targetEntity: 'Gheb\Fish\NeatBundle\Network\Specie'
       cascade: ['persist', 'remove', 'refresh']
+      orphanRemoval: true
       mappedBy: pool

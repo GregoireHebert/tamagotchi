@@ -25,6 +25,7 @@ Gheb\Fish\NeatBundle\Network\Gene:
     genome:
       targetEntity: 'Gheb\Fish\NeatBundle\Network\Genome'
       cascade: ['persist', 'remove', 'refresh']
+      orphanRemoval: true
       inversedBy: genes
       joinColumn:
         name: genome_id
