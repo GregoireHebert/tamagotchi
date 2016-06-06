@@ -15,7 +15,7 @@ class Pool
 {
     const CROSSOVER_CHANCE = 0.75;
     const STALE_SPECIES = 15;
-    const POPULATION = 20;
+    const POPULATION = 300;
     const DELTA_DISJOINT = 2.0;
     const DELTA_WEIGHT = 0.4;
     const DELTA_THRESHOLD = 1.0;
@@ -157,6 +157,8 @@ class Pool
             $g = $specie->genomes->offsetGet(mt_rand(1, $specie->genomes->count())-1);
             $child = $this->mutation->cloneEntity($g);
         }
+
+        $this->mutation->mutate($child, $this);
 
         return $child;
     }
@@ -386,7 +388,6 @@ class Pool
         // it does not contains as much population as the maximum defined.
         // Therefor we create a new child from a random specie until the max population is reached
         while ($children->count() + $this->species->count() < self::POPULATION) {
-            var_dump($this->species->count());
             $specie = $this->species->offsetGet(rand(1, $this->species->count())-1);
             $children->add($this->breedChild($specie));
         }
@@ -440,7 +441,7 @@ class Pool
 
         /** @var Genome $genome */
         foreach ($iterator as $rank => $genome) {
-            $genome->setGlobalRank($rank);
+            $genome->setGlobalRank($rank+1);
         }
 
         $this->em->flush();
@@ -494,7 +495,7 @@ class Pool
             }
         }
 
-        $this->setSpecies(new ArrayCollection($this->species->toArray()));
+        $this->setSpecies(new ArrayCollection($this->species->getValues()));
     }
 
     /**
@@ -516,8 +517,7 @@ class Pool
             }
         }
 
-
-        $this->setSpecies(new ArrayCollection($this->species->toArray()));
+        $this->setSpecies(new ArrayCollection($this->species->getValues()));
     }
 
     /**

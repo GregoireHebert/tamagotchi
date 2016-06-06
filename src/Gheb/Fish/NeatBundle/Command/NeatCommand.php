@@ -125,12 +125,15 @@ class NeatCommand extends ContainerAwareCommand
 
                 $command->run($birthInput, $nullOutput);
                 $fish = $repo->findAliveFish();
+                $output->writeln('Best Fitness :'.$pool->getMaxFitness());
                 $output->writeln('New Life.');
 
                 $manager->initializeRun();
             }
 
-            $manager->evaluateCurrent();
+            if ($fish->getLifeTick() % 5 == 0) {
+                $manager->evaluateCurrent();
+            }
 
             $this->em->flush();
 

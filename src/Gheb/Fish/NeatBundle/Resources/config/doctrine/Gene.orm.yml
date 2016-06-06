@@ -30,3 +30,4 @@ Gheb\Fish\NeatBundle\Network\Gene:
       joinColumn:
         name: genome_id
         referencedColumnName: id
+        onDelete: CASCADE

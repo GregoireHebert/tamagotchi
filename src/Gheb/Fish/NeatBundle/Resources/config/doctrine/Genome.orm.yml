@@ -31,6 +31,7 @@ Gheb\Fish\NeatBundle\Network\Genome:
       joinColumn:
         name: specie_id
         referencedColumnName: id
+        onDelete: CASCADE
 
   manyToMany:
     network:
@@ -42,7 +43,9 @@ Gheb\Fish\NeatBundle\Network\Genome:
         joinColumns:
           genome_id:
             referencedColumnName: id
+            onDelete: CASCADE
         inverseJoinColumns:
           neuron_id:
             referencedColumnName: id
             unique: true
+            onDelete: CASCADE
