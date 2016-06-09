@@ -131,9 +131,7 @@ class NeatCommand extends ContainerAwareCommand
                 $manager->initializeRun();
             }
 
-            if ($fish->getLifeTick() % 5 == 0) {
-                $manager->evaluateCurrent();
-            }
+            $manager->evaluateCurrent();
 
             $this->em->flush();
 
@@ -148,18 +146,16 @@ class NeatCommand extends ContainerAwareCommand
 
             $command->run($timeInput, $nullOutput);
 
-            if ($fish->getLifeTick() % 5 == 0) {
-                $command = $this->getApplication()->find('fish:life:apply');
+            $command = $this->getApplication()->find('fish:life:apply');
 
-                $nullOutput = new NullOutput();
-                $timeInput = new ArrayInput(
-                    array(
-                        'command' => 'fish:life:apply'
-                    )
-                );
+            $nullOutput = new NullOutput();
+            $timeInput = new ArrayInput(
+                array(
+                    'command' => 'fish:life:apply'
+                )
+            );
 
-                $command->run($timeInput, $nullOutput);
-            }
+            $command->run($timeInput, $nullOutput);
         }
     }
 }

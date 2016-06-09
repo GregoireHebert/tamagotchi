@@ -18,12 +18,7 @@ class TimeObligation extends AbstractLifeObligation
         $fish->addLifeTick();
 
         $fish->setHunger($fish->getHunger() +1);
-        $fish->setSleepiness($fish->getSleepiness() +1);
-        $fish->setPlayfull($fish->getPlayfull() +1);
-
-        $this->application .= 'Time :'."\t".' -1 Health'."\n";
-        $this->application .= 'Time :'."\t".' +1 Hunger'."\n";
-        $this->application .= 'Time :'."\t".' +1 Sleepiness'."\n";
-        $this->application .= 'Time :'."\t".' -0.5 Playfull'."\n";
+        $fish->setSleepiness($fish->getSleepiness() +0.5);
+        $fish->setPlayfull($fish->getPlayfull() +3);
     }
 }

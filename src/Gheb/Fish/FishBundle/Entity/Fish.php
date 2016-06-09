@@ -41,7 +41,7 @@ class Fish
 
     public function __construct()
     {
-        $this->health = 100;
+        $this->health = 300;
         $this->hunger = 3;
         $this->sleepiness = 3;
         $this->playfull = 3;
@@ -103,7 +103,7 @@ class Fish
      */
     public function setHealth($health)
     {
-        $this->health = min(100, max(0, $health));
+        $this->health = min(300, max(0, $health));
     }
 
     /**

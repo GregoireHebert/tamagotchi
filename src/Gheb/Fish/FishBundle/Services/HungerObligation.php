@@ -21,8 +21,8 @@ class HungerObligation extends AbstractLifeObligation
 
         // As it's too high, it's getting worse for it's life
         if ($fish->getHunger() >= 8) {
-            $fish->setHealth($fish->getHealth() - 5);
-            $this->application .= 'Hunger >= 8 :'."\t".' -5 Health'."\n";
+            $fish->setHealth($fish->getHealth() - 10);
+            $this->application .= 'Hunger >= 8 :'."\t".' -10 Health'."\n";
         }
     }
 }
