@@ -79,12 +79,14 @@ class NeatCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $manager = new Manager($this->em, $this->inputsAggregator, $this->outputsAggregator, $this->mutation);
+        $this->em->getConnection()->getConfiguration()->setSQLLogger(null);
+
         /** @var FishRepository $repo */
         $repo = $this->em->getRepository('FishBundle:Fish');
 
+        /** @var Fish $fish */
+        $fish = $repo->findAliveFish();
         while (true) {
-            /** @var Fish $fish */
-            $fish = $repo->findAliveFish();
 
             $pool = $manager->getPool();
 
@@ -94,7 +96,7 @@ class NeatCommand extends ContainerAwareCommand
             /** @var Genome $genome */
             $genome = $specie->getGenomes()->offsetGet($pool->getCurrentGenome());
 
-            if ($fish == null) {
+            if (!$fish instanceof Fish || $fish->getHealth() <= 0) {
                 /** @var Fish $lastFish */
                 $lastFish = $repo->findLastAliveFish();
                 $fitness = $lastFish->getLifeTick();
@@ -102,12 +104,10 @@ class NeatCommand extends ContainerAwareCommand
 
                 if ($fitness > $pool->getMaxFitness()) {
                     $pool->setMaxFitness($fitness);
-                    $this->em->flush();
                 }
 
                 $pool->setCurrentSpecies(0);
                 $pool->setCurrentGenome(0);
-                $this->em->flush();
 
                 while ($manager->fitnessAlreadyMeasured()) {
                     $pool->nextGenome();
@@ -124,6 +124,7 @@ class NeatCommand extends ContainerAwareCommand
                 );
 
                 $command->run($birthInput, $nullOutput);
+                /** @var Fish $fish */
                 $fish = $repo->findAliveFish();
                 $output->writeln('Best Fitness :'.$pool->getMaxFitness());
                 $output->writeln('New Life.');
@@ -131,9 +132,24 @@ class NeatCommand extends ContainerAwareCommand
                 $manager->initializeRun();
             }
 
-            $manager->evaluateCurrent();
+            try {
+                $manager->evaluateCurrent();
+            } catch (\Exception $e) {
+                $command = $this->getApplication()->find('fish:give:birth');
+                /** @var Fish $fish */
+                $fish = $repo->findAliveFish();
 
-            $this->em->flush();
+                $nullOutput = new NullOutput();
+                $birthInput = new ArrayInput(
+                    array(
+                        'command' => 'fish:give:birth'
+                    )
+                );
+
+                $command->run($birthInput, $nullOutput);
+                $output->writeln('Best Fitness :'.$pool->getMaxFitness());
+                $output->writeln('New Life.');
+            }
 
             $command = $this->getApplication()->find('fish:time:apply');
 

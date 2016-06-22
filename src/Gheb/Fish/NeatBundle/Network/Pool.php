@@ -399,8 +399,6 @@ class Pool
         }
 
         $this->generation++;
-
-        $this->em->flush();
     }
 
     /**
@@ -443,8 +441,6 @@ class Pool
         foreach ($iterator as $rank => $genome) {
             $genome->setGlobalRank($rank+1);
         }
-
-        $this->em->flush();
     }
 
     public function removeSpecie(Specie $specie)
@@ -491,7 +487,6 @@ class Pool
                 $this->species->removeElement($specie);
                 $specie->setPool(null);
                 $this->em->remove($specie);
-                $this->em->flush();
             }
         }
 
@@ -513,7 +508,6 @@ class Pool
                 $this->species->removeElement($specie);
                 $specie->setPool(null);
                 $this->em->remove($specie);
-                $this->em->flush();
             }
         }
 

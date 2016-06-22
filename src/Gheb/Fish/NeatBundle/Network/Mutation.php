@@ -49,8 +49,6 @@ class Mutation
     {
         $clone = clone $entity;
         $this->em->clear($clone);
-        $this->em->persist($clone);
-        $this->em->flush();
 
         return $clone;
     }
@@ -119,7 +117,6 @@ class Mutation
 
         $gene = $candidates->get(mt_rand(1,$candidates->count())-1);
         $gene->setEnabled(!$gene->isEnabled());
-        $this->em->flush();
     }
 
     /**
@@ -313,7 +310,5 @@ class Mutation
         $clone2->setEnabled(true);
 
         $genome->addGene($clone2);
-
-        $this->em->flush();
     }
 }
