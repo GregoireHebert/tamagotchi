@@ -30,7 +30,8 @@
     "symfony/swiftmailer-bundle": "^2.3",
     "symfony/monolog-bundle": "^2.8",
     "mybuilder/phpunit-accelerator": "^1.1",
-    "stof/doctrine-extensions-bundle": "^1.2"
+    "stof/doctrine-extensions-bundle": "^1.2",
+    "gheb/neat-bundle": "^1.0@dev"
   },
 
   "require-dev": {

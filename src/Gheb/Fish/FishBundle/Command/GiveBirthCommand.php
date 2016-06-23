@@ -54,7 +54,7 @@ class GiveBirthCommand extends ContainerAwareCommand
         $fish = $repo->findAliveFish();
 
         if ($fish == null) {
-
+            var_dump('giveBirthCommand');
             $fish = new Fish();
             $this->em->persist($fish);
             $this->em->flush();

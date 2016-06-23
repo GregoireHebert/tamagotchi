@@ -63,9 +63,9 @@ doctrine:
                 is_bundle: true
             genome:
                 type: yml
-                dir: %kernel.root_dir%/../src/Gheb/Fish/NeatBundle/Resources/config/doctrine
+                dir: %kernel.root_dir%/../vendor/gheb/neat-bundle/Resources/config/doctrine
                 alias: NeatBundle
-                prefix: Gheb\Fish\NeatBundle\Network
+                prefix: Gheb\NeatBundle\Network
                 is_bundle: false
         #auto_generate_proxy_classes: "%kernel.debug%"
         #auto_mapping: true

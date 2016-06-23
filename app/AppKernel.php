@@ -32,9 +32,9 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
         ];
 
-        $bundles[] = new \Gheb\Fish\FishBundle\FishBundle();
-        $bundles[] = new \Gheb\Fish\IOBundle\IOBundle();
-        $bundles[] = new \Gheb\Fish\NeatBundle\NeatBundle();
+        $bundles[] = new Gheb\Fish\FishBundle\FishBundle();
+        $bundles[] = new Gheb\IOBundle\IOBundle();
+        $bundles[] = new Gheb\NeatBundle\NeatBundle();
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();

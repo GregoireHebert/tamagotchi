@@ -43,7 +43,6 @@ class Life
         foreach ($this->obligations as $obligation) {
             if ($obligation instanceof AbstractLifeObligation) {
                 $obligation->applyEffect($fish);
-                //$obligation->logEffect();
             }
         }
     }

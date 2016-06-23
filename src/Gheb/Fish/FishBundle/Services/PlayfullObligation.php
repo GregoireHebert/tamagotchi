@@ -15,7 +15,6 @@ class PlayfullObligation extends AbstractLifeObligation
     {
         if ($fish->getPlayfull() >= 8) {
             $fish->setHealth($fish->getHealth() - 1);
-            $this->application .= 'Playfull >= 8 :'."\t".' -1 Health'."\n";
         }
     }
 }

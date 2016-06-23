@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f12856ccabba264804d2acca31d75695",
-    "content-hash": "54b25c0442dc704f48ac40017151c451",
+    "hash": "777cbf044385942800f620491751e7d3",
+    "content-hash": "2f458163daa724b027c93e916d7a5e9d",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1005,6 +1005,115 @@
                 "uploadable"
             ],
             "time": "2016-02-18 15:33:43"
+        },
+        {
+            "name": "gheb/io-bundle",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GregoireHebert/io-bundle.git",
+                "reference": "3cc7ff46f9079d50db6fb162573e1e69af92746f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GregoireHebert/io-bundle/zipball/3cc7ff46f9079d50db6fb162573e1e69af92746f",
+                "reference": "3cc7ff46f9079d50db6fb162573e1e69af92746f",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/doctrine-bundle": "^1.6",
+                "doctrine/doctrine-cache-bundle": "^1.2",
+                "doctrine/orm": "^2.5",
+                "php": ">=5.5.9",
+                "symfony/symfony": "3.*"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Gheb\\IOBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégoire Hébert",
+                    "email": "gregoire59166@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This Bundle is a bridge to the Gheb/NeatBundle",
+            "homepage": "https://github.com/GregoireHebert/io-bundle",
+            "keywords": [
+                "augmenting",
+                "io",
+                "neat",
+                "neuroevolution",
+                "topologies"
+            ],
+            "time": "2016-06-23 14:33:43"
+        },
+        {
+            "name": "gheb/neat-bundle",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GregoireHebert/neat-bundle.git",
+                "reference": "7dfc6cd9e43361f33db5ffc362ad5be17ccab872"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GregoireHebert/neat-bundle/zipball/7dfc6cd9e43361f33db5ffc362ad5be17ccab872",
+                "reference": "7dfc6cd9e43361f33db5ffc362ad5be17ccab872",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/doctrine-bundle": "^1.6",
+                "doctrine/doctrine-cache-bundle": "^1.2",
+                "doctrine/orm": "^2.5",
+                "gheb/io-bundle": "1.0.x-dev",
+                "php": ">=5.5.9",
+                "symfony/symfony": "3.*"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Gheb\\NeatBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégoire Hébert",
+                    "email": "gregoire59166@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This Bundle can put in application a neuro evolution by augmenting topologies (NEAT)",
+            "homepage": "https://github.com/GregoireHebert/neat-bundle",
+            "keywords": [
+                "augmenting",
+                "evolution",
+                "neat",
+                "neuro",
+                "topologies"
+            ],
+            "time": "2016-06-23 14:43:07"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -3690,6 +3799,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "gheb/neat-bundle": 20,
         "symfony/phpunit-bridge": 10
     },
     "prefer-stable": true,
