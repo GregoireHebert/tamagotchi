@@ -8,13 +8,14 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Class HealthCompilerPass
+ *
  * @author  Grégoire Hébert <gregoire@opo.fr>
- * @package Gheb\Fish\FishBundle\DependencyInjection\Compiler
  */
 class HealthCompilerPass implements CompilerPassInterface
 {
     /**
      * Add rules validators to the RulesValidator
+     *
      * @param ContainerBuilder $container
      */
     public function process(ContainerBuilder $container)
@@ -24,7 +25,7 @@ class HealthCompilerPass implements CompilerPassInterface
         $factories = array_keys($container->findTaggedServiceIds('fish.life.obligation'));
         foreach ($factories as $factoryID) {
             $factory = new Reference($factoryID);
-            $life->addMethodCall('addObligation', array($factory));
+            $life->addMethodCall('addObligation', [$factory]);
         }
     }
 }

@@ -6,14 +6,13 @@ use Doctrine\ORM\EntityManager;
 use Gheb\Fish\FishBundle\Entity\Fish;
 use Gheb\Fish\FishBundle\Entity\FishRepository;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\output\OutputInterface;
 
 /**
  * Class GiveBirthCommand
+ *
  * @author  Grégoire Hébert <gregoire@opo.fr>
- * @package Gheb\Fish\FishBundle\Command
  */
 class GiveBirthCommand extends ContainerAwareCommand
 {
@@ -59,7 +58,6 @@ class GiveBirthCommand extends ContainerAwareCommand
             $this->em->persist($fish);
             $this->em->flush();
             $output->writeln('A new fish is born.');
-
         } else {
             $output->writeln('There is already a fish alive...');
         }

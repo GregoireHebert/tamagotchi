@@ -6,8 +6,8 @@ use Gheb\Fish\FishBundle\Entity\Fish;
 
 /**
  * Class PutToBed
+ *
  * @author  Grégoire Hébert <gregoire@opo.fr>
- * @package Gheb\Fish\FishBundle\IO\Outputs
  */
 class PutToBed extends Output
 {

@@ -6,8 +6,8 @@ use Gheb\Fish\FishBundle\Entity\Fish;
 
 /**
  * Class HungerEffect
+ *
  * @author  Grégoire Hébert <gregoire@opo.fr>
- * @package Gheb\Fish\FishBundle\Services
  */
 class TimeObligation extends AbstractLifeObligation
 {

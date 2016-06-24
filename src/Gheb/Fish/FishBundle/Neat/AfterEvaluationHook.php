@@ -11,8 +11,8 @@ use Gheb\NeatBundle\Hook;
 
 /**
  * Class AfterEvaluationHook
+ *
  * @author  Grégoire Hébert <gregoire@opo.fr>
- * @package Gheb\Fish\FishBundle\Neat
  */
 class AfterEvaluationHook extends Hook
 {
@@ -40,7 +40,7 @@ class AfterEvaluationHook extends Hook
      */
     public function __construct(EntityManager $em, TimeObligation $time, Life $life)
     {
-        $this->em = $em;
+        $this->em   = $em;
         $this->time = $time;
         $this->life = $life;
     }
@@ -48,7 +48,7 @@ class AfterEvaluationHook extends Hook
     public function hook()
     {
         /** @var FishRepository $repo */
-        /** @var Fish $fish */
+        /* @var Fish $fish */
         $repo = $this->em->getRepository('FishBundle:Fish');
         $fish = $repo->findAliveFish();
 

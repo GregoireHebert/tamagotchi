@@ -3,13 +3,12 @@
 namespace Gheb\Fish\FishBundle\Services;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Gheb\Fish\FishBundle\Entity\Fish;
 
 /**
  * Class Life
+ *
  * @author  Grégoire Hébert <gregoire@opo.fr>
- * @package Gheb\Fish\FishBundle\Services
  */
 class Life
 {
@@ -25,6 +24,7 @@ class Life
 
     /**
      * Add a life obligation
+     *
      * @param $obligation
      */
     public function addObligation($obligation)

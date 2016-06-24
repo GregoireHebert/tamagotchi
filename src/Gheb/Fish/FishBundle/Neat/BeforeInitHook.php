@@ -9,8 +9,8 @@ use Gheb\NeatBundle\Hook;
 
 /**
  * Class BeforeInitHook
+ *
  * @author  Grégoire Hébert <gregoire@opo.fr>
- * @package Gheb\Fish\FishBundle\Neat
  */
 class BeforeInitHook extends Hook
 {
@@ -32,7 +32,7 @@ class BeforeInitHook extends Hook
     public function hook()
     {
         /** @var FishRepository $repo */
-        /** @var Fish $fish */
+        /* @var Fish $fish */
         $repo = $this->em->getRepository('FishBundle:Fish');
         $fish = $repo->findAliveFish();
 

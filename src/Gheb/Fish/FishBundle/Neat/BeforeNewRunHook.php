@@ -8,8 +8,8 @@ use Gheb\NeatBundle\Hook;
 
 /**
  * Class BeforeNewRunHook
+ *
  * @author  Grégoire Hébert <gregoire@opo.fr>
- * @package Gheb\Fish\FishBundle\Neat
  */
 class BeforeNewRunHook extends Hook
 {

@@ -9,8 +9,8 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * Class FishExtension
+ *
  * @author  Grégoire Hébert <gregoire@opo.fr>
- * @package Gheb\Fish\FishBundle\DependencyInjection
  */
 class FishExtension extends Extension
 {
@@ -22,8 +22,8 @@ class FishExtension extends Extension
      */
     public function load(array $config, ContainerBuilder $container)
     {
-        $locator = new FileLocator(__DIR__.'/../Resources/config');
-        $loader = new YamlFileLoader($container, $locator);
+        $locator = new FileLocator(__DIR__ . '/../Resources/config');
+        $loader  = new YamlFileLoader($container, $locator);
         $loader->load('services.yml');
     }
 }

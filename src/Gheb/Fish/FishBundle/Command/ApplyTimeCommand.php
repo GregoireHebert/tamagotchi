@@ -7,14 +7,13 @@ use Gheb\Fish\FishBundle\Entity\Fish;
 use Gheb\Fish\FishBundle\Entity\FishRepository;
 use Gheb\Fish\FishBundle\Services\TimeObligation;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\output\OutputInterface;
 
 /**
  * Class ApplyTimeCommand
+ *
  * @author  Grégoire Hébert <gregoire@opo.fr>
- * @package Gheb\Fish\FishBundle\Command
  */
 class ApplyTimeCommand extends ContainerAwareCommand
 {
@@ -36,7 +35,7 @@ class ApplyTimeCommand extends ContainerAwareCommand
      */
     public function __construct(EntityManager $em, TimeObligation $time)
     {
-        $this->em = $em;
+        $this->em   = $em;
         $this->time = $time;
         parent::__construct();
     }

@@ -1,1 +1,0 @@
-"C:\Users\gregoire.greg\PHP\php.exe" "C:\Users\gregoire.greg\Documents\TRAVAUX\tamagotchi\bin\console" f:l:a

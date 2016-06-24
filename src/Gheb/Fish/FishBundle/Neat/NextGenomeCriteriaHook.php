@@ -9,8 +9,8 @@ use Gheb\NeatBundle\Hook;
 
 /**
  * Class NextGenomeCriteriaHook
+ *
  * @author  Grégoire Hébert <gregoire@opo.fr>
- * @package Gheb\Fish\FishBundle\Neat
  */
 class NextGenomeCriteriaHook extends Hook
 {
@@ -36,11 +36,10 @@ class NextGenomeCriteriaHook extends Hook
 
     public function hook()
     {
-
         if ($this->fish === null || $this->fish->getHealth() <= 0) {
             /** @var FishRepository $repo */
-            /** @var Fish $fish */
-            $repo = $this->em->getRepository('FishBundle:Fish');
+            /* @var Fish $fish */
+            $repo       = $this->em->getRepository('FishBundle:Fish');
             $this->fish = $repo->findAliveFish();
         }
 

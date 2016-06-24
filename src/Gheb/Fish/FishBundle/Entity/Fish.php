@@ -4,16 +4,11 @@ namespace Gheb\Fish\FishBundle\Entity;
 
 /**
  * Class Fish
+ *
  * @author  Grégoire Hébert <gregoire@opo.fr>
- * @package Gheb\Fish\FishBundle\Entity
  */
 class Fish
 {
-    /**
-     * @var int
-     */
-    private $lifeTick;
-
     /**
      * @var int
      */
@@ -27,12 +22,17 @@ class Fish
     /**
      * @var int
      */
-    private $playfull;
+    private $id;
 
     /**
      * @var int
      */
-    private $id;
+    private $lifeTick;
+
+    /**
+     * @var int
+     */
+    private $playfull;
 
     /**
      * @var int
@@ -41,24 +41,11 @@ class Fish
 
     public function __construct()
     {
-        $this->health = 300;
-        $this->hunger = 3;
+        $this->health     = 300;
+        $this->hunger     = 3;
         $this->sleepiness = 3;
-        $this->playfull = 3;
-        $this->lifeTick = 0;
-    }
-
-    public function getLifeTick()
-    {
-        return $this->lifeTick;
-    }
-
-    /**
-     * @param $lifeTick
-     */
-    public function setLifeTick($lifeTick)
-    {
-        $this->lifeTick = $lifeTick;
+        $this->playfull   = 3;
+        $this->lifeTick   = 0;
     }
 
     public function addLifeTick()
@@ -88,6 +75,19 @@ class Fish
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getLifeTick()
+    {
+        return $this->lifeTick;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPlayfull()
+    {
+        return $this->playfull;
     }
 
     /**
@@ -123,19 +123,11 @@ class Fish
     }
 
     /**
-     * @param int $sleepiness
+     * @param $lifeTick
      */
-    public function setSleepiness($sleepiness)
+    public function setLifeTick($lifeTick)
     {
-        $this->sleepiness = min(10, max(0, $sleepiness));
-    }
-
-    /**
-     * @return int
-     */
-    public function getPlayfull()
-    {
-        return $this->playfull;
+        $this->lifeTick = $lifeTick;
     }
 
     /**
@@ -144,5 +136,13 @@ class Fish
     public function setPlayfull($playfull)
     {
         $this->playfull = min(10, max(0, $playfull));
+    }
+
+    /**
+     * @param int $sleepiness
+     */
+    public function setSleepiness($sleepiness)
+    {
+        $this->sleepiness = min(10, max(0, $sleepiness));
     }
 }

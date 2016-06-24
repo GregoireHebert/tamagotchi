@@ -6,8 +6,8 @@ use Gheb\Fish\FishBundle\Entity\Fish;
 
 /**
  * Class AbstractLifeObligation
+ *
  * @author  Grégoire Hébert <gregoire@opo.fr>
- * @package Gheb\Fish\FishBundle\Services
  */
 abstract class AbstractLifeObligation
 {
@@ -18,6 +18,5 @@ abstract class AbstractLifeObligation
      *
      * @return mixed
      */
-    public abstract function applyEffect(Fish &$fish);
-
+    abstract public function applyEffect(Fish &$fish);
 }

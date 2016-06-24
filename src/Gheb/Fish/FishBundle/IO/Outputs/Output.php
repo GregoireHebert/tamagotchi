@@ -8,8 +8,8 @@ use Gheb\IOBundle\Outputs\AbstractOutput;
 
 /**
  * Class AbstractOutput
+ *
  * @author  Grégoire Hébert <gregoire@opo.fr>
- * @package Gheb\Fish\FishBundle\IO\Outputs
  */
 abstract class Output extends AbstractOutput
 {
@@ -21,8 +21,7 @@ abstract class Output extends AbstractOutput
     protected function getFish()
     {
         /** @var FishRepository $repo */
-        $repo = $this->em->getRepository('FishBundle:Fish');
+        $repo       = $this->em->getRepository('FishBundle:Fish');
         $this->fish = $repo->findAliveFish();
     }
-
 }

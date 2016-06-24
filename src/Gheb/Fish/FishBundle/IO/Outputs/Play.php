@@ -6,8 +6,8 @@ use Gheb\Fish\FishBundle\Entity\Fish;
 
 /**
  * Class Play
+ *
  * @author  Grégoire Hébert <gregoire@opo.fr>
- * @package Gheb\Fish\FishBundle\IO\Outputs
  */
 class Play extends Output
 {
