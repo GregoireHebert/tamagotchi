@@ -57,18 +57,7 @@ doctrine:
 
     orm:
         auto_generate_proxy_classes: %kernel.debug%
-
-        mappings:
-            FishBundle:
-                is_bundle: true
-            genome:
-                type: yml
-                dir: %kernel.root_dir%/../vendor/gheb/neat-bundle/Resources/config/doctrine
-                alias: NeatBundle
-                prefix: Gheb\NeatBundle\Network
-                is_bundle: false
-        #auto_generate_proxy_classes: "%kernel.debug%"
-        #auto_mapping: true
+        auto_mapping: true
 
 # Swiftmailer Configuration
 swiftmailer:

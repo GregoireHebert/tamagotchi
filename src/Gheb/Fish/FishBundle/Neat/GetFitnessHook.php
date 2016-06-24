@@ -5,7 +5,7 @@ namespace Gheb\Fish\FishBundle\Neat;
 use Doctrine\ORM\EntityManager;
 use Gheb\Fish\FishBundle\Entity\Fish;
 use Gheb\Fish\FishBundle\Entity\FishRepository;
-use Gheb\NeatBundle\Command\Hook;
+use Gheb\NeatBundle\Hook;
 
 /**
  * Class GetFitnessHook

@@ -7,7 +7,7 @@ use Gheb\Fish\FishBundle\Entity\Fish;
 use Gheb\Fish\FishBundle\Entity\FishRepository;
 use Gheb\Fish\FishBundle\Services\Life;
 use Gheb\Fish\FishBundle\Services\TimeObligation;
-use Gheb\NeatBundle\Command\Hook;
+use Gheb\NeatBundle\Hook;
 
 /**
  * Class AfterEvaluationHook
