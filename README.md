@@ -10,7 +10,7 @@ This project exists as a demonstration for the neat bundle.
 
 ## Play
 
-Clone this project and run
+Clone this project and run:
 
 ```shell
 $ composer install
@@ -21,7 +21,14 @@ to create a bunch of population and let the neat-bundle evaluate each genome, ru
 
 ```shell
 $ composer install
-$ php bin/console gheb:neat:run
+$ php bin/console gheb:neat:generate
+```
+
+to get the best genome and play it's network upon your inputs, run:
+
+```shell
+$ composer install
+$ php bin/console gheb:neat:evaluate
 ```
 
 ## TODO

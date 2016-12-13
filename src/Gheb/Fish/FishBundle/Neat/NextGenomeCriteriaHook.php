@@ -12,7 +12,7 @@ use Gheb\NeatBundle\Hook;
  *
  * @author  Grégoire Hébert <gregoire@opo.fr>
  */
-class NextGenomeCriteriaHook extends Hook
+class NextGenomeCriteriaHook implements Hook
 {
     /**
      * @var EntityManager
@@ -34,7 +34,7 @@ class NextGenomeCriteriaHook extends Hook
         $this->em = $em;
     }
 
-    public function hook()
+    public function __invoke()
     {
         if ($this->fish === null || $this->fish->getHealth() <= 0) {
             /** @var FishRepository $repo */

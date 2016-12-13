@@ -12,7 +12,7 @@ use Gheb\NeatBundle\Hook;
  *
  * @author  Grégoire Hébert <gregoire@opo.fr>
  */
-class GetFitnessHook extends Hook
+class GetFitnessHook implements Hook
 {
     /**
      * @var EntityManager
@@ -29,7 +29,7 @@ class GetFitnessHook extends Hook
         $this->em = $em;
     }
 
-    public function hook()
+    public function __invoke()
     {
         /** @var FishRepository $repo */
         /* @var Fish $fish */

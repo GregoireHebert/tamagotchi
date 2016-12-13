@@ -11,7 +11,7 @@ use Gheb\NeatBundle\Hook;
  *
  * @author  Grégoire Hébert <gregoire@opo.fr>
  */
-class BeforeNewRunHook extends Hook
+class BeforeNewRunHook implements Hook
 {
     /**
      * @var EntityManager
@@ -28,7 +28,7 @@ class BeforeNewRunHook extends Hook
         $this->em = $em;
     }
 
-    public function hook()
+    public function __invoke()
     {
         $fish = new Fish();
         $this->em->persist($fish);

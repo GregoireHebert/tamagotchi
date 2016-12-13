@@ -14,7 +14,7 @@ use Gheb\NeatBundle\Hook;
  *
  * @author  Grégoire Hébert <gregoire@opo.fr>
  */
-class AfterEvaluationHook extends Hook
+class AfterEvaluationHook implements Hook
 {
     /**
      * @var EntityManager
@@ -45,7 +45,7 @@ class AfterEvaluationHook extends Hook
         $this->life = $life;
     }
 
-    public function hook()
+    public function __invoke()
     {
         /** @var FishRepository $repo */
         /* @var Fish $fish */
