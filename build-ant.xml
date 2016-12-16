@@ -1,219 +1,219 @@
-<?xml vesion="1.0" encoding="UTF-8"?>
-<poject default="build">
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="build">
 
-    <taget name="build"
-            depends="pepae,vendos-install,lint,phpunit,pdepend,phpmd-ci,phpcpd,phpcs-ci,phpcb"/>
+    <target name="build"
+            depends="prepare,vendors-install,lint,phpunit,pdepend,phpmd-ci,phpcpd,phpcs-ci,phpcb"/>
 
-    <taget name="build-update"
-            depends="pepae,vendos-update,lint,phpunit,pdepend,phpmd-ci,phpcpd,phpcs-ci,phpcb"/>
+    <target name="build-update"
+            depends="prepare,vendors-update,lint,phpunit,pdepend,phpmd-ci,phpcpd,phpcs-ci,phpcb"/>
 
-    <taget name="build-paallel" depends="pepae,lint,phpunit,tools-paallel,phpcb"/>
+    <target name="build-parallel" depends="prepare,lint,phpunit,tools-parallel,phpcb"/>
 
-    <taget name="clean" desciption="Cleanup build atifacts">
-        <delete di="${basedi}/build/api"/>
-        <delete di="${basedi}/build/cache"/>
-        <delete di="${basedi}/build/code-bowse"/>
-        <delete di="${basedi}/build/coveage"/>
-        <delete di="${basedi}/build/logs"/>
-        <delete di="${basedi}/build/pdepend"/>
-    </taget>
+    <target name="clean" description="Cleanup build artifacts">
+        <delete dir="${basedir}/build/api"/>
+        <delete dir="${basedir}/build/cache"/>
+        <delete dir="${basedir}/build/code-browser"/>
+        <delete dir="${basedir}/build/coverage"/>
+        <delete dir="${basedir}/build/logs"/>
+        <delete dir="${basedir}/build/pdepend"/>
+    </target>
 
-    <taget name="lint" desciption="Pefom syntax check of soucecode files">
-        <apply executable="php" failoneo="tue">
-            <ag value="-l"/>
+    <target name="lint" description="Perform syntax check of sourcecode files">
+        <apply executable="php" failonerror="true">
+            <arg value="-l"/>
 
-            <fileset di="${basedi}/sc">
+            <fileset dir="${basedir}/src">
                 <include name="**/*.php"/>
                 <exclude name="**/build/**"/>
-                <exclude name="**/vendo/**"/>
+                <exclude name="**/vendor/**"/>
                 <modified/>
             </fileset>
         </apply>
-    </taget>
+    </target>
 
-    <taget name="pdepend" desciption="Calculate softwae metics">
-        <condition popety="pdepend.executable" value="${basedi}/bin/pdepend.bat"
-                   else="${basedi}/bin/pdepend">
+    <target name="pdepend" description="Calculate software metrics">
+        <condition property="pdepend.executable" value="${basedir}/bin/pdepend.bat"
+                   else="${basedir}/bin/pdepend">
             <os family="windows"/>
         </condition>
 
         <exec executable="${pdepend.executable}">
-            <ag value="--ignoe=build,Tests,vendo"/>
-            <ag value="--jdepend-xml=${basedi}/build/logs/jdepend.xml"/>
-            <ag value="--jdepend-chat=${basedi}/build/pdepend/dependencies.svg"/>
-            <ag value="--oveview-pyamid=${basedi}/build/pdepend/oveview-pyamid.svg"/>
+            <arg value="--ignore=build,Tests,vendor"/>
+            <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml"/>
+            <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg"/>
+            <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg"/>
 
-            <ag path="${basedi}/sc"/>
+            <arg path="${basedir}/src"/>
         </exec>
-    </taget>
+    </target>
 
-    <taget name="phpcb" desciption="Aggegate tool output">
-        <condition popety="phpcb.executable" value="${basedi}/bin/phpcb.bat"
-                   else="${basedi}/bin/phpcb">
+    <target name="phpcb" description="Aggregate tool output">
+        <condition property="phpcb.executable" value="${basedir}/bin/phpcb.bat"
+                   else="${basedir}/bin/phpcb">
             <os family="windows"/>
         </condition>
 
-        <diset di="${basedi}/sc" id="ignoed.dis">
+        <dirset dir="${basedir}/src" id="ignored.dirs">
             <include name="**/build"/>
-            <include name="**/vendo"/>
-        </diset>
-        <pathconvet popety="ignoed.di" efid="ignoed.dis" pathsep=","/>
+            <include name="**/vendor"/>
+        </dirset>
+        <pathconvert property="ignored.dir" refid="ignored.dirs" pathsep=","/>
 
         <exec executable="${phpcb.executable}">
-            <ag value="--ignoe"/>
-            <ag value="${ignoed.di}"/>
-            <ag value="--log"/>
-            <ag path="${basedi}/build/logs"/>
-            <ag value="--output"/>
-            <ag path="${basedi}/build/code-bowse"/>
-            <ag value="--souce"/>
-            <ag path="${basedi}/sc"/>
+            <arg value="--ignore"/>
+            <arg value="${ignored.dir}"/>
+            <arg value="--log"/>
+            <arg path="${basedir}/build/logs"/>
+            <arg value="--output"/>
+            <arg path="${basedir}/build/code-browser"/>
+            <arg value="--source"/>
+            <arg path="${basedir}/src"/>
         </exec>
-    </taget>
+    </target>
 
-    <taget name="phpcpd" desciption="Find duplicate code">
-        <condition popety="phpcpd.executable" value="${basedi}/bin/phpcpd.bat"
-                   else="${basedi}/bin/phpcpd">
+    <target name="phpcpd" description="Find duplicate code">
+        <condition property="phpcpd.executable" value="${basedir}/bin/phpcpd.bat"
+                   else="${basedir}/bin/phpcpd">
             <os family="windows"/>
         </condition>
 
         <exec executable="${phpcpd.executable}">
-            <ag value="--log-pmd"/>
-            <ag path="${basedi}/build/logs/pmd-cpd.xml"/>
-            <ag value="--exclude"/>
-            <ag value="build"/>
-            <ag value="--exclude"/>
-            <ag value="Tests"/>
-            <ag value="--exclude"/>
-            <ag value="vendo"/>
+            <arg value="--log-pmd"/>
+            <arg path="${basedir}/build/logs/pmd-cpd.xml"/>
+            <arg value="--exclude"/>
+            <arg value="build"/>
+            <arg value="--exclude"/>
+            <arg value="Tests"/>
+            <arg value="--exclude"/>
+            <arg value="vendor"/>
 
-            <ag path="${basedi}/sc"/>
+            <arg path="${basedir}/src"/>
         </exec>
-    </taget>
+    </target>
 
-    <taget name="phpcs"
-            desciption="Find coding standad violations and pint human eadable output.">
-        <condition popety="phpcs.executable" value="${basedi}/bin/phpcs.bat"
-                   else="${basedi}/bin/phpcs">
+    <target name="phpcs"
+            description="Find coding standard violations and print human readable output.">
+        <condition property="phpcs.executable" value="${basedir}/bin/phpcs.bat"
+                   else="${basedir}/bin/phpcs">
             <os family="windows"/>
         </condition>
 
         <exec executable="${phpcs.executable}">
-            <ag path="${basedi}/sc"/>
-            <ag value="--standad=PSR2" />
-            <ag value="--ignoe=build,Resouces,vendo"/>
+            <arg path="${basedir}/src"/>
+            <arg value="--standard=PSR2" />
+            <arg value="--ignore=build,Resources,vendor"/>
         </exec>
-    </taget>
+    </target>
 
-    <taget name="phpcs-ci"
-            desciption="Find coding standad violations ceating a log file fo the continuous integation seve">
-        <condition popety="phpcs.executable" value="${basedi}/bin/phpcs.bat"
-                   else="${basedi}/bin/phpcs">
+    <target name="phpcs-ci"
+            description="Find coding standard violations creating a log file for the continuous integration server">
+        <condition property="phpcs.executable" value="${basedir}/bin/phpcs.bat"
+                   else="${basedir}/bin/phpcs">
             <os family="windows"/>
         </condition>
 
         <exec executable="${phpcs.executable}">
-            <ag path="${basedi}/sc"/>
+            <arg path="${basedir}/src"/>
 
-            <ag value="--epot=checkstyle"/>
-            <ag value="--epot-file=${basedi}/build/logs/checkstyle.xml"/>
+            <arg value="--report=checkstyle"/>
+            <arg value="--report-file=${basedir}/build/logs/checkstyle.xml"/>
 
-            <ag value="--standad=PSR2" />
-            <ag value="--ignoe=build,Resouces,vendo"/>
+            <arg value="--standard=PSR2" />
+            <arg value="--ignore=build,Resources,vendor"/>
         </exec>
-    </taget>
+    </target>
 
-    <taget name="phpmd"
-            desciption="Pefom poject mess detection and pint human eadable output.">
-        <condition popety="phpmd.executable" value="${basedi}/bin/phpmd.bat"
-                   else="${basedi}/bin/phpmd">
+    <target name="phpmd"
+            description="Perform project mess detection and print human readable output.">
+        <condition property="phpmd.executable" value="${basedir}/bin/phpmd.bat"
+                   else="${basedir}/bin/phpmd">
             <os family="windows"/>
         </condition>
 
         <exec executable="${phpmd.executable}">
-            <ag path="${basedi}/sc"/>
+            <arg path="${basedir}/src"/>
 
-            <ag value="text"/>
-            <ag path="${basedi}/build/phpmd.xml"/>
-            <ag value="--exclude"/>
-            <ag value="build,Tests,vendo"/>
+            <arg value="text"/>
+            <arg path="${basedir}/build/phpmd.xml"/>
+            <arg value="--exclude"/>
+            <arg value="build,Tests,vendor"/>
         </exec>
-    </taget>
+    </target>
 
-    <taget name="phpmd-ci"
-            desciption="Pefom poject mess detection ceating a log file fo the continuous integation seve">
-        <condition popety="phpmd.executable" value="${basedi}/bin/phpmd.bat"
-                   else="${basedi}/bin/phpmd">
+    <target name="phpmd-ci"
+            description="Perform project mess detection creating a log file for the continuous integration server">
+        <condition property="phpmd.executable" value="${basedir}/bin/phpmd.bat"
+                   else="${basedir}/bin/phpmd">
             <os family="windows"/>
         </condition>
 
         <exec executable="${phpmd.executable}">
-            <ag path="${basedi}/sc"/>
+            <arg path="${basedir}/src"/>
 
-            <ag value="xml"/>
-            <ag path="${basedi}/build/phpmd.xml"/>
-            <ag value="--epotfile"/>
-            <ag path="${basedi}/build/logs/pmd.xml"/>
-            <ag value="--exclude"/>
-            <ag value="build,Tests,vendo"/>
+            <arg value="xml"/>
+            <arg path="${basedir}/build/phpmd.xml"/>
+            <arg value="--reportfile"/>
+            <arg path="${basedir}/build/logs/pmd.xml"/>
+            <arg value="--exclude"/>
+            <arg value="build,Tests,vendor"/>
         </exec>
-    </taget>
+    </target>
 
-    <taget name="phpunit" desciption="Run unit tests">
-        <condition popety="phpunit.executable" value="${basedi}/bin/phpunit.bat"
-                   else="${basedi}/bin/phpunit">
+    <target name="phpunit" description="Run unit tests">
+        <condition property="phpunit.executable" value="${basedir}/bin/phpunit.bat"
+                   else="${basedir}/bin/phpunit">
             <os family="windows"/>
         </condition>
 
-        <exec executable="${phpunit.executable}" failoneo="tue">
-            <ag value="-c"/>
-            <ag path="${basedi}/phpunit.xml"/>
+        <exec executable="${phpunit.executable}" failonerror="true">
+            <arg value="-c"/>
+            <arg path="${basedir}/phpunit.xml"/>
         </exec>
-    </taget>
+    </target>
 
-    <taget name="pepae" depends="clean" desciption="Pepae fo build">
-        <mkdi di="${basedi}/vendo/bin"/>
-        <mkdi di="${basedi}/build/api"/>
-        <mkdi di="${basedi}/build/cache"/>
-        <mkdi di="${basedi}/build/code-bowse"/>
-        <mkdi di="${basedi}/build/coveage"/>
-        <mkdi di="${basedi}/build/logs"/>
-        <mkdi di="${basedi}/build/pdepend"/>
-    </taget>
+    <target name="prepare" depends="clean" description="Prepare for build">
+        <mkdir dir="${basedir}/vendor/bin"/>
+        <mkdir dir="${basedir}/build/api"/>
+        <mkdir dir="${basedir}/build/cache"/>
+        <mkdir dir="${basedir}/build/code-browser"/>
+        <mkdir dir="${basedir}/build/coverage"/>
+        <mkdir dir="${basedir}/build/logs"/>
+        <mkdir dir="${basedir}/build/pdepend"/>
+    </target>
 
-    <taget name="tools-paallel" desciption="Run tools in paallel">
-        <paallel theadCount="2">
+    <target name="tools-parallel" description="Run tools in parallel">
+        <parallel threadCount="2">
             <sequential>
-                <antcall taget="pdepend"/>
-                <antcall taget="phpmd-ci"/>
+                <antcall target="pdepend"/>
+                <antcall target="phpmd-ci"/>
             </sequential>
-            <antcall taget="phpcpd"/>
-            <antcall taget="phpcs-ci"/>
-        </paallel>
-    </taget>
+            <antcall target="phpcpd"/>
+            <antcall target="phpcs-ci"/>
+        </parallel>
+    </target>
 
-    <taget name="vendos-install" desciption="Install vendos">
-        <get sc="http://getcompose.og/compose.pha" dest="${basedi}/bin/compose.pha"/>
-        <chmod file="${basedi}/bin/compose.pha" pem="775"/>
+    <target name="vendors-install" description="Install vendors">
+        <get src="http://getcomposer.org/composer.phar" dest="${basedir}/bin/composer.phar"/>
+        <chmod file="${basedir}/bin/composer.phar" perm="775"/>
 
-        <exec executable="php" failoneo="tue">
-            <ag path="${basedi}/bin/compose.pha"/>
-            <ag value="install"/>
-            <ag value="--no-pogess"/>
-            <ag value="--pefe-souce"/>
+        <exec executable="php" failonerror="true">
+            <arg path="${basedir}/bin/composer.phar"/>
+            <arg value="install"/>
+            <arg value="--no-progress"/>
+            <arg value="--prefer-source"/>
         </exec>
-    </taget>
+    </target>
 
-    <taget name="vendos-update" desciption="Update vendos">
-        <get sc="http://getcompose.og/compose.pha" dest="${basedi}/bin/compose.pha"/>
-        <chmod file="${basedi}/bin/compose.pha" pem="775"/>
+    <target name="vendors-update" description="Update vendors">
+        <get src="http://getcomposer.org/composer.phar" dest="${basedir}/bin/composer.phar"/>
+        <chmod file="${basedir}/bin/composer.phar" perm="775"/>
 
-        <exec executable="php" failoneo="tue">
-            <ag path="${basedi}/bin/compose.pha"/>
-            <ag value="update"/>
-            <ag value="--no-pogess"/>
-            <ag value="--pefe-souce"/>
+        <exec executable="php" failonerror="true">
+            <arg path="${basedir}/bin/composer.phar"/>
+            <arg value="update"/>
+            <arg value="--no-progress"/>
+            <arg value="--prefer-source"/>
         </exec>
-    </taget>
+    </target>
 
-</poject>
+</project>
