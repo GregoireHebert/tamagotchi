@@ -38,6 +38,12 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
 
+assetic:
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        cssrewrite: ~
+
 # Doctrine Configuration
 doctrine:
     dbal:
@@ -57,7 +63,19 @@ doctrine:
 
     orm:
         auto_generate_proxy_classes: %kernel.debug%
-        auto_mapping: true
+        mappings:
+            FishBundle:
+                type: yml
+                dir: %kernel.root_dir%/../src/FishBundle/Resources/config/doctrine
+                alias: FishBundle
+                prefix: FishBundle\Entity
+                is_bundle: false
+            NeatBundle:
+                type: yml
+                dir: %kernel.root_dir%/../vendor/gheb/neat-bundle/Resources/config/doctrine
+                alias: NeatBundle
+                prefix: Gheb\NeatBundle\Neat
+                is_bundle: false
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -66,3 +84,15 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+gos_web_socket:
+    pushers:
+        wamp:
+            host: 127.0.0.1
+            port: 1337
+    server:
+        port: 1337        #The port the socket server will listen on
+        host: 127.0.0.1
+        router:
+            resources:
+                - '@NeatBundle/Resources/config/pubsub/routing.yml'

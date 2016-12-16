@@ -30,7 +30,3 @@ to get the best genome and play it's network upon your inputs, run:
 $ composer install
 $ php bin/console gheb:neat:evaluate
 ```
-
-## TODO
-
-Animations

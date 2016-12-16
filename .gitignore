@@ -10,9 +10,6 @@
 /build/pdepend/
 /cache.properties
 
-# PhpStorm
-.idea/
-
 # Symfony
 /app/config/parameters.yml
 /web/bundles/

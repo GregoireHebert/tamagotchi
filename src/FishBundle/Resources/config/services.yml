@@ -1,0 +1,135 @@
+parameters:
+  fish.command.givebirth.class: FishBundle\Command\GiveBirthCommand
+  fish.command.kill.class: FishBundle\Command\KillCommand
+
+  fish.life.class: FishBundle\Services\Life
+  fish.life.obligation.hunger.class: FishBundle\Services\HungerObligation
+  fish.life.obligation.playfull.class: FishBundle\Services\PlayfullObligation
+  fish.life.obligation.sleepiness.class: FishBundle\Services\SleepinessObligation
+  fish.life.obligation.time.class: FishBundle\Services\TimeObligation
+
+  fish.io.input.hunger.class : FishBundle\IO\Inputs\Hunger
+  fish.io.input.playfull.class : FishBundle\IO\Inputs\Playfull
+  fish.io.input.sleepiness.class : FishBundle\IO\Inputs\Sleepiness
+
+  fish.io.output.feed.class : FishBundle\IO\Outputs\Feed
+  fish.io.output.play.class : FishBundle\IO\Outputs\Play
+  fish.io.output.puttobed.class : FishBundle\IO\Outputs\PutToBed
+  fish.io.output.nothing.class : FishBundle\IO\Outputs\Nothing
+
+  fish.neat.hook.afterEvaluation.class: FishBundle\Neat\AfterEvaluationHook
+  fish.neat.hook.getfitness.class: FishBundle\Neat\GetFitnessHook
+  fish.neat.hook.beforeinit.class: FishBundle\Neat\BeforeInitHook
+  fish.neat.hook.beforenewrun.class: FishBundle\Neat\BeforeNewRunHook
+  fish.neat.hook.nextgenomecriteria.class: FishBundle\Neat\NextGenomeCriteriaHook
+
+services:
+
+  fish.command.givebirth:
+    class: %fish.command.givebirth.class%
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: console.command }
+
+  fish.command.kill:
+    class: %fish.command.kill.class%
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: console.command }
+
+  fish.life:
+    class: %fish.life.class%
+
+  fish.life.obligation.hunger:
+    class: %fish.life.obligation.hunger.class%
+    public: false
+    tags:
+      - { name: fish.life.obligation }
+
+  fish.life.obligation.playfull:
+    class: %fish.life.obligation.playfull.class%
+    public: false
+    tags:
+      - { name: fish.life.obligation }
+
+  fish.life.obligation.sleepiness:
+    class: %fish.life.obligation.sleepiness.class%
+    public: false
+    tags:
+      - { name: fish.life.obligation }
+
+  fish.life.obligation.time:
+    class: %fish.life.obligation.time.class%
+    public: false
+
+  fish.io.input.hunger:
+    class : '%fish.io.input.hunger.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.io.input }
+
+  fish.io.input.playfull:
+    class : '%fish.io.input.playfull.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.io.input }
+
+  fish.io.input.sleepiness:
+    class : '%fish.io.input.sleepiness.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.io.input }
+
+  fish.io.output.feed:
+    class : '%fish.io.output.feed.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.io.output }
+
+  fish.io.output.nothing:
+    class : '%fish.io.output.nothing.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.io.output }
+
+  fish.io.output.play:
+    class : '%fish.io.output.play.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.io.output }
+
+  fish.io.output.puttobed:
+    class : '%fish.io.output.puttobed.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.io.output }
+
+  fish.neat.hook.afterevaluation:
+    class: '%fish.neat.hook.afterEvaluation.class%'
+    arguments: [ "@doctrine.orm.entity_manager", "@fish.life.obligation.time", "@fish.life" ]
+    tags:
+      - { name: gheb.neat.hook.onAfterEvaluation }
+
+  fish.neat.hook.getfitness:
+    class: '%fish.neat.hook.getfitness.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.neat.hook.getFitness }
+
+  fish.neat.hook.beforeinit:
+    class: '%fish.neat.hook.beforeinit.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.neat.hook.onBeforeInit }
+
+  fish.neat.hook.beforenewrun:
+    class: '%fish.neat.hook.beforenewrun.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.neat.hook.onBeforeNewRun }
+
+  fish.neat.hook.nextgenomecriteria:
+    class: '%fish.neat.hook.nextgenomecriteria.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.neat.hook.nextGenomeCriteria }
