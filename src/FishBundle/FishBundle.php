@@ -1,4 +1,5 @@
 <?php
+
 namespace FishBundle;
 
 use FishBundle\DependencyInjection\Compiler\HealthCompilerPass;

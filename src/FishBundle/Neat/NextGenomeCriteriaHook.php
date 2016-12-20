@@ -5,14 +5,14 @@ namespace FishBundle\Neat;
 use Doctrine\ORM\EntityManager;
 use FishBundle\Entity\Fish;
 use FishBundle\Entity\FishRepository;
-use Gheb\NeatBundle\Hook;
+use Gheb\NeatBundle\HookInterface;
 
 /**
  * Class NextGenomeCriteriaHook
  *
  * @author  Grégoire Hébert <gregoire@opo.fr>
  */
-class NextGenomeCriteriaHook implements Hook
+class NextGenomeCriteriaHook implements HookInterface
 {
     /**
      * @var EntityManager

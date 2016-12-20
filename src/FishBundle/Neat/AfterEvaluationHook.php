@@ -7,14 +7,14 @@ use FishBundle\Entity\Fish;
 use FishBundle\Entity\FishRepository;
 use FishBundle\Services\Life;
 use FishBundle\Services\TimeObligation;
-use Gheb\NeatBundle\Hook;
+use Gheb\NeatBundle\HookInterface;
 
 /**
  * Class AfterEvaluationHook
  *
  * @author  Grégoire Hébert <gregoire@opo.fr>
  */
-class AfterEvaluationHook implements Hook
+class AfterEvaluationHook implements HookInterface
 {
     /**
      * @var EntityManager

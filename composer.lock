@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cb1733479de93e4b4a4952d8c390eb3f",
+    "hash": "5b69da0cd011499ba87a18438f9f324f",
     "content-hash": "3e34e08b56f4a706483ce76e93104b04",
     "packages": [
         {
@@ -1062,12 +1062,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/GregoireHebert/io-bundle.git",
-                "reference": "6205dc165090bb62826253228763d375f875bd64"
+                "reference": "12eaff3e31d8ba52c0a3180554fe4e3f9c1f19fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GregoireHebert/io-bundle/zipball/6205dc165090bb62826253228763d375f875bd64",
-                "reference": "6205dc165090bb62826253228763d375f875bd64",
+                "url": "https://api.github.com/repos/GregoireHebert/io-bundle/zipball/12eaff3e31d8ba52c0a3180554fe4e3f9c1f19fc",
+                "reference": "12eaff3e31d8ba52c0a3180554fe4e3f9c1f19fc",
                 "shasum": ""
             },
             "require": {
@@ -1108,7 +1108,7 @@
                 "neuroevolution",
                 "topologies"
             ],
-            "time": "2016-12-13 07:12:06"
+            "time": "2016-12-19 16:02:45"
         },
         {
             "name": "gheb/neat-bundle",
@@ -1116,12 +1116,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/GregoireHebert/neat-bundle.git",
-                "reference": "27c76a05baf887b5bea8723e19b7f9109f141106"
+                "reference": "6d66bc4b573039a173b94922b61eb2ff45fbcf9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GregoireHebert/neat-bundle/zipball/27c76a05baf887b5bea8723e19b7f9109f141106",
-                "reference": "27c76a05baf887b5bea8723e19b7f9109f141106",
+                "url": "https://api.github.com/repos/GregoireHebert/neat-bundle/zipball/6d66bc4b573039a173b94922b61eb2ff45fbcf9d",
+                "reference": "6d66bc4b573039a173b94922b61eb2ff45fbcf9d",
                 "shasum": ""
             },
             "require": {
@@ -1164,7 +1164,7 @@
                 "neuro",
                 "topologies"
             ],
-            "time": "2016-12-16 19:38:10"
+            "time": "2016-12-19 16:47:46"
         },
         {
             "name": "gos/pnctl-event-loop-emitter",

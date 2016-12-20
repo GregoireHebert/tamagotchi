@@ -31,13 +31,12 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
+            new FishBundle\FishBundle(),
+            new Gheb\IOBundle\IOBundle(),
+            new Gheb\NeatBundle\NeatBundle(),
+            new Gos\Bundle\WebSocketBundle\GosWebSocketBundle(),
+            new Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle(),
         ];
-
-        $bundles[] = new FishBundle\FishBundle();
-        $bundles[] = new Gheb\IOBundle\IOBundle();
-        $bundles[] = new Gheb\NeatBundle\NeatBundle();
-        $bundles[] = new Gos\Bundle\WebSocketBundle\GosWebSocketBundle();
-        $bundles[] = new Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle();
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();

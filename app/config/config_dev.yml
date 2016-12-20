@@ -14,16 +14,6 @@ web_profiler:
 monolog:
     channels: ['obligations', 'io']
     handlers:
-        obligations:
-            type: stream
-            path: "%kernel.logs_dir%/obligations.log"
-            level: debug
-            channels: obligations
-        main:
-            type: stream
-            path: "%kernel.logs_dir%/%kernel.environment%.log"
-            level: debug
-            channels: [!event]
         console:
             type:   console
             bubble: false

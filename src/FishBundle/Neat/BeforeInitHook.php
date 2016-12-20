@@ -5,14 +5,14 @@ namespace FishBundle\Neat;
 use Doctrine\ORM\EntityManager;
 use FishBundle\Entity\Fish;
 use FishBundle\Entity\FishRepository;
-use Gheb\NeatBundle\Hook;
+use Gheb\NeatBundle\HookInterface;
 
 /**
  * Class BeforeInitHook
  *
  * @author  Grégoire Hébert <gregoire@opo.fr>
  */
-class BeforeInitHook implements Hook
+class BeforeInitHook implements HookInterface
 {
     /**
      * @var EntityManager

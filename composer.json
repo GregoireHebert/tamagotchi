@@ -4,6 +4,9 @@
   "license": "MIT",
   "type": "project",
   "autoload": {
+    "psr-4": {
+      "": "src/"
+    },
     "files": [
       "app/AppKernel.php"
     ]

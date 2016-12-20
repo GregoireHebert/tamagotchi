@@ -5,14 +5,14 @@ namespace FishBundle\Neat;
 use Doctrine\ORM\EntityManager;
 use FishBundle\Entity\Fish;
 use FishBundle\Entity\FishRepository;
-use Gheb\NeatBundle\Hook;
+use Gheb\NeatBundle\HookInterface;
 
 /**
  * Class GetFitnessHook
  *
  * @author  Grégoire Hébert <gregoire@opo.fr>
  */
-class GetFitnessHook implements Hook
+class GetFitnessHook implements HookInterface
 {
     /**
      * @var EntityManager

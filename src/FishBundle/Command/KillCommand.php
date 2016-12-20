@@ -50,6 +50,7 @@ class KillCommand extends ContainerAwareCommand
     {
         /** @var FishRepository $repo */
         $repo = $this->em->getRepository('FishBundle:Fish');
+        /** @var Fish $fish */
         $fish = $repo->findAliveFish();
 
         if (null === $fish) {
