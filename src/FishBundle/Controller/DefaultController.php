@@ -12,6 +12,6 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('NeatBundle::index.html.twig');
+        return $this->render('FishBundle::index.html.twig');
     }
 }

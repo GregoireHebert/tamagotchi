@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <pre id="fish"></pre>
+    <pre id="output"></pre>
+
+    {{ ws_client() }}
+
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+            $.get("http://127.0.0.1:8000/fish", function( fish ) {
+                $('#fish').html(JSON.stringify(fish, undefined, 2));
+            });
+        });
+
+        var websocket = WS.connect("ws://127.0.0.1:1337");
+
+        websocket.on("socket/connect", function(session){
+            session.subscribe("output/application", function(uri, payload){
+                console.log("Received message", JSON.parse(payload.msg));
+                $.get("http://127.0.0.1:8000/fish", function( fish ) {
+                    $('#fish').html(JSON.stringify(fish, undefined, 2));
+                    $('#output').append("\n");
+                    $('#output').append(JSON.stringify(JSON.parse(payload.msg), undefined, 2));
+                });
+            });
+        });
+
+        websocket.on("socket/disconnect", function(error){
+            //error provides us with some insight into the disconnection: error.reason and error.code
+
+            console.log("Disconnected for " + error.reason + " with code " + error.code);
+        });
+    </script>
+{% endblock %}

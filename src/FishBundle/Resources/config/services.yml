@@ -1,4 +1,6 @@
 parameters:
+  fish.class: FishBundle\Entity\Fish
+
   fish.command.givebirth.class: FishBundle\Command\GiveBirthCommand
   fish.command.kill.class: FishBundle\Command\KillCommand
 
@@ -24,6 +26,11 @@ parameters:
   fish.neat.hook.nextgenomecriteria.class: FishBundle\Neat\NextGenomeCriteriaHook
 
 services:
+  fish.repository:
+    class: Doctrine\ORM\EntityRepository
+    factory: ['@doctrine.orm.default_entity_manager', getRepository]
+    arguments:
+      - %fish.class%
 
   fish.command.givebirth:
     class: %fish.command.givebirth.class%

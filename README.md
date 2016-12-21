@@ -30,3 +30,9 @@ to get the best genome and play it's network upon your inputs, run:
 $ composer install
 $ php bin/console gheb:neat:evaluate
 ```
+
+## todo
+* on evaluate, give birth to a fish if there is none or if the previous is dead on before any evaluation.
+* on evaluate get fish status to update it's visual condition.
+* display it's condition and it's suggested animation between each tick
+* define the rythm to call a new evaluation.
