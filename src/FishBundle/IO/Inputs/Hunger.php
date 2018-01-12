@@ -11,7 +11,10 @@ use FishBundle\Entity\Fish;
  */
 class Hunger extends Input
 {
-    public function getName()
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return 'hunger';
     }
@@ -25,8 +28,8 @@ class Hunger extends Input
 
         if ($this->fish instanceof Fish) {
             return $this->fish->getHunger();
-        } else {
-            return 0;
         }
+
+        return 0;
     }
 }

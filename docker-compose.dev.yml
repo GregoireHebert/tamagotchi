@@ -1,0 +1,14 @@
+version: '2.1'
+
+services:
+  adminer:
+    image: 'adminer'
+    links:
+      - 'db'
+    depends_on:
+      db:
+        condition: 'service_healthy'
+    volumes_from:
+      - 'tamagotchi'
+    ports:
+      - '8082:8080'

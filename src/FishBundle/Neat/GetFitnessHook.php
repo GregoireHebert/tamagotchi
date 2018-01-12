@@ -3,6 +3,7 @@
 namespace FishBundle\Neat;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\NonUniqueResultException;
 use FishBundle\Entity\Fish;
 use FishBundle\Entity\FishRepository;
 use Gheb\NeatBundle\HookInterface;
@@ -29,6 +30,10 @@ class GetFitnessHook implements HookInterface
         $this->em = $em;
     }
 
+    /**
+     * @return int
+     * @throws NonUniqueResultException
+     */
     public function __invoke()
     {
         /** @var FishRepository $repo */

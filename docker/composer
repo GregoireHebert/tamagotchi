@@ -1,0 +1,5 @@
+#!/bin/bash
+echo -e "Running command: docker-compose exec -T tamagotchi composer $@ --working-dir=/srv/tamagotchi"
+echo -e "...............\n\n"
+
+docker-compose exec -T tamagotchi composer $@ --working-dir=/srv/tamagotchi

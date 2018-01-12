@@ -11,7 +11,7 @@ use FishBundle\Entity\Fish;
  */
 class HungerObligation extends AbstractLifeObligation
 {
-    public function applyEffect(Fish &$fish)
+    public function applyEffect(Fish $fish)
     {
         // As it's too low, it's getting worse for it's life
         if ($fish->getHunger() <= 2) {

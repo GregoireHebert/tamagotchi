@@ -11,7 +11,7 @@ use FishBundle\Entity\Fish;
  */
 class PlayfullObligation extends AbstractLifeObligation
 {
-    public function applyEffect(Fish &$fish)
+    public function applyEffect(Fish $fish)
     {
         if ($fish->getPlayfull() >= 8) {
             $fish->setHealth($fish->getHealth() - 1);

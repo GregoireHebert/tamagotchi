@@ -2,6 +2,7 @@
 
 namespace FishBundle\IO\Outputs;
 
+use Doctrine\ORM\OptimisticLockException;
 use FishBundle\Entity\Fish;
 
 /**
@@ -13,6 +14,8 @@ class Feed extends Output
 {
     /**
      * Feed
+     *
+     * @throws OptimisticLockException
      */
     public function apply()
     {
@@ -28,7 +31,7 @@ class Feed extends Output
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Feed';
     }

@@ -2,6 +2,7 @@
 
 namespace FishBundle\IO\Inputs;
 
+use Doctrine\ORM\NonUniqueResultException;
 use FishBundle\Entity\Fish;
 use FishBundle\Entity\FishRepository;
 use Gheb\IOBundle\Inputs\AbstractInput;
@@ -18,6 +19,9 @@ abstract class Input extends AbstractInput
      */
     protected $fish;
 
+    /**
+     * @throws NonUniqueResultException
+     */
     protected function getFish()
     {
         /** @var FishRepository $repo */

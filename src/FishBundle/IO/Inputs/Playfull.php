@@ -2,6 +2,7 @@
 
 namespace FishBundle\IO\Inputs;
 
+use Doctrine\ORM\NonUniqueResultException;
 use FishBundle\Entity\Fish;
 
 /**
@@ -11,13 +12,19 @@ use FishBundle\Entity\Fish;
  */
 class Playfull extends Input
 {
-    public function getName()
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return 'playfull';
     }
 
     /**
      * get the Hunger
+     *
+     * @return int|mixed
+     * @throws NonUniqueResultException
      */
     public function getValue()
     {
@@ -25,8 +32,8 @@ class Playfull extends Input
 
         if ($this->fish instanceof Fish) {
             return $this->fish->getPlayfull();
-        } else {
-            return 0;
         }
+
+        return 0;
     }
 }

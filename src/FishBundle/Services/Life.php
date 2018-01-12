@@ -27,16 +27,16 @@ class Life
      *
      * @param $obligation
      */
-    public function addObligation($obligation)
+    public function addObligation($obligation): void
     {
         if (!$this->obligations->contains($obligation)) {
             $this->obligations->add($obligation);
         }
     }
 
-    public function applyEffect(Fish $fish)
+    public function applyEffect(Fish $fish): void
     {
-        if ($fish->getHealth() == 0) {
+        if ($fish->getHealth() === 0) {
             return;
         }
 

@@ -3,6 +3,7 @@
 namespace FishBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * Class FishRepository
@@ -19,14 +20,22 @@ class FishRepository extends EntityRepository
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findAliveFish()
+    public function findAliveFish():? Fish
     {
         $qb = $this->createQueryBuilder('f');
         $qb->where('f.health > 0');
+        $qb->orderBy('f.health', 'ASC');
+        $qb->setFirstResult(0);
+        $qb->setMaxResults(1);
 
         return $qb->getQuery()->getOneOrNullResult();
     }
 
+    /**
+     * @return mixed
+     *
+     * @throws NonUniqueResultException
+     */
     public function findLastAliveFish()
     {
         $qb = $this->createQueryBuilder('f');

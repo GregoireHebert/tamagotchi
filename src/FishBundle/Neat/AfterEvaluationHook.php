@@ -3,6 +3,8 @@
 namespace FishBundle\Neat;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
 use FishBundle\Entity\Fish;
 use FishBundle\Entity\FishRepository;
 use FishBundle\Services\Life;
@@ -45,6 +47,10 @@ class AfterEvaluationHook implements HookInterface
         $this->life = $life;
     }
 
+    /**
+     * @throws NonUniqueResultException
+     * @throws OptimisticLockException
+     */
     public function __invoke()
     {
         /** @var FishRepository $repo */

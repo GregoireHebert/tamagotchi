@@ -11,7 +11,7 @@ use FishBundle\Entity\Fish;
  */
 class SleepinessObligation extends AbstractLifeObligation
 {
-    public function applyEffect(Fish &$fish)
+    public function applyEffect(Fish $fish)
     {
         // As it's too high, it's getting worse for it's life
         if ($fish->getSleepiness() >= 8) {

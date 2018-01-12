@@ -3,6 +3,8 @@
 namespace FishBundle\Neat;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMInvalidArgumentException;
 use FishBundle\Entity\Fish;
 use Gheb\NeatBundle\HookInterface;
 
@@ -28,6 +30,10 @@ class BeforeNewRunHook implements HookInterface
         $this->em = $em;
     }
 
+    /**
+     * @throws OptimisticLockException
+     * @throws ORMInvalidArgumentException
+     */
     public function __invoke()
     {
         $fish = new Fish();

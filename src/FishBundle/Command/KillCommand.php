@@ -8,6 +8,9 @@ use FishBundle\Entity\FishRepository;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\output\OutputInterface;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMInvalidArgumentException;
 
 /**
  * Class KillCommand
@@ -45,6 +48,10 @@ class KillCommand extends ContainerAwareCommand
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
+     *
+     * @throws NonUniqueResultException
+     * @throws OptimisticLockException
+     * @throws ORMInvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

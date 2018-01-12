@@ -11,7 +11,11 @@ use FishBundle\Entity\Fish;
  */
 class TimeObligation extends AbstractLifeObligation
 {
-    public function applyEffect(Fish &$fish)
+    /**
+     * @param Fish $fish
+     * @return mixed|void
+     */
+    public function applyEffect(Fish $fish)
     {
         // time goes by, health is going down
         $fish->setHealth($fish->getHealth() -1);

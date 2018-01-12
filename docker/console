@@ -1,0 +1,5 @@
+#! /bin/bash
+echo -e "Running command: docker-compose exec -T tamagotchi php /srv/tamagotchi/bin/console $@"
+echo -e "...............\n\n"
+
+eval "docker-compose exec -T tamagotchi php /srv/tamagotchi/bin/console $@"

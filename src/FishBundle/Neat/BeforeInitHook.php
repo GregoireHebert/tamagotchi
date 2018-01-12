@@ -3,6 +3,9 @@
 namespace FishBundle\Neat;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMInvalidArgumentException;
 use FishBundle\Entity\Fish;
 use FishBundle\Entity\FishRepository;
 use Gheb\NeatBundle\HookInterface;
@@ -29,6 +32,11 @@ class BeforeInitHook implements HookInterface
         $this->em = $em;
     }
 
+    /**
+     * @throws NonUniqueResultException
+     * @throws OptimisticLockException
+     * @throws ORMInvalidArgumentException
+     */
     public function __invoke()
     {
         /** @var FishRepository $repo */

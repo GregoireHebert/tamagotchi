@@ -2,6 +2,8 @@
 
 namespace FishBundle\IO\Outputs;
 
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
 use FishBundle\Entity\Fish;
 
 /**
@@ -13,6 +15,9 @@ class Play extends Output
 {
     /**
      * Feed
+     *
+     * @throws NonUniqueResultException
+     * @throws OptimisticLockException
      */
     public function apply()
     {
@@ -27,7 +32,7 @@ class Play extends Output
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Play';
     }

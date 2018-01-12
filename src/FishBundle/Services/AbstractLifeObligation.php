@@ -18,5 +18,5 @@ abstract class AbstractLifeObligation
      *
      * @return mixed
      */
-    abstract public function applyEffect(Fish &$fish);
+    abstract public function applyEffect(Fish $fish);
 }

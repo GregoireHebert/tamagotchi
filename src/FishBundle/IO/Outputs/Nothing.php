@@ -20,7 +20,7 @@ class Nothing extends Output
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Nothing';
     }

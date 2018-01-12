@@ -2,6 +2,8 @@
 
 namespace FishBundle\IO\Outputs;
 
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
 use FishBundle\Entity\Fish;
 
 /**
@@ -13,6 +15,9 @@ class PutToBed extends Output
 {
     /**
      *Put to bed
+     *
+     * @throws NonUniqueResultException
+     * @throws OptimisticLockException
      */
     public function apply()
     {
@@ -24,7 +29,10 @@ class PutToBed extends Output
         }
     }
 
-    public function getName()
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return 'putToBed';
     }

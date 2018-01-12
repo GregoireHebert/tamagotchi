@@ -48,7 +48,7 @@ class Fish
         $this->lifeTick   = 0;
     }
 
-    public function addLifeTick()
+    public function addLifeTick(): void
     {
         $this->lifeTick++;
     }
@@ -56,7 +56,7 @@ class Fish
     /**
      * @return int
      */
-    public function getHealth()
+    public function getHealth(): int
     {
         return $this->health;
     }
@@ -64,7 +64,7 @@ class Fish
     /**
      * @return int
      */
-    public function getHunger()
+    public function getHunger(): int
     {
         return $this->hunger;
     }
@@ -77,7 +77,7 @@ class Fish
         return $this->id;
     }
 
-    public function getLifeTick()
+    public function getLifeTick(): int
     {
         return $this->lifeTick;
     }
@@ -85,7 +85,7 @@ class Fish
     /**
      * @return int
      */
-    public function getPlayfull()
+    public function getPlayfull(): int
     {
         return $this->playfull;
     }
@@ -93,7 +93,7 @@ class Fish
     /**
      * @return int
      */
-    public function getSleepiness()
+    public function getSleepiness(): int
     {
         return $this->sleepiness;
     }
@@ -101,7 +101,7 @@ class Fish
     /**
      * @param int $health
      */
-    public function setHealth($health)
+    public function setHealth($health): void
     {
         $this->health = min(300, max(0, $health));
     }
@@ -109,7 +109,7 @@ class Fish
     /**
      * @param int $hunger
      */
-    public function setHunger($hunger)
+    public function setHunger($hunger): void
     {
         $this->hunger = min(10, max(0, $hunger));
     }
@@ -117,7 +117,7 @@ class Fish
     /**
      * @param mixed $id
      */
-    public function setId($id)
+    public function setId($id): void
     {
         $this->id = $id;
     }
@@ -125,7 +125,7 @@ class Fish
     /**
      * @param $lifeTick
      */
-    public function setLifeTick($lifeTick)
+    public function setLifeTick($lifeTick): void
     {
         $this->lifeTick = $lifeTick;
     }
@@ -133,7 +133,7 @@ class Fish
     /**
      * @param int $playfull
      */
-    public function setPlayfull($playfull)
+    public function setPlayfull($playfull): void
     {
         $this->playfull = min(10, max(0, $playfull));
     }
@@ -141,7 +141,7 @@ class Fish
     /**
      * @param int $sleepiness
      */
-    public function setSleepiness($sleepiness)
+    public function setSleepiness($sleepiness): void
     {
         $this->sleepiness = min(10, max(0, $sleepiness));
     }
