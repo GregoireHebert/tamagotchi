@@ -13,14 +13,9 @@ class SleepinessObligation extends AbstractLifeObligation
 {
     public function applyEffect(Fish $fish)
     {
-        // As it's too high, it's getting worse for it's life
-        if ($fish->getSleepiness() >= 8) {
-            $fish->setHealth($fish->getHealth() - 3);
-        }
-
-        // As it's too low, it's getting worse for it's life
-        if ($fish->getSleepiness() <= 2) {
-            $fish->setHealth($fish->getHealth() - 1);
+        // never sleeps increase bad wealth, and reduce health
+        if ($fish->getSleepiness()>=Fish::MAX_SLEEP || $fish->getSleepiness()<=0) {
+            $fish->setWealth($fish->getWealth() +1);
         }
     }
 }

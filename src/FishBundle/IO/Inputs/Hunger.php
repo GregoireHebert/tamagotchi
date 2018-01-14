@@ -2,6 +2,7 @@
 
 namespace FishBundle\IO\Inputs;
 
+use Doctrine\ORM\NonUniqueResultException;
 use FishBundle\Entity\Fish;
 
 /**
@@ -21,8 +22,12 @@ class Hunger extends Input
 
     /**
      * get the Hunger
+     *
+     * @throws NonUniqueResultException
+     *
+     * @return int
      */
-    public function getValue()
+    public function getValue(): int
     {
         $this->getFish();
 

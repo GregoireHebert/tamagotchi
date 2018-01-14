@@ -23,10 +23,11 @@ class Playfull extends Input
     /**
      * get the Hunger
      *
-     * @return int|mixed
      * @throws NonUniqueResultException
+     *
+     * @return int
      */
-    public function getValue()
+    public function getValue(): int
     {
         $this->getFish();
 

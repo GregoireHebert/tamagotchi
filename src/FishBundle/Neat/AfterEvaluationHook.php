@@ -58,8 +58,8 @@ class AfterEvaluationHook implements HookInterface
         $repo = $this->em->getRepository('FishBundle:Fish');
         $fish = $repo->findAliveFish();
 
-        $this->time->applyEffect($fish);
         $this->life->applyEffect($fish);
+        $this->time->applyEffect($fish);
         $this->em->flush();
     }
 }

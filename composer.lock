@@ -1115,19 +1115,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/GregoireHebert/neat-bundle.git",
-                "reference": "6d66bc4b573039a173b94922b61eb2ff45fbcf9d"
+                "reference": "13dddc91134ca2e7828fe86fd56af76620530375"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GregoireHebert/neat-bundle/zipball/6d66bc4b573039a173b94922b61eb2ff45fbcf9d",
-                "reference": "6d66bc4b573039a173b94922b61eb2ff45fbcf9d",
+                "url": "https://api.github.com/repos/GregoireHebert/neat-bundle/zipball/13dddc91134ca2e7828fe86fd56af76620530375",
+                "reference": "13dddc91134ca2e7828fe86fd56af76620530375",
                 "shasum": ""
             },
             "require": {
                 "doctrine/doctrine-bundle": "^1.6",
                 "doctrine/doctrine-cache-bundle": "^1.2",
                 "doctrine/orm": "^2.5",
-                "gheb/io-bundle": "1.0.x-dev",
+                "gheb/io-bundle": "master",
                 "gos/web-socket-bundle": "^1.8",
                 "php": ">=5.5.9",
                 "symfony/symfony": "3.*"
@@ -1135,7 +1135,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -1163,7 +1163,7 @@
                 "neuro",
                 "topologies"
             ],
-            "time": "2016-12-19T16:47:46+00:00"
+            "time": "2018-01-12T21:21:35+00:00"
         },
         {
             "name": "gos/pnctl-event-loop-emitter",

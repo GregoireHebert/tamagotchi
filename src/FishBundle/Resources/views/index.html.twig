@@ -2,7 +2,7 @@
 
 {% block body %}
     <pre id="fish"></pre>
-    <pre id="output"></pre>
+    <pre id="output" style="height:300px;"></pre>
 
     {{ ws_client() }}
 
@@ -17,12 +17,15 @@
         var websocket = WS.connect("ws://127.0.0.1:1337");
 
         websocket.on("socket/connect", function(session){
+            console.log("connection OK");
+
             session.subscribe("output/application", function(uri, payload){
-                console.log("Received message", JSON.parse(payload.msg));
+                console.log("Received message", payload);
+
                 $.get("http://127.0.0.1:8000/fish", function( fish ) {
                     $('#fish').html(JSON.stringify(fish, undefined, 2));
-                    $('#output').append("\n");
-                    $('#output').append(JSON.stringify(JSON.parse(payload.msg), undefined, 2));
+
+                    $('#output').html(payload);
                 });
             });
         });

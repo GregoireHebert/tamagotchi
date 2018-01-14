@@ -9,6 +9,13 @@ namespace FishBundle\Entity;
  */
 class Fish
 {
+    public const MAX_HEALTH = 300;
+    public const MAX_HUNGER = 7;
+    public const MAX_PLAY = 4;
+    public const MAX_SLEEP = 16;
+    public const MAX_WEALTH = 4;
+    public const MAX_WEIGHT = 7;
+
     /**
      * @var int
      */
@@ -39,13 +46,57 @@ class Fish
      */
     private $sleepiness;
 
+    /**
+     * @var int
+     */
+    private $weight;
+
+    /**
+     * @var int
+     */
+    private $wealth;
+
     public function __construct()
     {
-        $this->health     = 300;
-        $this->hunger     = 3;
-        $this->sleepiness = 3;
-        $this->playfull   = 3;
+        $this->health     = self::MAX_HEALTH;
+        $this->hunger     = 2;
+        $this->sleepiness = 4;
+        $this->playfull   = 1;
         $this->lifeTick   = 0;
+        $this->wealth     = 0;
+        $this->weight     = 2;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWeight(): int
+    {
+        return $this->weight;
+    }
+
+    /**
+     * @param int $weight
+     */
+    public function setWeight(int $weight): void
+    {
+        $this->weight = $weight;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWealth(): int
+    {
+        return $this->wealth;
+    }
+
+    /**
+     * @param int $wealth
+     */
+    public function setWealth(int $wealth): void
+    {
+        $this->wealth = max(0, $wealth);
     }
 
     public function addLifeTick(): void
@@ -103,7 +154,7 @@ class Fish
      */
     public function setHealth($health): void
     {
-        $this->health = min(300, max(0, $health));
+        $this->health = max(0, $health);
     }
 
     /**
@@ -111,7 +162,7 @@ class Fish
      */
     public function setHunger($hunger): void
     {
-        $this->hunger = min(10, max(0, $hunger));
+        $this->hunger = $hunger;
     }
 
     /**
@@ -135,7 +186,7 @@ class Fish
      */
     public function setPlayfull($playfull): void
     {
-        $this->playfull = min(10, max(0, $playfull));
+        $this->playfull = max(0, $playfull);
     }
 
     /**
@@ -143,6 +194,6 @@ class Fish
      */
     public function setSleepiness($sleepiness): void
     {
-        $this->sleepiness = min(10, max(0, $sleepiness));
+        $this->sleepiness = $sleepiness;
     }
 }

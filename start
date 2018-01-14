@@ -1,0 +1,17 @@
+#!/bin/bash
+
+scriptDir=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
+consoleDir="$scriptDir/bin/console"
+
+function stop {
+    php $consoleDir server:stop
+    kill $(ps aux | grep 'gos:web' | awk '{print $2}') 2>/dev/null
+    kill $(ps aux | grep 'chromium-browser' | grep 'http://127.0.0.1:8000'  | awk '{print $2}') 2>/dev/null
+}
+
+trap stop HUP TERM INT EXIT
+
+php $consoleDir server:start --force
+php $consoleDir gos:web:ser --env=prod
+
+exit 1

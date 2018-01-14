@@ -21,8 +21,34 @@ class TimeObligation extends AbstractLifeObligation
         $fish->setHealth($fish->getHealth() -1);
         $fish->addLifeTick();
 
-        $fish->setHunger($fish->getHunger() +1);
-        $fish->setSleepiness($fish->getSleepiness() +0.5);
-        $fish->setPlayfull($fish->getPlayfull() +3);
+        // classic time application
+        $fish->setHunger($fish->getHunger() +1); // gets hungry
+        $fish->setSleepiness($fish->getSleepiness() + 1);// gets sleepy
+        $fish->setPlayfull($fish->getPlayfull() +1);// needs to play
+
+        // eat too much or does not eat
+        if ($fish->getHunger()>=Fish::MAX_HUNGER || $fish->getHunger()<=0) {
+            $fish->setHealth($fish->getHealth() -1);
+        }
+
+        // plays too much or does not play
+        if ($fish->getPlayfull()>=Fish::MAX_PLAY || $fish->getPlayfull()<=0) {
+            $fish->setHealth($fish->getHealth() -1);
+        }
+
+        // sleep too much or does not sleep
+        if ($fish->getSleepiness()>=Fish::MAX_SLEEP || $fish->getSleepiness()<=0) {
+            $fish->setHealth($fish->getHealth() -1);
+        }
+
+        // Bad wealth shorten it's life
+        if ($fish->getWealth()>=Fish::MAX_WEALTH) {
+            $fish->setHealth($fish->getHealth() -2);
+        }
+
+        // starving or fat, shorten it's life
+        if ($fish->getWeight()>=Fish::MAX_WEIGHT || $fish->getWeight()<=0) {
+            $fish->setHealth($fish->getHealth() -2);
+        }
     }
 }

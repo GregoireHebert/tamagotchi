@@ -17,3 +17,7 @@ FishBundle\Entity\Fish:
             type: integer
         playfull:
             type: integer
+        weight:
+            type: integer
+        wealth:
+            type: integer

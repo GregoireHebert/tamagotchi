@@ -13,14 +13,16 @@ class HungerObligation extends AbstractLifeObligation
 {
     public function applyEffect(Fish $fish)
     {
-        // As it's too low, it's getting worse for it's life
-        if ($fish->getHunger() <= 2) {
-            $fish->setHealth($fish->getHealth() - 5);
+        // fat, increase the weight and the bad wealth
+        if ($fish->getHunger()>=Fish::MAX_HUNGER) {
+            $fish->setWealth($fish->getWealth() +1);
+            $fish->setWeight($fish->getWeight() -1);
         }
 
-        // As it's too high, it's getting worse for it's life
-        if ($fish->getHunger() >= 8) {
-            $fish->setHealth($fish->getHealth() - 10);
+        // skinny, decrease the weight and increase the bad wealth
+        if ($fish->getHunger()<=0) {
+            $fish->setWealth($fish->getWealth() +1);
+            $fish->setWeight($fish->getWeight() +1);
         }
     }
 }

@@ -14,7 +14,7 @@ use FishBundle\Entity\Fish;
 class PutToBed extends Output
 {
     /**
-     *Put to bed
+     * Put to bed
      *
      * @throws NonUniqueResultException
      * @throws OptimisticLockException
@@ -24,7 +24,8 @@ class PutToBed extends Output
         $this->getFish();
         if ($this->fish instanceof Fish) {
             $sleepiness = $this->fish->getSleepiness();
-            $this->fish->setSleepiness($sleepiness - 5);
+            $this->fish->setSleepiness($sleepiness -8);
+            $this->fish->setWealth($this->fish->getWealth() -1);
             $this->em->flush();
         }
     }

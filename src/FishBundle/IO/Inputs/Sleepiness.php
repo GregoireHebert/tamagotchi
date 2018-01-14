@@ -23,10 +23,11 @@ class Sleepiness extends Input
     /**
      * get the Sleepiness
      *
-     * @return int|mixed
      * @throws NonUniqueResultException
+     *
+     * @return int
      */
-    public function getValue()
+    public function getValue(): int
     {
         $this->getFish();
 

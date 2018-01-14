@@ -22,34 +22,34 @@ services:
       timeout: '1s'
       retries: 10
 
-  tamagotchi:
-    build: '.'
-    depends_on:
-      db:
-        condition: 'service_healthy'
-    ports:
-      - '9002:9000'
-    links:
-      - 'db'
-    environment:
-      SYMFONY_ENV: 'prod'
-      DATABASE_USER: 'tamagotchi'
-      DATABASE_NAME: 'tamagotchi'
-      DATABASE_PASSWORD: 'tamagotchi'
-    volumes:
-      - './:/srv/tamagotchi'
-
-  nginx:
-    image: 'nginx:1.11-alpine'
-    depends_on:
-      tamagotchi:
-        condition: 'service_started'
-    links:
-      - 'tamagotchi'
-    ports:
-      - '80:80'
-    volumes_from:
-      - 'tamagotchi'
-    volumes:
-      - './docker/nginx/conf.d:/etc/nginx/conf.d:ro'
-      - './docker/logs/nginx/:/var/log/nginx'
+#  tamagotchi:
+#    build: '.'
+#    depends_on:
+#      db:
+#        condition: 'service_healthy'
+#    ports:
+#      - '9002:9000'
+#    links:
+#      - 'db'
+#    environment:
+#      SYMFONY_ENV: 'prod'
+#      DATABASE_USER: 'tamagotchi'
+#      DATABASE_NAME: 'tamagotchi'
+#      DATABASE_PASSWORD: 'tamagotchi'
+#    volumes:
+#      - './:/srv/tamagotchi'
+#
+#  nginx:
+#    image: 'nginx:1.11-alpine'
+#    depends_on:
+#      tamagotchi:
+#        condition: 'service_started'
+#    links:
+#      - 'tamagotchi'
+#    ports:
+#      - '80:80'
+#    volumes_from:
+#      - 'tamagotchi'
+#    volumes:
+#      - './docker/nginx/conf.d:/etc/nginx/conf.d:ro'
+#      - './docker/logs/nginx/:/var/log/nginx'

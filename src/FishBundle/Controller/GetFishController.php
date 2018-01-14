@@ -2,6 +2,10 @@
 
 namespace FishBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMInvalidArgumentException;
+use FishBundle\Entity\Fish;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
@@ -19,11 +23,22 @@ class GetFishController extends Controller
      * @throws \InvalidArgumentException
      * @throws ServiceCircularReferenceException
      * @throws ServiceNotFoundException
+     * @throws ORMInvalidArgumentException
+     * @throws OptimisticLockException
      */
     public function indexAction()
     {
         $repo = $this->container->get('fish.repository');
         $fish = $repo->findAliveFish();
+
+        if (null === $fish) {
+            $fish = new Fish();
+
+            /** @var EntityManager $em */
+            $em = $this->container->get('doctrine.orm.entity_manager');
+            $em->persist($fish);
+            $em->flush();
+        }
 
         $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
 
