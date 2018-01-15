@@ -25,7 +25,6 @@ class Feed extends Output
         if ($this->fish instanceof Fish) {
             $hunger = $this->fish->getHunger();
             $this->fish->setHunger($hunger -5);
-            $this->fish->setWealth($this->fish->getWealth() -1);
             $this->fish->setWeight($this->fish->getWeight() +1);
             $this->em->flush();
         }
