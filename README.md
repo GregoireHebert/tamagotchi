@@ -49,7 +49,7 @@ you can run a webserver and the websocket by using the start script
 $ ./start
 ```
 
-you can now lauch your navigator
+you can now launch your navigator
 
 ```bash
 $ chromium-browser --start-fullscreen --start-maximized --no-default-browser-check --incognito http://127.0.0.1:8000 &>/dev/null &
