@@ -32,7 +32,7 @@
         };
 
         function poll(){
-            $.ajax({ url: "/howIsMyFish", success: function(data){
+            $.ajax({ url: "/howIsMyTamagotchi", success: function(data){
                 if (data['status'] == true) {
                     $('#health').html(data['Health']);
                     $('#mood').html(mood[data['Mood']]);
@@ -56,7 +56,7 @@
         poll();
 
         $('#clean').click(function(){
-            $.ajax({ url: "/cleanTheFish", success: function(data){
+            $.ajax({ url: "/cleanTheTamagotchi", success: function(data){
                 if (data['status'] == true){
                     alert('ça brille !');
                     poll();
@@ -69,7 +69,7 @@
         });
 
         $('#feed').click(function(){
-            $.ajax({ url: "/feedTheFish", success: function(data){
+            $.ajax({ url: "/feedTheTamagotchi", success: function(data){
                 if (data['status'] == true){
                     alert('Nom Nom Nom !');
                     poll();
@@ -82,7 +82,7 @@
         });
 
         $('#play').click(function(){
-            $.ajax({ url: "/goFish", success: function(data){
+            $.ajax({ url: "/goTamagotchi", success: function(data){
                 if (data['status'] == true){
                     alert('ouh yeah !');
                     poll();

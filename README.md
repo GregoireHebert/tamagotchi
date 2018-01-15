@@ -1,10 +1,10 @@
-# Fish
+# Tamagotchi
 ==========
 
-Fish is a tamagotchi like project
-The fish has need such as hunger, sleepiness and sometimes wants to play.
+Tamagotchi is a tamagotchi like project
+The tamagotchi has need such as hunger, sleepiness and sometimes wants to play.
 Each has an influence on it's health. If you do not take care of feeding him, put it to bed or play with it,
-the fish will eventually die faster.
+the tamagotchi will eventually die faster.
 
 This project exists as a demonstration for the neat bundle.
 

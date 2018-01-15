@@ -1,0 +1,142 @@
+parameters:
+  tamagotchi.class: TamagotchiBundle\Entity\Tamagotchi
+
+  tamagotchi.command.givebirth.class: TamagotchiBundle\Command\GiveBirthCommand
+  tamagotchi.command.kill.class: TamagotchiBundle\Command\KillCommand
+
+  tamagotchi.life.class: TamagotchiBundle\Services\Life
+  tamagotchi.life.obligation.hunger.class: TamagotchiBundle\Services\HungerObligation
+  tamagotchi.life.obligation.playfull.class: TamagotchiBundle\Services\PlayfullObligation
+  tamagotchi.life.obligation.sleepiness.class: TamagotchiBundle\Services\SleepinessObligation
+  tamagotchi.life.obligation.time.class: TamagotchiBundle\Services\TimeObligation
+
+  tamagotchi.io.input.hunger.class : TamagotchiBundle\IO\Inputs\Hunger
+  tamagotchi.io.input.playfull.class : TamagotchiBundle\IO\Inputs\Playfull
+  tamagotchi.io.input.sleepiness.class : TamagotchiBundle\IO\Inputs\Sleepiness
+
+  tamagotchi.io.output.feed.class : TamagotchiBundle\IO\Outputs\Feed
+  tamagotchi.io.output.play.class : TamagotchiBundle\IO\Outputs\Play
+  tamagotchi.io.output.puttobed.class : TamagotchiBundle\IO\Outputs\PutToBed
+  tamagotchi.io.output.nothing.class : TamagotchiBundle\IO\Outputs\Nothing
+
+  tamagotchi.neat.hook.afterEvaluation.class: TamagotchiBundle\Neat\AfterEvaluationHook
+  tamagotchi.neat.hook.getfitness.class: TamagotchiBundle\Neat\GetFitnessHook
+  tamagotchi.neat.hook.beforeinit.class: TamagotchiBundle\Neat\BeforeInitHook
+  tamagotchi.neat.hook.beforenewrun.class: TamagotchiBundle\Neat\BeforeNewRunHook
+  tamagotchi.neat.hook.nextgenomecriteria.class: TamagotchiBundle\Neat\NextGenomeCriteriaHook
+
+services:
+  tamagotchi.repository:
+    class: Doctrine\ORM\EntityRepository
+    factory: ['@doctrine.orm.default_entity_manager', getRepository]
+    arguments:
+      - %tamagotchi.class%
+
+  tamagotchi.command.givebirth:
+    class: %tamagotchi.command.givebirth.class%
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: console.command }
+
+  tamagotchi.command.kill:
+    class: %tamagotchi.command.kill.class%
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: console.command }
+
+  tamagotchi.life:
+    class: %tamagotchi.life.class%
+
+  tamagotchi.life.obligation.hunger:
+    class: %tamagotchi.life.obligation.hunger.class%
+    public: false
+    tags:
+      - { name: tamagotchi.life.obligation }
+
+  tamagotchi.life.obligation.playfull:
+    class: %tamagotchi.life.obligation.playfull.class%
+    public: false
+    tags:
+      - { name: tamagotchi.life.obligation }
+
+  tamagotchi.life.obligation.sleepiness:
+    class: %tamagotchi.life.obligation.sleepiness.class%
+    public: false
+    tags:
+      - { name: tamagotchi.life.obligation }
+
+  tamagotchi.life.obligation.time:
+    class: %tamagotchi.life.obligation.time.class%
+    public: false
+
+  tamagotchi.io.input.hunger:
+    class : '%tamagotchi.io.input.hunger.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.io.input }
+
+  tamagotchi.io.input.playfull:
+    class : '%tamagotchi.io.input.playfull.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.io.input }
+
+  tamagotchi.io.input.sleepiness:
+    class : '%tamagotchi.io.input.sleepiness.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.io.input }
+
+  tamagotchi.io.output.feed:
+    class : '%tamagotchi.io.output.feed.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.io.output }
+
+  tamagotchi.io.output.nothing:
+    class : '%tamagotchi.io.output.nothing.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.io.output }
+
+  tamagotchi.io.output.play:
+    class : '%tamagotchi.io.output.play.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.io.output }
+
+  tamagotchi.io.output.puttobed:
+    class : '%tamagotchi.io.output.puttobed.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.io.output }
+
+  tamagotchi.neat.hook.afterevaluation:
+    class: '%tamagotchi.neat.hook.afterEvaluation.class%'
+    arguments: [ "@doctrine.orm.entity_manager", "@tamagotchi.life.obligation.time", "@tamagotchi.life" ]
+    tags:
+      - { name: gheb.neat.hook.onAfterEvaluation }
+
+  tamagotchi.neat.hook.getfitness:
+    class: '%tamagotchi.neat.hook.getfitness.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.neat.hook.getFitness }
+
+  tamagotchi.neat.hook.beforeinit:
+    class: '%tamagotchi.neat.hook.beforeinit.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.neat.hook.onBeforeInit }
+
+  tamagotchi.neat.hook.beforenewrun:
+    class: '%tamagotchi.neat.hook.beforenewrun.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.neat.hook.onBeforeNewRun }
+
+  tamagotchi.neat.hook.nextgenomecriteria:
+    class: '%tamagotchi.neat.hook.nextgenomecriteria.class%'
+    arguments: [ "@doctrine.orm.entity_manager" ]
+    tags:
+      - { name: gheb.neat.hook.nextGenomeCriteria }

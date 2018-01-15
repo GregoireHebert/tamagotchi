@@ -1,0 +1,23 @@
+TamagotchiBundle\Entity\Tamagotchi:
+    type: entity
+    table: tamagotchi
+    repositoryClass: TamagotchiBundle\Entity\TamagotchiRepository
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        lifeTick:
+            type: integer
+        health:
+            type: integer
+        hunger:
+            type: integer
+        sleepiness:
+            type: integer
+        playfull:
+            type: integer
+        weight:
+            type: integer
+        wealth:
+            type: integer

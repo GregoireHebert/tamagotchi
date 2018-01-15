@@ -64,11 +64,11 @@ doctrine:
     orm:
         auto_generate_proxy_classes: %kernel.debug%
         mappings:
-            FishBundle:
+            TamagotchiBundle:
                 type: yml
-                dir: %kernel.root_dir%/../src/FishBundle/Resources/config/doctrine
-                alias: FishBundle
-                prefix: FishBundle\Entity
+                dir: %kernel.root_dir%/../src/TamagotchiBundle/Resources/config/doctrine
+                alias: TamagotchiBundle
+                prefix: TamagotchiBundle\Entity
                 is_bundle: false
             NeatBundle:
                 type: yml

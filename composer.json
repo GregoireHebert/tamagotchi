@@ -1,6 +1,6 @@
 {
   "name": "gheb/tamagotchi",
-  "description": "Self learning fish",
+  "description": "Self learning tamagotchi",
   "license": "MIT",
   "type": "project",
   "autoload": {
