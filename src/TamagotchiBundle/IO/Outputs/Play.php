@@ -36,6 +36,6 @@ class Play extends Output
      */
     public function getName(): string
     {
-        return 'Play';
+        return 'run';
     }
 }

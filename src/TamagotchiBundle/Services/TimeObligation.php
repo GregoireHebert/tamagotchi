@@ -26,21 +26,6 @@ class TimeObligation extends AbstractLifeObligation
         $tamagotchi->setSleepiness($tamagotchi->getSleepiness() + 1);// gets sleepy
         $tamagotchi->setPlayfull($tamagotchi->getPlayfull() +1);// needs to play
 
-        // eat too much or does not eat
-        if ($tamagotchi->getHunger()>=Tamagotchi::MAX_HUNGER || $tamagotchi->getHunger()<=0) {
-            $tamagotchi->setHealth($tamagotchi->getHealth() -1);
-        }
-
-        // plays too much or does not play
-        if ($tamagotchi->getPlayfull()>=Tamagotchi::MAX_PLAY || $tamagotchi->getPlayfull()<=0) {
-            $tamagotchi->setHealth($tamagotchi->getHealth() -1);
-        }
-
-        // sleep too much or does not sleep
-        if ($tamagotchi->getSleepiness()>=Tamagotchi::MAX_SLEEP || $tamagotchi->getSleepiness()<=0) {
-            $tamagotchi->setHealth($tamagotchi->getHealth() -1);
-        }
-
         // Bad wealth shorten it's life
         if ($tamagotchi->getWealth()>=Tamagotchi::MAX_WEALTH) {
             $tamagotchi->setHealth($tamagotchi->getHealth() -2);

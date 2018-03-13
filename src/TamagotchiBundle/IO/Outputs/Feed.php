@@ -35,6 +35,6 @@ class Feed extends Output
      */
     public function getName(): string
     {
-        return 'Feed';
+        return 'eat';
     }
 }

@@ -35,6 +35,6 @@ class PutToBed extends Output
      */
     public function getName(): string
     {
-        return 'putToBed';
+        return 'run';
     }
 }

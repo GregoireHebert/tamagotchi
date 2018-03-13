@@ -10,9 +10,9 @@ namespace TamagotchiBundle\Entity;
 class Tamagotchi
 {
     public const MAX_HEALTH = 300;
-    public const MAX_HUNGER = 7;
-    public const MAX_PLAY = 4;
-    public const MAX_SLEEP = 16;
+    public const MAX_HUNGER = 10;
+    public const MAX_PLAY = 10;
+    public const MAX_SLEEP = 10;
     public const MAX_WEALTH = 4;
     public const MAX_WEIGHT = 7;
 

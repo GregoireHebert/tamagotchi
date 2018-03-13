@@ -22,6 +22,6 @@ class Nothing extends Output
      */
     public function getName(): string
     {
-        return 'Nothing';
+        return 'idle';
     }
 }
