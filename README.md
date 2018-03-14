@@ -21,6 +21,12 @@ The Front is designed to be displayed on a 800x480 raspberry screen but should w
 
 ## Play
 
+Clone the project or install it with composer:
+
+```shell
+$ composer create-project gheb/tamagotchi
+```
+
 This project comes with a docker file for the database.
 and a dev compose file with adminer to navigate through the db while debugging.
 
