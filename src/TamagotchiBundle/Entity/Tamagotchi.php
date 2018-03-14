@@ -59,12 +59,12 @@ class Tamagotchi
     public function __construct()
     {
         $this->health     = self::MAX_HEALTH;
-        $this->hunger     = 0;
-        $this->sleepiness = 0;
-        $this->playfull   = 0;
+        $this->hunger     = 1;
+        $this->sleepiness = 1;
+        $this->playfull   = 1;
         $this->lifeTick   = 0;
         $this->wealth     = 10;
-        $this->weight     = 0;
+        $this->weight     = 5;
     }
 
     /**
