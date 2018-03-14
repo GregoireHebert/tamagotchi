@@ -33,34 +33,34 @@ export default class Hud extends Component {
     return (
       <div id="hud">
         <div className={`heart ${this.state.health <= 0 && 'inactive'}`}>&nbsp;</div>
-        <div className={`heart ${this.state.health <= 2 && 'inactive'}`}>&nbsp;</div>
-        <div className={`heart ${this.state.health <= 4 && 'inactive'}`}>&nbsp;</div>
-        <div className={`heart ${this.state.health <= 6 && 'inactive'}`}>&nbsp;</div>
-        <div className={`heart ${this.state.health <= 8 && 'inactive'}`}>&nbsp;</div>
+        <div className={`heart ${this.state.health <= 60 && 'inactive'}`}>&nbsp;</div>
+        <div className={`heart ${this.state.health <= 120 && 'inactive'}`}>&nbsp;</div>
+        <div className={`heart ${this.state.health <= 180 && 'inactive'}`}>&nbsp;</div>
+        <div className={`heart ${this.state.health <= 240 && 'inactive'}`}>&nbsp;</div>
 
         <div className="spacing">&nbsp;</div>
 
-        <div className={`hungry ${this.state.hunger <= 0 && 'inactive'}`}>&nbsp;</div>
-        <div className={`hungry ${this.state.hunger <= 2 && 'inactive'}`}>&nbsp;</div>
-        <div className={`hungry ${this.state.hunger <= 4 && 'inactive'}`}>&nbsp;</div>
-        <div className={`hungry ${this.state.hunger <= 6 && 'inactive'}`}>&nbsp;</div>
-        <div className={`hungry ${this.state.hunger <= 8 && 'inactive'}`}>&nbsp;</div>
+        <div className={`hungry ${this.state.hunger > 8 && 'inactive'}`}>&nbsp;</div>
+        <div className={`hungry ${this.state.hunger > 6 && 'inactive'}`}>&nbsp;</div>
+        <div className={`hungry ${this.state.hunger > 4 && 'inactive'}`}>&nbsp;</div>
+        <div className={`hungry ${this.state.hunger > 2 && 'inactive'}`}>&nbsp;</div>
+        <div className={`hungry ${this.state.hunger > 0 && 'inactive'}`}>&nbsp;</div>
 
         <div className="spacing">&nbsp;</div>
 
-        <div className={`playful ${this.state.playful <= 0 && 'inactive'}`}>&nbsp;</div>
-        <div className={`playful ${this.state.playful <= 2 && 'inactive'}`}>&nbsp;</div>
-        <div className={`playful ${this.state.playful <= 4 && 'inactive'}`}>&nbsp;</div>
-        <div className={`playful ${this.state.playful <= 6 && 'inactive'}`}>&nbsp;</div>
-        <div className={`playful ${this.state.playful <= 8 && 'inactive'}`}>&nbsp;</div>
+        <div className={`playful ${this.state.playful < 0 && 'inactive'}`}>&nbsp;</div>
+        <div className={`playful ${this.state.playful < 2 && 'inactive'}`}>&nbsp;</div>
+        <div className={`playful ${this.state.playful < 4 && 'inactive'}`}>&nbsp;</div>
+        <div className={`playful ${this.state.playful < 6 && 'inactive'}`}>&nbsp;</div>
+        <div className={`playful ${this.state.playful < 8 && 'inactive'}`}>&nbsp;</div>
 
         <div className="spacing">&nbsp;</div>
 
-        <div className={`sleep ${this.state.sleepiness <= 0 && 'inactive'}`}>&nbsp;</div>
-        <div className={`sleep ${this.state.sleepiness <= 2 && 'inactive'}`}>&nbsp;</div>
-        <div className={`sleep ${this.state.sleepiness <= 4 && 'inactive'}`}>&nbsp;</div>
-        <div className={`sleep ${this.state.sleepiness <= 6 && 'inactive'}`}>&nbsp;</div>
-        <div className={`sleep ${this.state.sleepiness <= 8 && 'inactive'}`}>&nbsp;</div>
+        <div className={`sleep ${this.state.sleepiness < 0 && 'inactive'}`}>&nbsp;</div>
+        <div className={`sleep ${this.state.sleepiness < 2 && 'inactive'}`}>&nbsp;</div>
+        <div className={`sleep ${this.state.sleepiness < 4 && 'inactive'}`}>&nbsp;</div>
+        <div className={`sleep ${this.state.sleepiness < 6 && 'inactive'}`}>&nbsp;</div>
+        <div className={`sleep ${this.state.sleepiness < 8 && 'inactive'}`}>&nbsp;</div>
       </div>
     );
   }

@@ -24,7 +24,7 @@ class PutToBed extends Output
         $this->getTamagotchi();
         if ($this->tamagotchi instanceof Tamagotchi) {
             $sleepiness = $this->tamagotchi->getSleepiness();
-            $this->tamagotchi->setSleepiness($sleepiness -8);
+            $this->tamagotchi->setSleepiness($sleepiness -7);
             $this->tamagotchi->setWealth($this->tamagotchi->getWealth() -1);
             $this->em->flush();
         }
@@ -35,6 +35,6 @@ class PutToBed extends Output
      */
     public function getName(): string
     {
-        return 'run';
+        return 'walk';
     }
 }

@@ -17,6 +17,7 @@ export default class Game extends Component {
   componentDidMount() {
       const that = this;
       const websocket = WS.connect('ws://127.0.0.1:1337/');
+      that.getTamagotchi();
 
       websocket.on("socket/connect", function(session){
           console.log("connection OK");
@@ -29,25 +30,29 @@ export default class Game extends Component {
                   animation: payload.slice(1,-1)
               }));
 
-              $.get("http://localhost:8000/tamagotchi", function( tamagotchi ) {
-                  console.table(tamagotchi);
-
-                  that.setState(() => ({
-                      health: tamagotchi.health,
-                      hunger: tamagotchi.hunger,
-                      playful: tamagotchi.playful,
-                      sleepiness: tamagotchi.sleepiness,
-                      weight: tamagotchi.weight,
-                      wealth: tamagotchi.wealth,
-                      animation: payload
-                  }));
-              });
+              that.getTamagotchi();
           });
       });
 
       websocket.on("socket/disconnect", function(error){
           //error provides us with some insight into the disconnection: error.reason and error.code
           console.log("Disconnected for " + error.reason + " with code " + error.code);
+      });
+  }
+
+  getTamagotchi = () => {
+      const that = this;
+      $.get("http://localhost:8000/tamagotchi", function( tamagotchi ) {
+          console.table(tamagotchi);
+
+          that.setState(() => ({
+              health: tamagotchi.health,
+              hunger: tamagotchi.hunger,
+              playful: tamagotchi.playfull,
+              sleepiness: tamagotchi.sleepiness,
+              weight: tamagotchi.weight,
+              wealth: tamagotchi.wealth,
+          }));
       });
   }
 

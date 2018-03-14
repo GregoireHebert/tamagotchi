@@ -13,8 +13,8 @@ class Tamagotchi
     public const MAX_HUNGER = 10;
     public const MAX_PLAY = 10;
     public const MAX_SLEEP = 10;
-    public const MAX_WEALTH = 4;
-    public const MAX_WEIGHT = 7;
+    public const MAX_WEALTH = 10;
+    public const MAX_WEIGHT = 10;
 
     /**
      * @var int
@@ -59,12 +59,12 @@ class Tamagotchi
     public function __construct()
     {
         $this->health     = self::MAX_HEALTH;
-        $this->hunger     = 2;
-        $this->sleepiness = 4;
-        $this->playfull   = 1;
+        $this->hunger     = 0;
+        $this->sleepiness = 0;
+        $this->playfull   = 0;
         $this->lifeTick   = 0;
-        $this->wealth     = 0;
-        $this->weight     = 2;
+        $this->wealth     = 10;
+        $this->weight     = 0;
     }
 
     /**
@@ -80,7 +80,7 @@ class Tamagotchi
      */
     public function setWeight(int $weight): void
     {
-        $this->weight = $weight;
+        $this->weight = min(max(0, $weight), $this::MAX_WEIGHT);
     }
 
     /**
@@ -96,7 +96,7 @@ class Tamagotchi
      */
     public function setWealth(int $wealth): void
     {
-        $this->wealth = max(0, $wealth);
+        $this->wealth = min(max(0, $wealth), $this::MAX_WEALTH);
     }
 
     public function addLifeTick(): void
@@ -154,7 +154,7 @@ class Tamagotchi
      */
     public function setHealth($health): void
     {
-        $this->health = max(0, $health);
+        $this->health = min(max(0, $health), $this::MAX_HEALTH);
     }
 
     /**
@@ -162,7 +162,7 @@ class Tamagotchi
      */
     public function setHunger($hunger): void
     {
-        $this->hunger = $hunger;
+        $this->hunger = min(max(0, $hunger), $this::MAX_HUNGER);
     }
 
     /**
@@ -186,7 +186,7 @@ class Tamagotchi
      */
     public function setPlayfull($playfull): void
     {
-        $this->playfull = max(0, $playfull);
+        $this->playfull = min(max(0, $playfull), $this::MAX_PLAY);
     }
 
     /**
@@ -194,6 +194,6 @@ class Tamagotchi
      */
     public function setSleepiness($sleepiness): void
     {
-        $this->sleepiness = $sleepiness;
+        $this->sleepiness = min(max(0, $sleepiness), $this::MAX_SLEEP);
     }
 }

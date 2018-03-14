@@ -24,7 +24,7 @@ class Feed extends Output
         $this->getTamagotchi();
         if ($this->tamagotchi instanceof Tamagotchi) {
             $hunger = $this->tamagotchi->getHunger();
-            $this->tamagotchi->setHunger($hunger -5);
+            $this->tamagotchi->setHunger($hunger -7);
             $this->tamagotchi->setWeight($this->tamagotchi->getWeight() +1);
             $this->em->flush();
         }

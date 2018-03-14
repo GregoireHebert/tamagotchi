@@ -27,7 +27,7 @@ class TimeObligation extends AbstractLifeObligation
         $tamagotchi->setPlayfull($tamagotchi->getPlayfull() +1);// needs to play
 
         // Bad wealth shorten it's life
-        if ($tamagotchi->getWealth()>=Tamagotchi::MAX_WEALTH) {
+        if ($tamagotchi->getWealth()<= 0) {
             $tamagotchi->setHealth($tamagotchi->getHealth() -2);
         }
 

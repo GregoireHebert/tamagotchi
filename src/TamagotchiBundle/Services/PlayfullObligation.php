@@ -16,23 +16,12 @@ class PlayfullObligation extends AbstractLifeObligation
         // if it does not play at all it gets fat and loses wealth
         if ($tamagotchi->getPlayfull()>=Tamagotchi::MAX_PLAY) {
             $tamagotchi->setWeight($tamagotchi->getWeight() +1);
-            $tamagotchi->setWealth($tamagotchi->getWealth() +1);
+            $tamagotchi->setWealth($tamagotchi->getWealth() -1);
         }
 
-        // if it does not play at all it gets fat and loses wealth
+        // if it play too much it loses weight again
         if ($tamagotchi->getPlayfull()<=0) {
             $tamagotchi->setWeight($tamagotchi->getWeight() -1);
-        }
-
-        // does not play
-        if ($tamagotchi->getPlayfull()>=Tamagotchi::MAX_PLAY) {
-            $delta = 1 + floor($tamagotchi->getPlayfull()/Tamagotchi::MAX_PLAY);
-            $tamagotchi->setHealth($tamagotchi->getHealth() - $delta);
-        }
-
-        // plays too much
-        if ($tamagotchi->getPlayfull()<=0) {
-            $tamagotchi->setHealth($tamagotchi->getHealth() -1);
         }
     }
 }

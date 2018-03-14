@@ -24,7 +24,7 @@ class Play extends Output
         $this->getTamagotchi();
         if ($this->tamagotchi instanceof Tamagotchi) {
             $playFull = $this->tamagotchi->getPlayfull();
-            $this->tamagotchi->setPlayfull($playFull -2);
+            $this->tamagotchi->setPlayfull($playFull -7);
             $this->tamagotchi->setWeight($this->tamagotchi->getWeight() -1);
             $this->tamagotchi->setWealth($this->tamagotchi->getWealth() -1);
             $this->em->flush();
