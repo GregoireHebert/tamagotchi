@@ -1,12 +1,23 @@
 # Tamagotchi
 ==========
 
-Tamagotchi is a tamagotchi like project
+A colleague of mine once came with a fish at work.
+At first I thought, wwaow, I need one too ! And then I thought of every single day I won't be able to feed him :(
+This is when I decided as a side project to build a Tamagotchi Like project, and use an AI to decide what's to do next.
+ 
 The tamagotchi has need such as hunger, sleepiness and sometimes wants to play.
 Each has an influence on it's health. If you do not take care of feeding him, put it to bed or play with it,
 the tamagotchi will eventually die faster.
 
-This project exists as a demonstration for the neat bundle.
+Since my skills in animations/drawing are bellow zero, I used some free spritesheets. 
+
+I could have used tensorflow or phpml but I wanted to use this project to learn how it works.
+And this project is the result with the idea of reuse it later for other projects.
+
+There is many things I would change, or not do the same way I did, but this is an experimental project.
+Maybe I'll code a better one later :)
+
+The Front is designed to be displayed on a 800x480 raspberry screen but should works on any screen that respect the ratio.
 
 ## Play
 
@@ -23,57 +34,73 @@ or
 $ docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
 ```
 
-Clone this project and run:
+If you do not use docker, clone this project.
+You'll need yarn, composer, mysql, php7.1.
+And then execute the commands:
+
 
 ```shell
 $ composer install
 $ php bin/console doctrine:schema:create
-$ php bin/console assetic:dump --env=prod
+$ cd web && yarn install && yarn run build
 ```
 
-to create a bunch of population and let the neat-bundle evaluate each genome, run
+Then you need to train the AI. 
+I encourage you to read how NEAT (Neuro Evolution of Augmented Topology) Génetic Algorithm works.
+To create a bunch of population and let the neat-bundle evaluate each genome to learn, run:
 
 ```shell
 $ php bin/console gheb:neat:generate
 ```
-    
-to get the best genome and play it's network upon your inputs, run:
+
+It's an infinite loop that'll try it's best to evolve a neural network and smash the score !
+  
+In order to get the best genome and play it's network upon the inputs, run:
 
 ```shell
 $ php bin/console gheb:neat:evaluate
 ```
 
-you can run a webserver and the websocket by using the start script
+You can run a webserver and the websocket by using the start script.
 
 ```bash
 $ ./start
 ```
 
-you can now launch your navigator
+you can now launch your navigator and open the http://localhost:8000
 
 ```bash
-$ chromium-browser --start-fullscreen --start-maximized --no-default-browser-check --incognito http://127.0.0.1:8000 &>/dev/null &
+$ chromium-browser --start-fullscreen --start-maximized --no-default-browser-check --incognito http://localhost:8000 &>/dev/null &
 ```
 
-to run the thing in the background you'll need supervisor
+to run the all thing in the background you'll need supervisor
 
 ```shell
-$ apt install supervisor
+$ sudo apt install supervisor
 ```
+
+Create a configuration file for the program
 
 ```ini
 # /etc/supervisor/conf.d/tamagotchi.conf
 [program:tamagotchi]
+
+# change this with your username
 user=gregoire
-command=/home/gregoire/TRAVAUX/PERSO/tamagotchi/start
+
+# change according to your path
+command=/home/gregoire/TRAVAUX/PERSO/tamagotchi/start 
 
 # uncomment these lines to launch this at start
 #autostart=true
 #autorestart=true
 
+# change according to your path
 stdout_logfile=/home/gregoire/TRAVAUX/PERSO/tamagotchi/var/logs/supervisor_stdout.log
 stderr_logfile=/home/gregoire/TRAVAUX/PERSO/tamagotchi/var/logs/supervisor_stderr.log
 ```
+
+Then you must tell supervisor to get and load this new config.
 
 ```shell
 $ supervisorctl reread
@@ -110,12 +137,15 @@ supervisor> status
 tamagotchi                       RUNNING   pid 26039, uptime 0:00:24
 ```
 
+## TROUBLESHOUTING
+
 `error: <class 'socket.error'>, [Errno 13] Permission denied: file: /usr/lib/python2.7/socket.py line: 228`
 
 if you got this message when lauching `supervisorctl` command, 
 update `/etc/supervisor/supervisor.conf` and change the `unix_http_server` chmod to `766`
 
 
-## todo
-* display it's condition and it's suggested animation between each tick
-* define the rythm to call a new evaluation.
+## Todo
+* Balance the Tamagotchi
+* Define the rythm to call a new evaluation and provide a way to use crontab or something else.
+* for demonstration purposes, display a graph of the network.

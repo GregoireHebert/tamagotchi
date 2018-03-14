@@ -2,6 +2,7 @@
 
 scriptDir=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 consoleDir="$scriptDir/bin/console"
+webDir="$scriptDir/web"
 
 function stop {
     php $consoleDir server:stop
@@ -15,5 +16,6 @@ trap stop HUP TERM INT EXIT
 
 php $consoleDir server:start --force
 php $consoleDir gos:web:ser --env=prod
+pushd webDir && yarn run build && popd
 
 exit 1

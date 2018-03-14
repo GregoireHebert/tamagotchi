@@ -4,7 +4,7 @@
   "description": "Self learning tamagotchi",
   "license": "MIT",
   "require": {
-    "php": ">=5.5.9",
+    "php": ">=7.1.0",
     "doctrine/doctrine-bundle": "^1.6",
     "doctrine/doctrine-cache-bundle": "^1.2",
     "doctrine/doctrine-fixtures-bundle": "^2.3",
