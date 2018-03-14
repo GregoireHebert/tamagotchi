@@ -29,10 +29,10 @@ export default class Game extends Component {
                   animation: payload.slice(1,-1)
               }));
 
-              $.get("http://127.0.0.1:8000/tamagotchi", function( tamagotchi ) {
+              $.get("http://localhost:8000/tamagotchi", function( tamagotchi ) {
                   console.table(tamagotchi);
 
-                  this.setState(() => ({
+                  that.setState(() => ({
                       health: tamagotchi.health,
                       hunger: tamagotchi.hunger,
                       playful: tamagotchi.playful,
