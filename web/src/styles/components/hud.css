@@ -1,0 +1,41 @@
+#hud {
+	position: fixed;
+	top: 10px;
+	left:20px;
+	height: 20%;
+	width: 100%;
+}
+
+#hud div {
+	height: 30px;
+	width: 30px;
+	margin: 0;
+	padding: 0;
+	display: inline-block;
+}
+
+.inactive {
+	opacity: 0.2;
+}
+
+.spacing {
+	width: 50px !important;
+}
+
+.heart {
+	background: url('/images/heart.svg') left bottom no-repeat;
+}
+
+.hungry {
+	background: url('/images/stomach.svg') left bottom no-repeat;
+}
+
+.playful {
+	height: 40px !important;
+	background: url('/images/playful.svg') left bottom no-repeat;
+}
+
+.sleep {
+	height: 35px !important;
+	background: url('/images/sleep.svg') left bottom no-repeat;
+}

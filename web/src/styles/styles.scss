@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+@import './components/decor';
+@import './components/idle';
+@import './components/die';
+@import './components/eating';
+@import './components/run';
+@import './components/walk';
+@import './components/sheep';
+@import './components/hud';

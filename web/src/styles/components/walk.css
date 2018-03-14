@@ -1,0 +1,28 @@
+#sheep.walk_left {
+	background: left 0 / 500% 300% no-repeat url('/spritesheets/white_sheep_1/__white_sheep_1_walk.png');
+	transform: scaleX(1);
+	animation: walkv 0.9s steps(3) infinite, walkh 0.3s steps(5) infinite, totheleft 10s linear infinite;
+}
+
+#sheep.walk_right {
+	background: left 0 / 500% 300% no-repeat url('/spritesheets/white_sheep_1/__white_sheep_1_walk.png');
+	transform: scaleX(-1);
+	animation: walkv 0.9s steps(3) infinite, walkh 0.3s steps(5) infinite, totheright 10s linear infinite;
+}
+
+
+@keyframes walkv {
+   100% { background-position-y: calc(100% + (100% / 2)); }
+}
+
+@keyframes walkh {
+   100% { background-position-x: calc(100% + (100% / 4)); }
+}
+
+@keyframes totheleft {
+   100% { left: -25%; }
+}
+
+@keyframes totheright {
+   100% { left: 100%; }
+}

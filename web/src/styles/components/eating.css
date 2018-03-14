@@ -1,0 +1,62 @@
+#sheep.chew_left {
+	background: left 0 / 500% 500% no-repeat url('/spritesheets/white_sheep_1/__white_sheep_1_eating.png');
+	animation: eatingv 1.5s steps(5) 3, eatingh 0.3s steps(5) 15;
+	animation-fill-mode: forwards;
+}
+
+#sheep.chew_right {
+	background: left 0 / 500% 500% no-repeat url('/spritesheets/white_sheep_1/__white_sheep_1_eating.png');
+	transform: scaleX(-1);
+	animation: eatingv 1.5s steps(5) 3, eatingh 0.3s steps(5) 15;
+	animation-fill-mode: forwards;
+}
+
+@keyframes eatingv {
+	100% { background-position-y: calc(100% + (100% / 4)); }
+}
+
+@keyframes eatingh {
+	100% { background-position-x: calc(100% + (100% / 4)); }
+}
+
+#sheep.grab_left {
+	background: left 0 / 500% 200% no-repeat url('/spritesheets/white_sheep_1/__white_sheep_1_transition_to_eat.png');
+	animation: toeatv 0.35s steps(1), toeath 0.35s steps(4) 2;
+	animation-fill-mode: forwards;
+}
+
+#sheep.grab_right {
+	background: left 0 / 500% 200% no-repeat url('/spritesheets/white_sheep_1/__white_sheep_1_transition_to_eat.png');
+	transform: scaleX(-1);
+	animation: toeatv 0.35s steps(1), toeath 0.35s steps(4) 2;
+	animation-fill-mode: forwards;
+}
+
+@keyframes toeatv {
+   100% { background-position-y: 100%; }
+}
+
+@keyframes toeath {
+   100% { background-position-x: 100%; }
+}
+
+#sheep.swallow_left {
+	background: left 0 / 500% 200% no-repeat url('/spritesheets/white_sheep_1/__white_sheep_1_eating_transition_end.png');
+	animation: endeatingv 0.35s steps(1), endeatingh 0.35s steps(4) 2;
+	animation-fill-mode: forwards;
+}
+
+#sheep.swallow_right {
+	background: left 0 / 500% 200% no-repeat url('/spritesheets/white_sheep_1/__white_sheep_1_eating_transition_end.png');
+	transform: scaleX(-1);
+	animation: endeatingv 0.35s steps(1), endeatingh 0.35s steps(4) 2;
+	animation-fill-mode: forwards;
+}
+
+@keyframes endeatingv {
+   100% { background-position-y: 100%; }
+}
+
+@keyframes endeatingh {
+   100% { background-position-x: 100%; }
+}

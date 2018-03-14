@@ -1,0 +1,18 @@
+#sheep.die_left {
+  	left: 33%;
+	background: left 0 / 500% 100% no-repeat url('/spritesheets/white_sheep_1/__white_sheep_1_die.png');
+	animation: die 0.6s steps(4);
+	animation-fill-mode: forwards;
+}
+
+#sheep.die_right {
+  	left: 33%;
+	background: left 0 / 500% 100% no-repeat url('/spritesheets/white_sheep_1/__white_sheep_1_die.png');
+	animation: die 0.6s steps(4);
+	animation-fill-mode: forwards;
+	transform: scaleX(-1);
+}
+
+@keyframes die {
+   100% { background-position-x: 100%; }
+}

@@ -1,14 +1,7 @@
 # Composer
 /vendor/
 
-# ant
-/build/api/
-/build/cache/
-/build/code-browser/
-/build/coverage/
-/build/logs/
-/build/pdepend/
-/cache.properties
+/web/node_modules
 
 # Symfony
 /app/config/parameters.yml

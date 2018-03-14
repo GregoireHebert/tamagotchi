@@ -1,0 +1,77 @@
+#world {
+	width: 100%;
+	height: 100%;
+	z-index: -10;
+}
+
+#sky {
+	z-index: -2;
+	width: 100vw;
+	height: 100vh;
+	position: relative;
+	background: linear-gradient(to bottom, #94c5f8 15%,#a6e6ff 50%,#b1b5ea 90%);
+}
+
+#rockone {
+	background: url('/pngs/stones/rock_1_blue.png') center bottom no-repeat;
+	background-size: 60%;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+	position: fixed;
+	bottom: 0;
+	left: 30%;
+}
+
+#rocktwo{
+	background: url('/pngs/stones/rock_4_brown.png') center bottom no-repeat;
+	background-size: 70%;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+	position: fixed;
+	bottom: 0;
+	left: -30%;
+}
+
+#grass_front {
+	background: url('/pngs/grass/long_grass_tuft_bright_green.png') left bottom repeat-x;
+	background-size: 15%;
+	width: 100%;
+	height: 3%;
+	z-index: 3;
+	position: fixed;
+	bottom: 0;
+}
+
+#grass_back {
+	background: url('/pngs/grass/long_grass_tuft_2_dark_green.png') center bottom repeat-x;
+	background-size: 15%;
+	width: 100%;
+	height: 8%;
+	z-index: 1;
+	position: fixed;
+	bottom: 0;
+}
+
+#treeone{
+	background: url('/pngs/trees/tree_1_dull_green.png') center bottom no-repeat;
+	background-size: 40%;
+	width: 100%;
+	height: 100%;
+	z-index: 0;
+	position: fixed;
+	bottom: 0;
+	left: 30%;
+}
+
+#treetwo{
+	background: url('/pngs/trees/tree_3_light_green.png') center bottom no-repeat;
+	background-size: 50%;
+	width: 100%;
+	height: 100%;
+	z-index: 0;
+	position: fixed;
+	bottom: 0;
+	left: -30%;
+}
