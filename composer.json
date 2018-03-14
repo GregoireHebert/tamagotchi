@@ -2,6 +2,7 @@
   "name": "gheb/tamagotchi",
   "type": "project",
   "description": "Self learning tamagotchi",
+  "keywords":["neat", "ga", "genetic", "research", "tamagotchi", "machine learning"],
   "license": "MIT",
   "require": {
     "php": ">=7.1.0",
