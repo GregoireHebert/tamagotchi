@@ -16,6 +16,6 @@ trap stop HUP TERM INT EXIT
 
 php $consoleDir server:start --force
 php $consoleDir gos:web:ser --env=prod
-pushd webDir && yarn run build && popd
+pushd $webDir && yarn run build && popd
 
 exit 1
