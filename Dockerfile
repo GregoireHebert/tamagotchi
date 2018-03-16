@@ -62,8 +62,17 @@ COPY docker/php/start.sh /usr/local/bin/docker-app-start
 
 RUN chmod +x /usr/local/bin/docker-app-start
 
+RUN touch crontab.tmp \
+    && echo '* * * * * php /srv/tamagotchi/bin/console g:n:e' > crontab.tmp \
+    && echo '* * * * * ( sleep 20 ; php /srv/tamagotchi/bin/console g:n:e )' >> crontab.tmp \
+    && echo '* * * * * ( sleep 40 ; php /srv/tamagotchi/bin/console g:n:e )' >> crontab.tmp \
+    && crontab crontab.tmp \
+    && rm -rf crontab.tmp
+
 EXPOSE 8000
 EXPOSE 1337
+
 CMD ["docker-app-start"]
+CMD ["crond"]
 
 RUN cp app/config/parameters.yml.dist app/config/parameters.yml
