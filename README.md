@@ -40,6 +40,13 @@ or
 $ docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
 ```
 
+then 
+
+```shell
+$ docker/console doctrine:schema:create
+$ docker/start
+```
+
 If you do not use docker, clone this project.
 You'll need yarn, composer, mysql, php7.1.
 And then execute the commands:
@@ -56,6 +63,7 @@ I encourage you to read how NEAT (Neuro Evolution of Augmented Topology) Géneti
 To create a bunch of population and let the neat-bundle evaluate each genome to learn, run:
 
 ```shell
+$ docker/console gheb:neat:generate
 $ php bin/console gheb:neat:generate
 ```
 
@@ -64,13 +72,15 @@ It's an infinite loop that'll try it's best to evolve a neural network and smash
 In order to get the best genome and play it's network upon the inputs, run:
 
 ```shell
+$ docker/console gheb:neat:evaluate
 $ php bin/console gheb:neat:evaluate
 ```
 
-You can run a webserver and the websocket by using the start script.
+**If you don't use docker**, you can run a webserver and the websocket by using the start script.
 
 ```bash
-$ ./start
+$ php bin/console server:start localhost -p 8000
+$ php bin/console gos:web:ser --env=prod
 ```
 
 you can now launch your navigator and open the http://localhost:8000
@@ -152,6 +162,5 @@ update `/etc/supervisor/supervisor.conf` and change the `unix_http_server` chmod
 
 
 ## Todo
-* Balance the Tamagotchi
 * Define the rythm to call a new evaluation and provide a way to use crontab or something else.
 * for demonstration purposes, display a graph of the network.

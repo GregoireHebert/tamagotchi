@@ -1,9 +1,7 @@
 FROM php:7.1-fpm-alpine
 
 RUN apk add --no-cache --virtual .persistent-deps \
-		git \
-		icu-libs \
-		zlib
+		icu-libs
 
 ENV APCU_VERSION 5.1.8
 ENV PATH /root/.yarn/bin:$PATH
@@ -13,46 +11,23 @@ RUN apk add --no-cache --virtual .yarn-deps curl gnupg && \
 
 RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories && \
     set -xe \
-    apk --update add \
-        php7-gd
+    apk --update
 
 RUN set -xe \
 	&& apk add --no-cache --virtual .build-deps \
-		$PHPIZE_DEPS \
-		icu-dev \
-		zlib-dev \
-		freetype-dev \
-		libpng-dev \
-		libjpeg-turbo-dev \
-		libmcrypt-dev \
-		freetype \
-		libpng \
-		libjpeg-turbo \
-		libmcrypt \
-        gd \
+	    icu-dev \
         nodejs \
-        python \
-	&& docker-php-ext-configure gd \
-        --with-gd \
-        --with-freetype-dir=/usr/include/ \
-        --with-png-dir=/usr/include/ \
-        --with-jpeg-dir=/usr/include/ && \
-        NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
+    && docker-php-ext-configure intl --enable-intl \
+    && docker-php-ext-configure pcntl --enable-pcntl \
+    && docker-php-ext-configure pdo_mysql --with-pdo-mysql \
+    && NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
 	&& docker-php-ext-install -j${NPROC} \
 		intl \
 		pdo_mysql \
-		zip \
-		exif \
-		gd \
-	&& pecl install \
-		apcu-${APCU_VERSION} \
-	&& docker-php-ext-enable --ini-name 20-apcu.ini apcu \
-	&& docker-php-ext-enable --ini-name 05-opcache.ini opcache
+		pcntl
 
 COPY docker/php/php.ini /usr/local/etc/php/php.ini
-
 COPY docker/php/install-composer.sh /usr/local/bin/docker-app-install-composer
-
 RUN chmod +x /usr/local/bin/docker-app-install-composer
 
 RUN set -xe \
@@ -87,6 +62,8 @@ COPY docker/php/start.sh /usr/local/bin/docker-app-start
 
 RUN chmod +x /usr/local/bin/docker-app-start
 
+EXPOSE 8000
+EXPOSE 1337
 CMD ["docker-app-start"]
 
 RUN cp app/config/parameters.yml.dist app/config/parameters.yml

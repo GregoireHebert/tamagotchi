@@ -88,11 +88,11 @@ swiftmailer:
 gos_web_socket:
     pushers:
         wamp:
-            host: 127.0.0.1
+            host: 0.0.0.0
             port: 1337
     server:
         port: 1337        #The port the socket server will listen on
-        host: 127.0.0.1
+        host: 0.0.0.0
         router:
             resources:
                 - '@NeatBundle/Resources/config/pubsub/routing.yml'

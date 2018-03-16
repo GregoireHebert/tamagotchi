@@ -1,9 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 
-php bin/console server:stop
-kill $(ps aux | grep 'server:start' | awk '{print $2}') 2>/dev/null
-kill $(ps aux | grep '127.0.0.1:8000' | awk '{print $2}') 2>/dev/null
-kill $(ps aux | grep 'gos:web' | awk '{print $2}') 2>/dev/null
-kill $(ps aux | grep 'chromium-browser' | grep 'http://127.0.0.1:8000'  | awk '{print $2}') 2>/dev/null
+php bin/console server:stop 0.0.0.0 -p 8000
+kill $(ps aux | grep 'server:start' | awk '{print $1}') 2>/dev/null
+kill $(ps aux | grep '0.0.0.0:8000' | awk '{print $1}') 2>/dev/null
+kill $(ps aux | grep 'gos:web' | awk '{print $1}') 2>/dev/null
 
 exit;

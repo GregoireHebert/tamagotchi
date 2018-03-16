@@ -1,21 +1,11 @@
-#!/bin/bash
+#!/bin/sh
 
 scriptDir=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 consoleDir="$scriptDir/bin/console"
 webDir="$scriptDir/web"
 
-function stop {
-    php $consoleDir server:stop
-    kill $(ps aux | grep 'server:start' | awk '{print $2}') 2>/dev/null
-    kill $(ps aux | grep '127.0.0.1:8000' | awk '{print $2}') 2>/dev/null
-    kill $(ps aux | grep 'gos:web' | awk '{print $2}') 2>/dev/null
-    kill $(ps aux | grep 'chromium-browser' | grep 'http://127.0.0.1:8000'  | awk '{print $2}') 2>/dev/null
-}
-
-trap stop HUP TERM INT EXIT
-
-php $consoleDir server:start --force
+cd $webDir && yarn install && yarn add node-sass && yarn run build && cd ..
+php $consoleDir server:start 0.0.0.0 -p 8000 --force
 php $consoleDir gos:web:ser --env=prod
-pushd $webDir && yarn run build && popd
 
 exit 1
