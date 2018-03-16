@@ -34,7 +34,7 @@ and a dev compose file with adminer to navigate through the db while debugging.
 $ docker-compose up -d
 ```
 
-or
+with adminer
 
 ```shell
 $ docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
@@ -45,6 +45,13 @@ then
 ```shell
 $ docker/console doctrine:schema:create
 $ docker/start
+```
+
+and when you are done
+
+```shell
+$ docker/stop
+$ docker-compose stop
 ```
 
 If you do not use docker, clone this project.
