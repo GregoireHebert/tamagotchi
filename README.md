@@ -1,8 +1,8 @@
-# Tamagotchi
+Tamagotchi
 ==========
 
 A colleague of mine once came with a fish at work.
-At first I thought, wwaow, I need one too ! And then I thought of every single day I won't be able to feed him :(
+At first I thought, waow, I need one too ! And then I thought of every single day I won't be able to feed him :(
 This is when I decided as a side project to build a Tamagotchi Like project, and use an AI to decide what's to do next.
  
 The tamagotchi has need such as hunger, sleepiness and sometimes wants to play.
