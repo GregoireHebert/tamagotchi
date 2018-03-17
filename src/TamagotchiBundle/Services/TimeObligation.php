@@ -22,9 +22,9 @@ class TimeObligation extends AbstractLifeObligation
         $tamagotchi->addLifeTick();
 
         // classic time application
-        $tamagotchi->setHunger($tamagotchi->getHunger() +1); // gets hungry
+        $tamagotchi->setHunger($tamagotchi->getHunger() +3); // gets hungry
         $tamagotchi->setSleepiness($tamagotchi->getSleepiness() + 1);// gets sleepy
-        $tamagotchi->setPlayfull($tamagotchi->getPlayfull() +1);// needs to play
+        $tamagotchi->setPlayfull($tamagotchi->getPlayfull() +2);// needs to play
 
         // Bad wealth shorten it's life
         if ($tamagotchi->getWealth()<= 0) {

@@ -36,7 +36,7 @@ class Life
 
     public function applyEffect(Tamagotchi $tamagotchi): void
     {
-        if ($tamagotchi->getHealth() === 0) {
+        if ($tamagotchi->getHealth() <= 0) {
             return;
         }
 
