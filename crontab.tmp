@@ -1,0 +1,3 @@
+* * * * * php /srv/tamagotchi/bin/console g:n:e
+* * * * * ( sleep 20 ; php /srv/tamagotchi/bin/console g:n:e )
+* * * * * ( sleep 40 ; php /srv/tamagotchi/bin/console g:n:e )
